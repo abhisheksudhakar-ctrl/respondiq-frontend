@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1802,7 +1802,9 @@ ABSOLUTE RULES YOU CANNOT BREAK:
 }
 
 // ======================== UPGRADE 2: MATH FIREWALL ========================
-// Hard-coded budget math — never trust AI for arithmetic
+// Deterministic budget math — AI provides contextual rates, Firewall enforces arithmetic.
+// BENCHMARK_RATES is the SAFETY NET: only used when AI's rate can't be parsed.
+// Priority: AI cpm field → AI impressions field → BENCHMARK_RATES → $8.00 default
 const BENCHMARK_RATES = {
     'Google Ads (Search)': { type: 'CPC', rate: 3.00 },
     'Google Search': { type: 'CPC', rate: 3.00 },
@@ -1896,36 +1898,55 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
         const pct = parseFloat(pctStr) || 0;
         const channelBudget = totalBudget * (pct / 100);
 
-        // Find benchmark rate — try exact match, then fuzzy match
-        let benchmark = BENCHMARK_RATES[bb.item];
-        if (!benchmark) {
-            // Fuzzy match: check if item name contains a known key
-            for (const [key, val] of Object.entries(BENCHMARK_RATES)) {
-                if (bb.item.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(bb.item.toLowerCase())) {
-                    benchmark = val;
-                    break;
+        // ── Rate Resolution: AI-first, BENCHMARK_RATES as safety net ──
+        // Priority 1: Extract rate from Gemini's cpm field (preserves geographic/industry context)
+        // Priority 2: Extract rate from Gemini's impressions field
+        // Priority 3: Fall back to BENCHMARK_RATES (static safety net)
+        // Priority 4: Default $8.00 CPM
+        let benchmark = null;
+
+        // Priority 1: AI's cpm field (e.g. "$8.50 CPC", "$35.00 CPM")
+        if (bb.cpm) {
+            const rateMatch = String(bb.cpm).match(/\$?([\d.]+)\s*(CPC|CPM|CPA)/i);
+            if (rateMatch) {
+                const aiRate = parseFloat(rateMatch[1]);
+                const aiType = rateMatch[2].toUpperCase();
+                // Sanity check: reject implausible values
+                if (aiRate > 0.05 && aiRate < 500) {
+                    benchmark = { type: aiType, rate: aiRate, source: 'ai' };
                 }
             }
         }
 
-        // Try to extract rate from AI's existing cpm field
-        if (!benchmark && bb.cpm) {
-            const rateMatch = String(bb.cpm).match(/\$?([\d.]+)\s*(CPC|CPM|CPA)/i);
-            if (rateMatch) {
-                benchmark = { type: rateMatch[2].toUpperCase(), rate: parseFloat(rateMatch[1]) };
-            }
-        }
-
-        // Try to extract from impressions field
+        // Priority 2: AI's impressions field (e.g. "2.7K clicks (at $3.00 CPC)")
         if (!benchmark && bb.impressions) {
             const rateMatch = String(bb.impressions).match(/\$?([\d.]+)\s*(CPC|CPM)/i);
             if (rateMatch) {
-                benchmark = { type: rateMatch[2].toUpperCase(), rate: parseFloat(rateMatch[1]) };
+                const aiRate = parseFloat(rateMatch[1]);
+                const aiType = rateMatch[2].toUpperCase();
+                if (aiRate > 0.05 && aiRate < 500) {
+                    benchmark = { type: aiType, rate: aiRate, source: 'ai' };
+                }
             }
         }
 
-        // Default fallback
-        if (!benchmark) benchmark = { type: 'CPM', rate: 8.00 };
+        // Priority 3: BENCHMARK_RATES static safety net (only if AI rate not parseable)
+        if (!benchmark) {
+            benchmark = BENCHMARK_RATES[bb.item];
+            if (!benchmark) {
+                // Fuzzy match: check if item name contains a known key
+                for (const [key, val] of Object.entries(BENCHMARK_RATES)) {
+                    if (bb.item.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(bb.item.toLowerCase())) {
+                        benchmark = val;
+                        break;
+                    }
+                }
+            }
+            if (benchmark) benchmark = { ...benchmark, source: 'fallback' };
+        }
+
+        // Priority 4: Default fallback
+        if (!benchmark) benchmark = { type: 'CPM', rate: 8.00, source: 'default' };
 
         // Skip contingency/testing lines
         if (bb.item.toLowerCase().includes('contingency') || bb.item.toLowerCase().includes('testing') || pct === 0) {
@@ -1952,6 +1973,7 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
             cpmStr = '$' + benchmark.rate.toFixed(2) + ' CPM';
         }
 
+        console.log('  📊', bb.item, '|', benchmark.type, '$' + benchmark.rate.toFixed(2), '| source:', benchmark.source || 'unknown');
         return { ...bb, impressions: impressionsStr, cpm: cpmStr };
     });
 
