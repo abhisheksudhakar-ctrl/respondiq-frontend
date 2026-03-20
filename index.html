@@ -1945,11 +1945,8 @@ async function refinePlan() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                model: 'gemini-3.1-pro-preview',
-                messages: [],  // Backend constructs its own for refine
                 refine_instruction: instruction,
-                current_plan: PLAN_DATA,
-                max_completion_tokens: 12000
+                current_plan: PLAN_DATA
             })
         });
 
