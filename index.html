@@ -1590,6 +1590,9 @@ const BENCHMARK_RATES = {
 //    Returns parsed object or null.
 function extractOuterJSON(text) {
     if (!text || typeof text !== 'string') return null;
+    // Sanitize unescaped control characters inside JSON string values
+    // (same fix as backend P0-1: Gemini produces literal newlines in multi-paragraph strings)
+    text = sanitizeJSONControlChars(text);
     const startIdx = text.indexOf('{');
     if (startIdx === -1) return null;
     let depth = 0, inString = false, escaped = false;
@@ -1604,11 +1607,43 @@ function extractOuterJSON(text) {
             depth--;
             if (depth === 0) {
                 try { return JSON.parse(text.substring(startIdx, i + 1)); }
-                catch (e) { return null; }
+                catch (e) {
+                    console.warn('extractOuterJSON: parse failed at position', i, '| error:', e.message);
+                    return null;
+                }
             }
         }
     }
+    // If we get here, braces were unbalanced (possible truncation)
+    console.warn('extractOuterJSON: unbalanced braces (response may be truncated). Depth:', depth);
     return null;
+}
+
+/**
+ * Sanitize unescaped control characters (newlines, tabs) inside JSON string values.
+ * Walks character-by-character, tracking whether we're inside a quoted string,
+ * and escapes any raw control characters that would break JSON.parse().
+ */
+function sanitizeJSONControlChars(text) {
+    let result = '';
+    let inString = false;
+    let escaped = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const code = text.charCodeAt(i);
+        if (escaped) { result += ch; escaped = false; continue; }
+        if (ch === '\\' && inString) { result += ch; escaped = true; continue; }
+        if (ch === '"') { inString = !inString; result += ch; continue; }
+        if (inString && code >= 0 && code <= 0x1F) {
+            if (code === 0x0A) result += '\\n';
+            else if (code === 0x0D) result += '\\r';
+            else if (code === 0x09) result += '\\t';
+            else result += '\\u' + code.toString(16).padStart(4, '0');
+            continue;
+        }
+        result += ch;
+    }
+    return result;
 }
 
 // ── cleanPlanText: strips em dashes, approximation symbols, and other
