@@ -1407,6 +1407,7 @@ async function generateMediaPlan(data) {
                 pageUrl: (data.website && data.website !== 'N/A') ? data.website : null,
                 location: data.location || 'United States',
                 maxKeywords: 10,
+                industry: data.industry || '',
             })
         });
         const kwJson = await kwRes.json();
@@ -1519,9 +1520,12 @@ async function generateMediaPlan(data) {
                 '| Reason:', result._industry_override.reason);
         }
 
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-            let plan = JSON.parse(jsonMatch[0]);
+        // Strip markdown fences before JSON extraction (Gemini sometimes wraps in ```json...```)
+        const cleanedText = text.replace(/^```(?:json)?\s*\n?/gm, '').replace(/\n?```\s*$/gm, '').trim();
+        // Brace-counting extraction: find the outermost {...} block
+        const jsonObj = extractOuterJSON(cleanedText);
+        if (jsonObj) {
+            let plan = jsonObj;
             plan._source = 'ai';
             plan._keywordDataUsed = !!keywordData;
             if (keywordData) plan._keywordResults = keywordData;
@@ -1580,6 +1584,32 @@ const BENCHMARK_RATES = {
     'SMS / MMS Marketing': { type: 'CPM', rate: 50.00 },
     'In-App Advertising': { type: 'CPM', rate: 6.00 },
 };
+
+// ── extractOuterJSON: Robust brace-counting JSON extractor.
+//    Handles markdown fences, preamble text, and partial responses.
+//    Returns parsed object or null.
+function extractOuterJSON(text) {
+    if (!text || typeof text !== 'string') return null;
+    const startIdx = text.indexOf('{');
+    if (startIdx === -1) return null;
+    let depth = 0, inString = false, escaped = false;
+    for (let i = startIdx; i < text.length; i++) {
+        const ch = text[i];
+        if (escaped) { escaped = false; continue; }
+        if (ch === '\\') { escaped = true; continue; }
+        if (ch === '"') { inString = !inString; continue; }
+        if (inString) continue;
+        if (ch === '{') depth++;
+        else if (ch === '}') {
+            depth--;
+            if (depth === 0) {
+                try { return JSON.parse(text.substring(startIdx, i + 1)); }
+                catch (e) { return null; }
+            }
+        }
+    }
+    return null;
+}
 
 // ── cleanPlanText: strips em dashes, approximation symbols, and other
 //    typographic characters from every string value in the plan JSON.
@@ -1960,10 +1990,12 @@ async function refinePlan() {
 
         const result = await res.json();
         const text = result.choices?.[0]?.message?.content || '';
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        // Strip markdown fences before JSON extraction
+        const cleanedRefineText = text.replace(/^```(?:json)?\s*\n?/gm, '').replace(/\n?```\s*$/gm, '').trim();
+        const refinedObj = extractOuterJSON(cleanedRefineText);
 
-        if (jsonMatch) {
-            let newPlan = JSON.parse(jsonMatch[0]);
+        if (refinedObj) {
+            let newPlan = refinedObj;
             newPlan._source = 'ai';
             // Carry forward keyword data from original plan
             if (PLAN_DATA._keywordDataUsed) newPlan._keywordDataUsed = true;
@@ -2158,7 +2190,8 @@ async function generateMockPlan(data) {
             landing_page_score: '6/10',
             missing_elements: ['Social Proof: No visible testimonials, reviews, or client logos on the landing page', 'Urgency/Scarcity: No time-limited offers, countdown timers, or limited availability signals', 'Trust Signals: Missing security badges, certifications, guarantees, or industry accreditations'],
             recommendations: ['Add a testimonials carousel or "Trusted by X+ companies" badge above the fold to boost credibility', 'Implement a sticky CTA bar with a time-sensitive offer (e.g., "Free audit — limited spots this month")', 'Display trust badges (SSL, BBB, industry certifications) near form fields and checkout to reduce friction']
-        }
+        },
+        _source: 'mock'
     };
 }
 
