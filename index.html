@@ -773,7 +773,7 @@
                 page: snapshot;
                 page-break-before: always;
                 page-break-after: always;
-                min-height: 268mm;
+                min-height: 250mm;
                 background: #fff !important;
             }
             /* Per-page footer via @page margin boxes. Campaign name is injected
@@ -1225,7 +1225,7 @@
                         <div class="pt-campaign" id="printClient2">Prepared for —</div>
                         <div class="pt-cta-box">
                             <div class="pt-cta-title">Need deeper strategy or full-service execution?</div>
-                            <div class="pt-cta-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9df5f8f1f1f2ddeff8eeedf2f3eef4ebf8f0e9eeb3fef2f0">[email&#160;protected]</a></div>
+                            <div class="pt-cta-email"><a href="mailto:hello@responsivemts.com" style="color:inherit;text-decoration:none;">hello@responsivemts.com</a></div>
                             <div class="pt-cta-web">responsivemts.com</div>
                             <div class="pt-contact-line">+1 (646) 757-1717 · 333 Hudson St, New York, NY</div>
                         </div>
@@ -1272,7 +1272,7 @@
                     <span class="cta-service-tag">Consulting & Workshops</span>
                 </div>
                 <div class="cta-buttons">
-                    <a class="cta-btn-primary" href="/cdn-cgi/l/email-protection#cca4a9a0a0a38cbea9bfbca3a2bfa5baa9a1b8bfe2afa3a1f3bfb9aea6a9afb8f181a9a8a5ade9fefc9ca0ada2e9fefc8fa3a2bfb9a0b8adb8a5a3a2e9fefc9ea9bdb9a9bfb8eaaea3a8b5f184a5e9fe8fe9fefc85e9fefca6b9bfb8e9fefcaba9a2a9beadb8a9a8e9fefcade9fefca1a9a8a5ade9fefcbca0ada2e9fefcb9bfa5a2abe9fefc9ea9bfbca3a2a8859de9fefcada2a8e9fefcbba3b9a0a8e9fefca0a5a7a9e9fefcb8a3e9fefca8a5bfafb9bfbfe9fefcaab9beb8a4a9bee9fefcbfb9bcbca3beb8e2e9fefc9ca0a9adbfa9e9fefca0a9b8e9fefca1a9e9fefca7a2a3bbe9fefcb5a3b9bee9fefcadbaada5a0adaea5a0a5b8b5e2">
+                    <a class="cta-btn-primary" href="mailto:hello@responsivemts.com?subject=Media%20Plan%20Consultation%20Request&body=Hi%2C%20I%20just%20generated%20a%20media%20plan%20using%20RespondIQ%20and%20would%20like%20to%20discuss%20further%20support.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0AThanks%2C">
                         ✉ Email Our Consulting Team
                     </a>
                     <a class="cta-btn-secondary" href="https://responsivemts.com" target="_blank">
@@ -2720,8 +2720,11 @@ function renderTemplate(data, plan) {
     // ── Section 16 pill renderer (replaces ⚠/✅ glyphs) ──
     function benchPill(vs) {
         const s = String(vs || '');
-        if (s.includes('✅') || /below|at|good/i.test(s)) return `<span class="bench-pill bench-pill-good">${s.replace(/[✅⚠️]/g, '').trim() || 'At/Below'}</span>`;
-        if (s.includes('⚠') || /above|over|worse/i.test(s)) return `<span class="bench-pill bench-pill-over">${s.replace(/[✅⚠️]/g, '').trim() || 'Above avg'}</span>`;
+        const stripped = s.replace(/[✅⚠️]/g, '').trim();
+        // Word boundaries on the regex so words like 'category' or 'beating'
+        // don't accidentally match 'at' and turn a red flag green.
+        if (s.includes('✅') || /\b(below|at|good|beat|beating)\b/i.test(s)) return `<span class="bench-pill bench-pill-good">${stripped || 'At/Below'}</span>`;
+        if (s.includes('⚠')  || /\b(above|over|worse|exceed|exceeds)\b/i.test(s)) return `<span class="bench-pill bench-pill-over">${stripped || 'Above avg'}</span>`;
         return `<span class="bench-pill bench-pill-neutral">${s || '—'}</span>`;
     }
 
@@ -3047,10 +3050,21 @@ function downloadAsPDF() {
         dyn.id = 'printDynamic';
         document.head.appendChild(dyn);
     }
-    dyn.textContent = '@media print { @page { @bottom-left { content: "RespondIQ · ' + campaign + '"; font-family: -apple-system, Inter, sans-serif; font-size: 9px; color: #94a3b8; letter-spacing: 0.05em; } } }';
+    dyn.textContent = '@media print {' +
+        '  @page { @bottom-left { content: "RespondIQ · ' + campaign + '"; font-family: -apple-system, Inter, sans-serif; font-size: 9px; color: #94a3b8; letter-spacing: 0.05em; } }' +
+        '  @page cover { @bottom-left { content: ""; } @bottom-right { content: ""; } }' +
+        '  @page snapshot { @bottom-left { content: ""; } @bottom-right { content: ""; } }' +
+        '}';
 
-    // Give Chart.js a tick to finish drawing the snapshot donut before printing
-    setTimeout(() => window.print(), 250);
+    // Give Chart.js a beat to finish drawing the snapshot donut before printing.
+    // 250ms was too tight for some browsers; 600ms is comfortable and unnoticeable.
+    setTimeout(() => {
+        // Force a final layout pass so the canvas is sized correctly in print
+        if (window._snapshotChartInstance) {
+            try { window._snapshotChartInstance.resize(); window._snapshotChartInstance.update('none'); } catch(e) {}
+        }
+        window.print();
+    }, 600);
 }
 
 function startOver() {
