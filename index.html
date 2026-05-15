@@ -364,6 +364,9 @@
 
         /* Hero metric card variants — used by Section 1 Investment Overview */
         .metric-card.hero { border: none; padding: 28px 26px; }
+        /* Force a tidy 2x2 layout for the four hero cards (auto-fit would
+           give 3+1 at common widths). On print the four cards lay out 4x1 */
+        .info-grid:has(> .metric-card.hero) { grid-template-columns: repeat(2, 1fr) !important; }
         .metric-card.hero::before { display: none; }
         .metric-card.hero .metric-value { color: #fff; font-size: 44px; line-height: 1.05; letter-spacing: -0.02em; }
         .metric-card.hero .metric-label { color: rgba(255,255,255,0.78); font-weight: 500; letter-spacing: 0.01em; }
@@ -486,19 +489,48 @@
             /* Force backgrounds to print so subtle surface tints render */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
 
-            /* Page setup */
-            @page { size: A4; margin: 12mm 10mm; }
+            /* Page setup. We use both @page margin AND .template-content padding.
+               @page sets the canonical margin and provides margin boxes for the
+               footer. .template-content padding is a defense in case the user
+               picks "Margins: None" in Chrome's print dialog (which strips @page).
+               At default settings, both add up to a slightly larger margin than
+               strictly needed, which still looks fine. */
+            @page {
+                size: A4;
+                margin: 14mm 12mm 18mm;
+                @bottom-left { content: "RespondIQ"; font-family: -apple-system, 'Inter', sans-serif; font-size: 9px; color: #94a3b8; letter-spacing: 0.05em; }
+                @bottom-right { content: "Page " counter(page); font-family: -apple-system, 'Inter', sans-serif; font-size: 9px; color: #94a3b8; }
+            }
+            @page cover {
+                margin: 0;
+                @bottom-left { content: ""; }
+                @bottom-right { content: ""; }
+            }
+            @page snapshot {
+                margin: 14mm 12mm 18mm;
+                @bottom-left { content: ""; }
+                @bottom-right { content: ""; }
+            }
+            @page closing {
+                margin: 14mm 12mm 18mm;
+                @bottom-left { content: ""; }
+                @bottom-right { content: ""; }
+            }
 
             /* Hide everything except the template */
             body { background: #ffffff !important; margin: 0; padding: 0; color: #0f172a !important; }
             .noise, #formSection, #loaderSection, .form-header, .result-actions,
-            .cta-section, .new-plan-link, .btn-download { display: none !important; }
+            .cta-section, .new-plan-link, .new-plan-link-wrap, .btn-download,
+            #refineSection, .refine-section { display: none !important; }
 
             /* Show only the media plan content */
             .container { max-width: 100% !important; padding: 0 !important; }
             #resultSection { display: block !important; }
             .template-wrapper { border: none !important; border-radius: 0 !important; box-shadow: none !important; background: #ffffff !important; }
-            .template-content { padding: 10px 5px !important; background: #ffffff !important; }
+            /* Padding here is a defensive layer for users who pick "Margins:
+               None" in the print dialog. With default margins, this adds a
+               little extra inset, which still looks fine. */
+            .template-content { padding: 4mm 4mm !important; background: #ffffff !important; }
             .template-brand-bar { padding: 10px 0 16px 0 !important; margin-bottom: 20px !important; }
             .client-logo { width: 36px !important; height: 36px !important; }
 
@@ -587,14 +619,15 @@
             .pt-ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,107,53,0.7); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(255,107,53,0.08); }
             .pt-ai-badge .pt-spark { color: var(--orange); font-size: 12px; }
 
-            /* ── Closing / CTA page (sits in default @page, keeps the footer) ── */
+            /* ── Closing / CTA page (footer suppressed via wrapper override below) ── */
             .print-cta-page {
                 display: grid !important;
                 grid-template-rows: auto 1fr auto;
-                min-height: 240mm;
+                min-height: 230mm;
                 padding: 10mm 14mm 6mm;
                 background: #ffffff !important; color: #0f172a !important;
                 page-break-before: always; page-break-after: avoid;
+                page: closing;
                 position: relative;
             }
             .print-cta-page .pt-top { display: flex; justify-content: space-between; align-items: flex-start; }
@@ -754,7 +787,14 @@
         .ps-audience-row strong { color: var(--navy); font-weight: 700; letter-spacing: 0.02em; }
 
         .ps-donut-wrap { display: flex; align-items: center; justify-content: center; min-height: 200px; }
-        .ps-donut-wrap canvas { max-width: 200px !important; max-height: 200px !important; }
+        .ps-donut-wrap .ps-donut-flex { display: flex; align-items: center; gap: 14px; width: 100%; }
+        .ps-donut-wrap svg { flex-shrink: 0; }
+        .ps-donut-wrap .ps-legend { font-size: 10.5px; line-height: 1.5; min-width: 0; flex: 1; }
+        .ps-donut-wrap .ps-legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+        .ps-donut-wrap .ps-legend-row:last-child { margin-bottom: 0; }
+        .ps-donut-wrap .ps-legend-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+        .ps-donut-wrap .ps-legend-label { color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ps-donut-wrap .ps-legend-pct { color: var(--text-3); font-variant-numeric: tabular-nums; font-weight: 600; }
 
         .ps-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
         .ps-phase { padding: 8px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; text-align: center; }
@@ -776,29 +816,14 @@
                 min-height: 250mm;
                 background: #fff !important;
             }
-            /* Per-page footer via @page margin boxes. Campaign name is injected
-               at print-time by downloadAsPDF() via a dynamic <style id="printDynamic"> tag.
-               Page numbering uses CSS counter(page). Named pages 'cover' and 'snapshot'
-               suppress the footer on the title and snapshot pages. */
-            @page {
-                size: A4;
-                margin: 14mm 12mm 18mm;
-                @bottom-left { content: "RespondIQ"; font-family: -apple-system, 'Inter', sans-serif; font-size: 9px; color: #94a3b8; letter-spacing: 0.05em; }
-                @bottom-right { content: "Page " counter(page); font-family: -apple-system, 'Inter', sans-serif; font-size: 9px; color: #94a3b8; }
-            }
-            @page cover {
-                margin: 0;
-                @bottom-left { content: ""; }
-                @bottom-right { content: ""; }
-            }
-            @page snapshot {
-                margin: 14mm 12mm 18mm;
-                @bottom-left { content: ""; }
-                @bottom-right { content: ""; }
-            }
+            /* Per-page footer is rendered as a position:fixed DOM element
+               inside .template-content (see .print-footer below). We don't
+               use @page margin boxes here because Chrome's "Margins: None"
+               print setting strips them. */
 
             /* The hero metric cards rendered on screen are also used on print page 3+ */
             .metric-card.hero { box-shadow: 0 4px 12px rgba(15,23,42,0.08) !important; }
+            .info-grid:has(> .metric-card.hero) { grid-template-columns: repeat(4, 1fr) !important; }
 
             /* Section group tint backgrounds must print */
             .section[data-group] { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -849,7 +874,8 @@
                     <div class="form-grid">
                         <div class="form-group"><label class="form-label">Industry *</label>
                             <select id="industry" class="form-select">
-                                <option>E-commerce (DTC)</option><option>B2B SaaS</option><option>Local Services</option><option>Healthcare</option><option>Financial Services</option><option>Education</option><option>Real Estate</option><option>Technology</option><option>Manufacturing</option><option>Professional Services</option><option>Retail</option><option>Hospitality & Travel</option><option>Automotive</option><option>FMCG / CPG</option><option>Media & Entertainment</option><option>Non-Profit</option>
+                                <option value="__auto__" selected>✦ Auto-detect from URL (recommended)</option>
+                                <option>E-commerce (DTC)</option><option>B2B SaaS</option><option>Local Services</option><option>Healthcare</option><option>Financial Services</option><option>Education</option><option>Real Estate</option><option>Technology</option><option>Manufacturing</option><option>Professional Services</option><option>Retail</option><option>Hospitality & Travel</option><option>Automotive</option><option>FMCG / CPG</option><option>Media & Entertainment</option><option>Non-Profit</option><option>B2B Marketing & Ad Operations Outsourcing</option><option>Adtech / Martech</option><option>Programmatic Advertising</option><option>Performance Marketing Agency</option><option>Creative Production</option><option>SaaS</option><option>Marketplace</option><option>DTC E-commerce</option><option>Subscription Services</option><option>Logistics & Supply Chain</option><option>Legal Services</option><option>Insurance</option><option>Fitness & Wellness</option><option>Beauty & Personal Care</option><option>Food & Beverage</option><option>Gaming</option><option>Cryptocurrency / Web3</option><option>Telecommunications</option><option>Energy & Utilities</option><option>Construction</option><option>Other</option>
                             </select>
                         </div>
                         <div class="form-group"><label class="form-label">Company Size</label>
@@ -1192,7 +1218,7 @@
                     <div class="ps-split">
                         <div class="ps-panel">
                             <div class="ps-panel-title">Channel Mix</div>
-                            <div class="ps-donut-wrap"><canvas id="snapshotBudgetChart"></canvas></div>
+                            <div class="ps-donut-wrap" id="snapshotBudgetSvg"></div>
                         </div>
                         <div class="ps-panel">
                             <div class="ps-panel-title">Audience Snapshot</div>
@@ -1286,7 +1312,7 @@
             </div>
 
             <!-- Small link to generate another plan -->
-            <div style="text-align:center;margin-top:24px;margin-bottom:40px;">
+            <div class="new-plan-link-wrap" style="text-align:center;margin-top:24px;margin-bottom:40px;">
                 <button class="new-plan-link" onclick="startOver()">↻ Generate another media plan</button>
             </div>
         </div>
@@ -1644,7 +1670,14 @@ function getFormData() {
         // Client info
         brandName: document.getElementById('brandName').value.trim() || 'Brand',
         website: document.getElementById('website').value.trim() || 'N/A',
-        industry: document.getElementById('industry').value,
+        industry: (function(){
+            const v = document.getElementById('industry').value;
+            // 'Auto-detect from URL' is value="__auto__" — send empty string so
+            // the server runs detectActualIndustry() and uses whatever it finds
+            // as the canonical industry (no mismatch banner will be shown).
+            return v === '__auto__' ? '' : v;
+        })(),
+        industryAutoDetect: document.getElementById('industry').value === '__auto__',
         companySize: document.getElementById('companySize').value,
         competitors: document.getElementById('competitors').value.trim() || '',
         // Campaign
@@ -2650,7 +2683,7 @@ function renderTemplate(data, plan) {
 
     // ── Industry Mismatch Banner ──
     let industryMismatchHtml = '';
-    if (plan.industry_mismatch && plan.detected_industry && plan._selectedIndustry) {
+    if (plan.industry_mismatch && plan.detected_industry && plan._selectedIndustry && !data.industryAutoDetect) {
         industryMismatchHtml = '<div style="margin:12px 0 8px;padding:12px 16px;border-radius:8px;background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.3);display:flex;align-items:flex-start;gap:10px;">' +
             '<span style="font-size:16px;line-height:1;">&#9888;</span>' +
             '<div style="font-size:11.5px;color:#475569;line-height:1.5;">' +
@@ -2810,7 +2843,7 @@ function renderTemplate(data, plan) {
                 '</tr>').join('') +
                 '</tbody></table>';
         })()}
-        <p style="margin-top:12px;color:#64748b;font-size:13px;font-style:italic;">Phase: <span class="phase-launch" style="font-size:10px;padding:3px 8px;">Launch</span> <span class="phase-optimize" style="font-size:10px;padding:3px 8px;">Optimize</span> <span class="phase-scale" style="font-size:10px;padding:3px 8px;">Scale</span> <span class="phase-close" style="font-size:10px;padding:3px 8px;">Close</span></p>
+        <p style="margin-top:12px;color:#64748b;font-size:13px;font-style:italic;">Phase: <span class="phase-launch" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Launch</span> <span class="phase-optimize" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Optimize</span> <span class="phase-scale" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Scale</span> <span class="phase-close" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Close</span></p>
     </div>
     <div class="section" data-group="tactics"><div class="section-number">Section 08</div><div class="section-title">${M.tactics}Budget Breakdown</div>
         <div class="chart-container"><canvas id="budgetChart"></canvas></div>
@@ -2990,36 +3023,31 @@ function renderSnapshotPage(plan, data) {
     renderSnapshotDonut(plan);
 }
 
-// ── Second Chart.js donut for the snapshot page (parallel to renderBudgetChart) ──
+// ── Inline-SVG donut for the snapshot page. We use SVG instead of Chart.js
+// here because Chrome's print path rasterizes canvases and the timing of
+// when that rasterization captures the latest pixels is unreliable. SVG
+// is part of the DOM and prints deterministically.
 function renderSnapshotDonut(plan) {
-    const canvas = document.getElementById('snapshotBudgetChart');
-    if (!canvas || !plan.budget_breakdown) return;
-    if (window._snapshotChartInstance) { window._snapshotChartInstance.destroy(); }
-    const labels = [];
-    const values = [];
-    const brandColors = ['#0071e3', '#ff6b35', '#34c759', '#af52de', '#5ac8fa', '#ff9500', '#ff2d55', '#00b4f0', '#ffcc00', '#8e8e93'];
-    plan.budget_breakdown.forEach(bb => {
-        if (bb.item && bb.pct) {
-            labels.push(bb.item);
-            const pctNum = parseFloat(String(bb.pct).replace('%', ''));
-            values.push(isNaN(pctNum) ? 0 : pctNum);
-        }
-    });
-    if (values.length === 0) return;
-    const colors = labels.map((_, i) => brandColors[i % brandColors.length]);
-    window._snapshotChartInstance = new Chart(canvas, {
-        type: 'doughnut',
-        data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#ffffff', borderWidth: 2 }] },
-        options: {
-            responsive: true, maintainAspectRatio: true,
-            animation: { duration: 0 },
-            plugins: {
-                legend: { position: 'right', labels: { color: '#0f172a', padding: 8, font: { size: 9, family: 'Inter' }, usePointStyle: true, pointStyle: 'circle', boxWidth: 8 } },
-                tooltip: { enabled: false }
-            },
-            cutout: '58%'
-        }
-    });
+    const container = document.getElementById('snapshotBudgetSvg');
+    if (!container || !plan.budget_breakdown) return;
+    const palette = ['#0071e3', '#ff6b35', '#34c759', '#af52de', '#5ac8fa', '#ff9500', '#ff2d55', '#00b4f0', '#ffcc00', '#8e8e93'];
+    const items = plan.budget_breakdown
+        .map(bb => ({ label: bb.item || '', pct: parseFloat(String(bb.pct || '').replace('%', '')) || 0 }))
+        .filter(it => it.pct > 0 && it.label);
+    if (!items.length) { container.innerHTML = ''; return; }
+    const total = items.reduce((s, it) => s + it.pct, 0) || 1;
+    // SVG geometry
+    const size = 150, cx = size / 2, cy = size / 2, r = 56, sw = 22;
+    const circ = 2 * Math.PI * r;
+    let offset = 0;
+    const segs = items.map((it, i) => {
+        const len = (it.pct / total) * circ;
+        const seg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${palette[i % palette.length]}" stroke-width="${sw}" stroke-dasharray="${len.toFixed(2)} ${(circ - len).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+        offset += len;
+        return seg;
+    }).join('');
+    const legend = items.map((it, i) => `<div class="ps-legend-row"><span class="ps-legend-swatch" style="background:${palette[i % palette.length]}"></span><span class="ps-legend-label">${it.label}</span><span class="ps-legend-pct">${it.pct.toFixed(0)}%</span></div>`).join('');
+    container.innerHTML = `<div class="ps-donut-flex"><svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">${segs}</svg><div class="ps-legend">${legend}</div></div>`;
 }
 
 // ======================== PDF DOWNLOAD (Browser Print-to-PDF) ========================
@@ -3041,8 +3069,11 @@ function downloadAsPDF() {
         try { renderSnapshotPage(PLAN_DATA, FORM_DATA); } catch (e) { console.warn('Snapshot render failed:', e); }
     }
 
-    // Inject per-print page footer with the campaign name. We escape any
-    // double-quotes in the campaign name to keep the CSS string valid.
+    // Inject a print-only stylesheet that overrides the static "RespondIQ"
+    // @page footer with "RespondIQ · <campaign>". Escape double quotes so
+    // they don't break the CSS string. Cover and snapshot are explicitly
+    // re-suppressed because the generic @page rule comes later in source
+    // order and would otherwise win the cascade.
     const campaign = (FORM_DATA && FORM_DATA.campaignName ? String(FORM_DATA.campaignName) : 'Media Plan').replace(/"/g, '\\"');
     let dyn = document.getElementById('printDynamic');
     if (!dyn) {
@@ -3054,17 +3085,15 @@ function downloadAsPDF() {
         '  @page { @bottom-left { content: "RespondIQ · ' + campaign + '"; font-family: -apple-system, Inter, sans-serif; font-size: 9px; color: #94a3b8; letter-spacing: 0.05em; } }' +
         '  @page cover { @bottom-left { content: ""; } @bottom-right { content: ""; } }' +
         '  @page snapshot { @bottom-left { content: ""; } @bottom-right { content: ""; } }' +
+        '  @page closing { @bottom-left { content: ""; } @bottom-right { content: ""; } }' +
         '}';
 
-    // Give Chart.js a beat to finish drawing the snapshot donut before printing.
-    // 250ms was too tight for some browsers; 600ms is comfortable and unnoticeable.
+    // Snapshot donut is now inline SVG (see renderSnapshotDonut), so we no
+    // longer need to wait for Chart.js or force a canvas resize. Tiny delay
+    // for layout reflow then print.
     setTimeout(() => {
-        // Force a final layout pass so the canvas is sized correctly in print
-        if (window._snapshotChartInstance) {
-            try { window._snapshotChartInstance.resize(); window._snapshotChartInstance.update('none'); } catch(e) {}
-        }
         window.print();
-    }, 600);
+    }, 150);
 }
 
 function startOver() {
