@@ -711,7 +711,10 @@
             .client-logo { width: 36px !important; height: 36px !important; }
 
             /* Section styling */
-            .section { margin-bottom: 30px !important; page-break-inside: avoid; }
+            .section { margin-bottom: 26px !important; break-inside: auto; page-break-inside: auto; }
+            .section-number,
+            .section-title,
+            .subsection-title { break-after: avoid; page-break-after: avoid; }
             .section-title { font-size: 22px !important; margin-bottom: 18px !important; }
             .subsection { margin-bottom: 20px !important; }
             .subsection-title { font-size: 16px !important; margin-bottom: 12px !important; }
@@ -722,6 +725,10 @@
             .info-box { padding: 16px !important; border-radius: 10px !important; page-break-inside: avoid; }
             .metric-card { padding: 18px !important; border-radius: 12px !important; page-break-inside: avoid; }
             .metric-value { font-size: 28px !important; }
+            .hero-metric-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 8px !important; background: transparent !important; align-items: stretch !important; break-inside: avoid; page-break-inside: avoid; }
+            .hero-metric-grid .metric-card.hero { min-height: 78px; padding: 14px 16px !important; box-shadow: none !important; background-clip: border-box !important; }
+            .hero-metric-grid .metric-value { font-size: 26px !important; margin-bottom: 4px !important; }
+            .hero-metric-grid .metric-label { font-size: 10.5px !important; line-height: 1.2 !important; }
 
             /* Tables */
             table { page-break-inside: auto; margin-top: 10px !important; border-radius: 8px !important; font-size: 11px !important;
@@ -734,6 +741,34 @@
             /* FIX: Wrap long text to next line instead of cropping */
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;}
+            .dense-print th { padding: 8px 10px !important; font-size: 9px !important; line-height: 1.2 !important; }
+            .dense-print td { padding: 8px 10px !important; font-size: 9.5px !important; line-height: 1.25 !important; }
+            .flight-plan-table th,
+            .flight-plan-table td { font-size: 8.5px !important; line-height: 1.2 !important; word-break: normal !important; overflow-wrap: normal !important; hyphens: auto; }
+            .flight-plan-table th:first-child,
+            .flight-plan-table td:first-child { width: 15% !important; }
+            .flight-plan-table .phase-launch,
+            .flight-plan-table .phase-optimize,
+            .flight-plan-table .phase-scale,
+            .flight-plan-table .phase-close,
+            .flight-plan-table .phase-sustain { padding: 6px 7px !important; font-size: 8.5px !important; line-height: 1.25 !important; margin-bottom: 0 !important; }
+            .phase-legend { display: none !important; }
+            .campaign-objectives-section,
+            .channel-mix-section,
+            .flight-plan-section,
+            .budget-breakdown-section,
+            .kpi-section,
+            .risk-planning-section,
+            .attribution-section,
+            .competitive-intel-section,
+            .cro-audit-section,
+            .creative-brief-section,
+            .benchmark-section { break-before: page; page-break-before: always; padding-top: 1mm !important; }
+            .flight-plan-section,
+            .budget-breakdown-section { break-inside: avoid; page-break-inside: avoid; }
+            .ai-disclaimer { font-size: 9.5px !important; line-height: 1.35 !important; margin-top: 8px !important; padding-top: 6px !important; break-inside: avoid; page-break-inside: avoid; }
+            .competitive-analysis-table td,
+            .journey-table td { font-size: 9px !important; line-height: 1.2 !important; padding-top: 7px !important; padding-bottom: 7px !important; }
 
             /* Bullet lists */
             .strategy-list li { padding: 12px 16px !important; margin-bottom: 6px !important; font-size: 12px !important; page-break-inside: avoid; }
@@ -745,6 +780,12 @@
             /* CRO Audit */
             .cro-grid { grid-template-columns: 1fr !important; }
             .cro-score-circle { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .brief-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+            .brief-card { padding: 12px !important; border-radius: 10px !important; break-inside: avoid; page-break-inside: avoid; }
+            .brief-card-channel { font-size: 11px !important; margin-bottom: 8px !important; }
+            .brief-field { margin-bottom: 6px !important; }
+            .brief-field-label { font-size: 8px !important; line-height: 1.15 !important; margin-bottom: 2px !important; }
+            .brief-field-value { font-size: 10px !important; line-height: 1.25 !important; }
 
             /* Text */
             .content-text { font-size: 13px !important; line-height: 1.7 !important; }
@@ -3651,27 +3692,27 @@ function renderTemplate(data, plan) {
             <div class="info-box"><div class="info-label">Monthly Budget</div><div class="info-value">${data.budget}</div></div>
         </div>
         <p class="content-text">${plan.executive_summary}</p>
-        <div class="subsection" style="margin-top:32px;"><div class="subsection-title">Investment Overview</div><div class="info-grid"><div class="metric-card hero hero-1"><div class="metric-value">${plan.total_investment}</div><div class="metric-label">Total Media Investment</div></div><div class="metric-card hero hero-2"><div class="metric-value">${plan.projected_impressions}</div><div class="metric-label">Projected Impressions</div></div>${['Sales & Conversions','Customer Retention'].includes(rawData.goal) ? `<div class="metric-card hero hero-3"><div class="metric-value">${plan.target_roas}</div><div class="metric-label">Target ROAS</div></div>` : `<div class="metric-card hero hero-3"><div class="metric-value">${data.kpi.split('(')[0].trim()}</div><div class="metric-label">Primary KPI</div></div>`}<div class="metric-card hero hero-4"><div class="metric-value">${plan.target_reach_pct}</div><div class="metric-label">Reach (Target Audience)</div></div></div></div>
+        <div class="subsection investment-overview" style="margin-top:32px;"><div class="subsection-title">Investment Overview</div><div class="info-grid hero-metric-grid"><div class="metric-card hero hero-1"><div class="metric-value">${plan.total_investment}</div><div class="metric-label">Total Media Investment</div></div><div class="metric-card hero hero-2"><div class="metric-value">${plan.projected_impressions}</div><div class="metric-label">Projected Impressions</div></div>${['Sales & Conversions','Customer Retention'].includes(rawData.goal) ? `<div class="metric-card hero hero-3"><div class="metric-value">${plan.target_roas}</div><div class="metric-label">Target ROAS</div></div>` : `<div class="metric-card hero hero-3"><div class="metric-value">${data.kpi.split('(')[0].trim()}</div><div class="metric-label">Primary KPI</div></div>`}<div class="metric-card hero hero-4"><div class="metric-value">${plan.target_reach_pct}</div><div class="metric-label">Reach (Target Audience)</div></div></div></div>
     </div>
     <div class="section" data-group="reference"><div class="section-number">Section 02</div><div class="section-title">${M.reference}Situation Analysis</div>
         <div class="subsection"><div class="subsection-title">Market Overview</div><p class="content-text">${plan.situation_analysis.market_overview}</p></div>
         <div class="subsection"><div class="subsection-title">Brand Position</div><p class="content-text">${plan.situation_analysis.brand_position}</p></div>
-        <div class="subsection"><div class="subsection-title">Competitive Analysis</div><table class="tbl-slate"><thead><tr><th>Competitor</th><th>Market Share</th><th>Key Strengths</th><th>Media Strategy</th></tr></thead><tbody>${plan.competitors.map(c=>`<tr><td>${c.name}${compBadge(c.name)}</td><td>${c.market_share}</td><td>${c.strengths}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></table>
+        <div class="subsection"><div class="subsection-title">Competitive Analysis</div><table class="tbl-slate dense-print competitive-analysis-table"><thead><tr><th>Competitor</th><th>Market Share</th><th>Key Strengths</th><th>Media Strategy</th></tr></thead><tbody>${plan.competitors.map(c=>`<tr><td>${c.name}${compBadge(c.name)}</td><td>${c.market_share}</td><td>${c.strengths}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></table>
         <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with verified intelligence from Google Ads Transparency Center.' : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
     </div>
     <div class="section" data-group="audience"><div class="section-number">Section 03</div><div class="section-title">${M.audience}Target Audience</div>
         <div class="subsection"><div class="subsection-title">Primary Target</div><div class="info-grid"><div class="info-box"><div class="info-label">Demographics</div><div class="info-value">${plan.target_audience.demographics}</div></div><div class="info-box"><div class="info-label">Psychographics</div><div class="info-value">${plan.target_audience.psychographics}</div></div><div class="info-box"><div class="info-label">Geographic</div><div class="info-value">${plan.target_audience.geographic}</div></div><div class="info-box"><div class="info-label">Behavioral</div><div class="info-value">${plan.target_audience.behavioral}</div></div></div></div>
         <div class="subsection"><div class="subsection-title">Secondary Audience</div><p class="content-text">${plan.target_audience.secondary_audience}</p></div>
     </div>
-    <div class="section" data-group="audience"><div class="section-number">Section 04</div><div class="section-title">${M.audience}Campaign Objectives</div>
+    <div class="section campaign-objectives-section" data-group="audience"><div class="section-number">Section 04</div><div class="section-title">${M.audience}Campaign Objectives</div>
         <div class="subsection"><div class="subsection-title">Marketing Objectives</div><ul class="strategy-list">${plan.marketing_objectives.map(o=>`<li>${o}</li>`).join('')}</ul></div>
         <div class="subsection"><div class="subsection-title">Media Objectives</div><ul class="strategy-list">${plan.media_objectives.map(o=>`<li>${o}</li>`).join('')}</ul></div>
     </div>
     <div class="section" data-group="strategy"><div class="section-number">Section 05</div><div class="section-title">${M.strategy}Media Strategy</div><p class="content-text">${plan.media_strategy}</p></div>
-    <div class="section" data-group="tactics"><div class="section-number">Section 06</div><div class="section-title">${M.tactics}Media Channel Mix & Tactics</div>
+    <div class="section channel-mix-section" data-group="tactics"><div class="section-number">Section 06</div><div class="section-title">${M.tactics}Media Channel Mix & Tactics</div>
         ${plan.channels.map(ch=>`<div class="subsection"><div class="subsection-title">${ch.name} — ${ch.budget_pct} of Budget</div><p class="content-text" style="margin-bottom:12px;"><em>${ch.rationale}</em></p><ul class="strategy-list">${ch.tactics.map(t=>`<li>${t}</li>`).join('')}</ul></div>`).join('')}
     </div>
-    <div class="section" data-group="tactics"><div class="section-number">Section 07</div><div class="section-title">${M.tactics}Flight Plan & Calendar</div>
+    <div class="section flight-plan-section" data-group="tactics"><div class="section-number">Section 07</div><div class="section-title">${M.tactics}Flight Plan & Calendar</div>
         ${(function() {
             const dur = data.campaignDuration || '6 Months';
             let headers = [];
@@ -3711,7 +3752,7 @@ function renderTemplate(data, plan) {
                 return cell;
             }
 
-            return '<table><thead><tr><th>Channel</th>' +
+            return '<table class="flight-plan-table"><thead><tr><th>Channel</th>' +
                 headers.map(h => '<th>' + h + '</th>').join('') +
                 '</tr></thead><tbody>' +
                 plan.flight_plan.map(fp => '<tr><td>' + fp.channel + '</td>' +
@@ -3719,9 +3760,9 @@ function renderTemplate(data, plan) {
                 '</tr>').join('') +
                 '</tbody></table>';
         })()}
-        <p style="margin-top:12px;color:#64748b;font-size:13px;font-style:italic;">Phase: <span class="phase-launch" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Launch</span> <span class="phase-optimize" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Optimize</span> <span class="phase-scale" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Scale</span> <span class="phase-close" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Close</span></p>
+        <p class="phase-legend" style="margin-top:12px;color:#64748b;font-size:13px;font-style:italic;">Phase: <span class="phase-launch" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Launch</span> <span class="phase-optimize" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Optimize</span> <span class="phase-scale" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Scale</span> <span class="phase-close" style="display:inline-block;font-size:10px;padding:3px 8px;margin:0 2px;">Close</span></p>
     </div>
-    <div class="section" data-group="tactics"><div class="section-number">Section 08</div><div class="section-title">${M.tactics}Budget Breakdown</div>
+    <div class="section budget-breakdown-section" data-group="tactics"><div class="section-number">Section 08</div><div class="section-title">${M.tactics}Budget Breakdown</div>
         <div class="chart-container"><canvas id="budgetChart"></canvas></div>
         <table class="tbl-orange"><thead><tr><th>Line Item</th><th>% of Total</th><th>Dollar Amount</th><th>Est. Impressions / Clicks</th><th>CPM / CPC</th></tr></thead><tbody>${plan.budget_breakdown.map(bb=>{
             const cpmVal = bb.cpm && bb.cpm !== '$0.00' && bb.cpm !== '$0' && bb.cpm !== '0' ? bb.cpm : (bb.impressions && bb.impressions.includes('$') ? bb.impressions.match(/\$[\d.]+\s*CP[CMAmsg]+/i)?.[0] || 'See impressions' : 'Included');
@@ -3734,22 +3775,22 @@ function renderTemplate(data, plan) {
             return `<tr><td>${bb.item}</td><td>${bb.pct}</td><td>${dollarAmt}</td><td>${bb.impressions}</td><td>${cpmVal}</td></tr>`;
         }).join('')}</tbody></table>
     </div>
-    <div class="section" data-group="measurement"><div class="section-number">Section 09</div><div class="section-title">${M.measurement}KPIs & Measurement Plan</div>
+    <div class="section kpi-section" data-group="measurement"><div class="section-number">Section 09</div><div class="section-title">${M.measurement}KPIs & Measurement Plan</div>
         <div class="subsection"><div class="subsection-title">Key Performance Indicators</div><table class="tbl-blue"><thead><tr><th>KPI</th><th>Target</th><th>Tool</th><th>Frequency</th></tr></thead><tbody>${plan.kpis.map(k=>`<tr><td>${k.kpi}</td><td>${k.target}</td><td>${k.tool}</td><td>${k.frequency}</td></tr>`).join('')}</tbody></table></div>
         <div class="subsection"><div class="subsection-title">Reporting & Optimization</div><ul class="strategy-list">${plan.reporting_plan.map(r=>`<li>${r}</li>`).join('')}</ul></div>
     </div>
-    <div class="section" data-group="risk"><div class="section-number">Section 10</div><div class="section-title">${M.risk}Risks & Contingency Planning</div>
+    <div class="section risk-planning-section" data-group="risk"><div class="section-number">Section 10</div><div class="section-title">${M.risk}Risks & Contingency Planning</div>
         <table class="tbl-amber"><thead><tr><th>Risk</th><th>Impact</th><th>Probability</th><th>Mitigation</th></tr></thead><tbody>${plan.risks.map(r=>`<tr><td>${r.risk}</td><td>${r.impact}</td><td>${r.probability}</td><td>${r.mitigation}</td></tr>`).join('')}</tbody></table>
     </div>
-    <div class="section" data-group="measurement"><div class="section-number">Section 11</div><div class="section-title">${M.measurement}Attribution & Analytics Framework</div>
-        <div class="subsection"><div class="subsection-title">Multi-Touch Attribution</div><table class="tbl-teal"><thead><tr><th>Model</th><th>Use Case</th><th>Credit Logic</th><th>Tool</th></tr></thead><tbody>${plan.attribution_models.map(a=>`<tr><td>${a.model}</td><td>${a.use_case}</td><td>${a.credit_logic}</td><td>${a.tool}</td></tr>`).join('')}</tbody></table></div>
+    <div class="section attribution-section" data-group="measurement"><div class="section-number">Section 11</div><div class="section-title">${M.measurement}Attribution & Analytics Framework</div>
+        <div class="subsection"><div class="subsection-title">Multi-Touch Attribution</div><table class="tbl-teal dense-print attribution-table"><thead><tr><th>Model</th><th>Use Case</th><th>Credit Logic</th><th>Tool</th></tr></thead><tbody>${plan.attribution_models.map(a=>`<tr><td>${a.model}</td><td>${a.use_case}</td><td>${a.credit_logic}</td><td>${a.tool}</td></tr>`).join('')}</tbody></table></div>
         <div class="subsection"><div class="subsection-title">Analytics Stack</div><ul class="strategy-list">${plan.analytics_stack.map(a=>`<li>${a}</li>`).join('')}</ul></div>
-        <div class="subsection"><div class="subsection-title">Customer Journey Tracking</div><table class="tbl-teal"><thead><tr><th>Stage</th><th>Touchpoints</th><th>Tracking</th><th>Metrics</th></tr></thead><tbody>${plan.customer_journey.map(j=>`<tr><td>${j.stage}</td><td>${j.touchpoints}</td><td>${j.tracking}</td><td>${j.metrics}</td></tr>`).join('')}</tbody></table></div>
+        <div class="subsection"><div class="subsection-title">Customer Journey Tracking</div><table class="tbl-teal dense-print journey-table"><thead><tr><th>Stage</th><th>Touchpoints</th><th>Tracking</th><th>Metrics</th></tr></thead><tbody>${plan.customer_journey.map(j=>`<tr><td>${j.stage}</td><td>${j.touchpoints}</td><td>${j.tracking}</td><td>${j.metrics}</td></tr>`).join('')}</tbody></table></div>
     </div>
-    <div class="section" data-group="reference"><div class="section-number">Section 12</div><div class="section-title">${M.reference}Competitive Intelligence</div>
+    <div class="section competitive-intel-section" data-group="reference"><div class="section-number">Section 12</div><div class="section-title">${M.reference}Competitive Intelligence</div>
         <div class="subsection"><div class="subsection-title">Share of Voice Analysis</div>
         ${sovChart(plan.competitive_sov, data.brandName)}
-        <table class="tbl-slate"><thead><tr><th>Brand</th><th>Est. Spend</th><th>SOV %</th><th>Channels</th><th>Messaging</th></tr></thead><tbody>${plan.competitive_sov.map(s=>`<tr><td>${s.brand}${adsPill(s.brand)}</td><td>${s.spend}</td><td>${s.sov_pct}</td><td>${s.channels}</td><td>${s.messaging}</td></tr>`).join('')}</tbody></table>
+        <table class="tbl-slate dense-print"><thead><tr><th>Brand</th><th>Est. Spend</th><th>SOV %</th><th>Channels</th><th>Messaging</th></tr></thead><tbody>${plan.competitive_sov.map(s=>`<tr><td>${s.brand}${adsPill(s.brand)}</td><td>${s.spend}</td><td>${s.sov_pct}</td><td>${s.channels}</td><td>${s.messaging}</td></tr>`).join('')}</tbody></table>
         ${plan.ai_data_confidence ? `<div class="ai-confidence-badge ai-confidence-${plan.ai_data_confidence}">${plan.ai_data_confidence === 'high' ? '●' : plan.ai_data_confidence === 'medium' ? '◐' : '○'} Data Confidence: ${plan.ai_data_confidence.charAt(0).toUpperCase() + plan.ai_data_confidence.slice(1)}</div>` : ''}
         <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Active ad counts verified via Google Ads Transparency Center. Spend estimates and SOV percentages remain AI-generated approximations.' : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
         <div class="subsection"><div class="subsection-title">Market Opportunities</div><ul class="strategy-list">${plan.market_opportunities.map(o=>`<li>${o}</li>`).join('')}</ul></div>
@@ -3758,7 +3799,7 @@ function renderTemplate(data, plan) {
     <div class="section" data-group="strategy"><div class="section-number">Section 13</div><div class="section-title">${M.strategy}Recommendations & Next Steps</div>
         <ul class="strategy-list">${plan.recommendations.map(r=>`<li>${r}</li>`).join('')}</ul>
     </div>
-    ${plan.cro_audit ? `<div class="section" data-group="risk"><div class="section-number">Section 14</div><div class="section-title">${M.risk}Website & Conversion Audit</div>
+    ${plan.cro_audit ? `<div class="section cro-audit-section" data-group="risk"><div class="section-number">Section 14</div><div class="section-title">${M.risk}Website & Conversion Audit</div>
         <div class="cro-score">
             <div class="cro-score-circle">${plan.cro_audit.landing_page_score}</div>
             <div class="cro-score-label"><strong style="color:#0f172a;">Landing Page Score</strong><br>Based on analysis of value proposition clarity, social proof, urgency elements, trust signals, CTA effectiveness, and mobile experience.</div>
@@ -3768,7 +3809,7 @@ function renderTemplate(data, plan) {
             <div class="cro-card recs"><div class="cro-card-title">✅ Recommendations</div><ul>${plan.cro_audit.recommendations.map(r=>`<li>${r}</li>`).join('')}</ul></div>
         </div>
     </div>` : ''}
-    ${plan.creative_briefs && plan.creative_briefs.length ? `<div class="section" data-group="risk"><div class="section-number">Section 15</div><div class="section-title">${M.risk}Creative Brief by Channel</div>
+    ${plan.creative_briefs && plan.creative_briefs.length ? `<div class="section creative-brief-section" data-group="risk"><div class="section-number">Section 15</div><div class="section-title">${M.risk}Creative Brief by Channel</div>
         <div class="brief-grid">${plan.creative_briefs.map(b => `<div class="brief-card">
             <div class="brief-card-channel">${b.channel}</div>
             <div class="brief-field"><div class="brief-field-label">Format</div><div class="brief-field-value">${b.format}</div></div>
@@ -3777,7 +3818,7 @@ function renderTemplate(data, plan) {
             <div class="brief-field"><div class="brief-field-label">Creative Notes</div><div class="brief-field-value">${b.creative_notes}</div></div>
         </div>`).join('')}</div>
     </div>` : ''}
-    ${plan.benchmarks && plan.benchmarks.length ? `<div class="section" data-group="measurement"><div class="section-number">Section 16</div><div class="section-title">${M.measurement}Industry Benchmark Comparison</div>
+    ${plan.benchmarks && plan.benchmarks.length ? `<div class="section benchmark-section" data-group="measurement"><div class="section-number">Section 16</div><div class="section-title">${M.measurement}Industry Benchmark Comparison</div>
         ${benchChart(plan.benchmarks)}
         <table class="tbl-blue"><thead><tr><th>Metric</th><th>Plan Target</th><th>Industry Avg (${benchmarkIndustryLabel})</th><th>vs. Benchmark</th></tr></thead><tbody>${plan.benchmarks.map(b => `<tr><td>${b.metric}</td><td>${b.plan_target}</td><td>${b.industry_avg}</td><td>${benchPill(b.vs_benchmark)}</td></tr>`).join('')}</tbody></table>
         <p class="ai-disclaimer">Benchmarks based on 2025-2026 industry aggregates. Actual performance varies by creative quality, landing page experience, and competitive landscape.</p>
