@@ -631,6 +631,7 @@
         .ads-pill.high { background: rgba(0,113,227,0.1); color: #0071e3; border: 1px solid rgba(0,113,227,0.3); }
         .ads-pill.moderate { background: rgba(255,149,0,0.1); color: #d97e00; border: 1px solid rgba(255,149,0,0.3); }
         .ads-pill.low { background: var(--surface-2); color: var(--text-3); border: 1px solid var(--border); }
+        .ads-pill.weighted { border-style: dashed; }
 
         /* Data Sources Bar (top of plan) */
         .data-sources-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); margin-bottom: 16px; }
@@ -3731,7 +3732,14 @@ function renderTemplate(data, plan) {
         const pills = [];
         if (intel && intel.ad_count > 0) {
             const tier = intel.ad_count > 100 ? 'high' : intel.ad_count > 20 ? 'moderate' : 'low';
-            pills.push(`<span class="ads-pill ${tier}">${intel.ad_count} Google ads</span>`);
+            const accountCount = Number(intel.account_ad_count || intel.raw_ad_count || intel.ad_count || 0);
+            const brandCount = Number(intel.ad_count || 0);
+            const isWeighted = accountCount > brandCount && String(intel.ad_count_scope || '').includes('weighted');
+            const label = isWeighted ? `${brandCount} weighted Google ads` : `${brandCount} Google ads`;
+            const title = isWeighted
+                ? `Google account shows ${accountCount} active ads. RespondIQ weighted this to ${brandCount} brand-relevant ads because the account may include client or third-party ads. ${intel.qualification_note || ''}`
+                : 'Verified via Google Ads Transparency Center';
+            pills.push(`<span class="ads-pill ${tier}${isWeighted ? ' weighted' : ''}" title="${escapeAttr(title)}">${escapeHtml(label)}</span>`);
         }
         if (metaIntel && metaIntel.ad_count > 0) {
             const tier = metaIntel.ad_count > 100 ? 'high' : metaIntel.ad_count > 20 ? 'moderate' : 'low';
@@ -3776,6 +3784,11 @@ function renderTemplate(data, plan) {
     // ── Build Data Sources bar ──
     const hasTransparencyData = window._competitiveIntel && window._competitiveIntel.some(ci => ci.found);
     const hasMetaData = window._metaAdsIntel && window._metaAdsIntel.some(mi => mi.found);
+    const hasWeightedGoogleCounts = window._competitiveIntel && window._competitiveIntel.some(ci => {
+        const accountCount = Number(ci.account_ad_count || ci.raw_ad_count || ci.ad_count || 0);
+        const brandCount = Number(ci.ad_count || 0);
+        return ci.found && accountCount > brandCount && String(ci.ad_count_scope || '').includes('weighted');
+    });
     const hasKeywordData = plan._keywordDataUsed || false;
     let dataSourcesHtml = '';
     if (hasTransparencyData || hasMetaData || hasKeywordData) {
@@ -3903,7 +3916,7 @@ function renderTemplate(data, plan) {
         <div class="subsection"><div class="subsection-title">Market Overview</div><p class="content-text">${plan.situation_analysis.market_overview}</p></div>
         <div class="subsection"><div class="subsection-title">Brand Position</div><p class="content-text">${plan.situation_analysis.brand_position}</p></div>
         <div class="subsection"><div class="subsection-title">Competitive Analysis</div><table class="tbl-slate dense-print competitive-analysis-table"><thead><tr><th>Competitor</th><th>Market Share</th><th>Key Strengths</th><th>Media Strategy</th></tr></thead><tbody>${plan.competitors.map(c=>`<tr><td>${c.name}${compBadge(c.name)}</td><td>${c.market_share}</td><td>${c.strengths}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></table>
-        <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with verified intelligence from Google Ads Transparency Center.' : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with Google Ads Transparency Center intelligence' + (hasWeightedGoogleCounts ? '; agency-style account totals are weighted so client ads are not treated as brand-owned.' : '.') : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
     </div>
     <div class="section" data-group="audience"><div class="section-number">Section 03</div><div class="section-title">${M.audience}Target Audience</div>
         <div class="subsection"><div class="subsection-title">Primary Target</div><div class="info-grid"><div class="info-box"><div class="info-label">Demographics</div><div class="info-value">${plan.target_audience.demographics}</div></div><div class="info-box"><div class="info-label">Psychographics</div><div class="info-value">${plan.target_audience.psychographics}</div></div><div class="info-box"><div class="info-label">Geographic</div><div class="info-value">${plan.target_audience.geographic}</div></div><div class="info-box"><div class="info-label">Behavioral</div><div class="info-value">${plan.target_audience.behavioral}</div></div></div></div>
@@ -3998,7 +4011,7 @@ function renderTemplate(data, plan) {
         <table class="tbl-slate dense-print"><thead><tr><th>Brand</th><th>Est. Spend</th><th>SOV %</th><th>Channels</th><th>Messaging</th></tr></thead><tbody>${plan.competitive_sov.map(s=>`<tr><td>${s.brand}${adsPill(s.brand)}</td><td>${s.spend}</td><td>${s.sov_pct}</td><td>${s.channels}</td><td>${s.messaging}</td></tr>`).join('')}</tbody></table>
         ${metaCreativeEvidenceHtml()}
         ${plan.ai_data_confidence ? `<div class="ai-confidence-badge ai-confidence-${plan.ai_data_confidence}">${plan.ai_data_confidence === 'high' ? '●' : plan.ai_data_confidence === 'medium' ? '◐' : '○'} Data Confidence: ${plan.ai_data_confidence.charAt(0).toUpperCase() + plan.ai_data_confidence.slice(1)}</div>` : ''}
-        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' + (hasWeightedGoogleCounts ? ' Google account-level totals are weighted where profiles appear agency-managed or multi-brand.' : '') : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
         <div class="subsection"><div class="subsection-title">Market Opportunities</div><ul class="strategy-list">${plan.market_opportunities.map(o=>`<li>${o}</li>`).join('')}</ul></div>
         <div class="subsection"><div class="subsection-title">Monitoring & Response Strategy</div><table class="tbl-slate"><thead><tr><th>Tool</th><th>Frequency</th><th>Key Metrics</th><th>Trigger</th></tr></thead><tbody>${plan.monitoring_tools.map(m=>`<tr><td>${m.tool}</td><td>${m.frequency}</td><td>${m.metrics}</td><td>${m.trigger}</td></tr>`).join('')}</tbody></table></div>
     </div>
