@@ -422,12 +422,17 @@
         /* ── RESULTS ── */
         #resultSection { display: none; animation: fadeInUp 0.8s ease-out; }
         .result-actions { display: flex; gap: 16px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-        .btn-download { padding: 16px 32px; font-size: 16px; font-weight: 500; border: none; border-radius: 980px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
+        .btn-download { position: relative; padding: 16px 32px; font-size: 16px; font-weight: 500; border: none; border-radius: 980px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
         .btn-download:hover { transform: translateY(-3px) scale(1.02); }
         .btn-pdf { background: var(--accent-gradient); color: white; box-shadow: 0 10px 24px rgba(255,59,48,0.25); }
-        .btn-pdf:disabled { opacity: 0.6; cursor: wait; transform: none; }
         .btn-ppt { background: linear-gradient(135deg, #2f80ed, #4aa69a); color: white; box-shadow: 0 10px 24px rgba(47,128,237,0.22); }
-        .btn-ppt:disabled { opacity: 0.6; cursor: wait; transform: none; }
+        .btn-download:disabled { opacity: 0.72; cursor: wait; transform: none; }
+        .btn-download.is-processing { box-shadow: 0 10px 28px rgba(15,23,42,0.12); }
+        .btn-download.is-processing::before {
+            content: ''; width: 14px; height: 14px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.44); border-top-color: #fff;
+            animation: spin 0.8s linear infinite; flex: 0 0 auto;
+        }
 
         /* ── CTA SECTION ── */
         .cta-section {
@@ -1424,16 +1429,16 @@
                 <p class="loader-sub">Analyzing data, forecasting performance, building strategy</p>
                 <div class="riq-loader-kpi-strip" aria-hidden="true">
                     <div class="riq-loader-kpi-cell">
-                        <span class="riq-loader-kpi-label" id="loaderKpiRoasLabel">Forecast ROAS</span>
-                        <span class="riq-loader-kpi-value" id="loaderKpiRoas">2.10<span class="riq-loader-kpi-unit">×</span></span>
+                        <span class="riq-loader-kpi-label" id="loaderKpiRoasLabel">Forecast KPI</span>
+                        <span class="riq-loader-kpi-value" id="loaderKpiRoas">—</span>
                     </div>
                     <div class="riq-loader-kpi-cell">
-                        <span class="riq-loader-kpi-label" id="loaderKpiReachLabel">Est. Reach</span>
+                        <span class="riq-loader-kpi-label" id="loaderKpiReachLabel">Est. Impressions</span>
                         <span class="riq-loader-kpi-value" id="loaderKpiReach">0</span>
                     </div>
                     <div class="riq-loader-kpi-cell">
-                        <span class="riq-loader-kpi-label" id="loaderKpiCostLabel">Cost Model</span>
-                        <span class="riq-loader-kpi-value" id="loaderKpiCost">$0</span>
+                        <span class="riq-loader-kpi-label" id="loaderKpiCostLabel">KPI Model</span>
+                        <span class="riq-loader-kpi-value" id="loaderKpiCost">—</span>
                     </div>
                 </div>
                 <div class="riq-loader-status-row">
@@ -1460,7 +1465,7 @@
                     </div>
                     <div class="riq-loader-step is-pending">
                         <span class="riq-loader-state"><span class="pending">·</span><span class="spin"></span><span class="done">✓</span></span>
-                        <span class="riq-loader-label">Forecasting reach &amp; conversion</span>
+                        <span class="riq-loader-label">Forecasting impressions &amp; KPI</span>
                         <span class="riq-loader-step-status">Queued</span>
                     </div>
                     <div class="riq-loader-step is-pending">
@@ -1500,7 +1505,7 @@
 
             <!-- EXPORT ACTIONS -->
             <div class="result-actions">
-                <button class="btn-download btn-pdf" id="btnPdf" onclick="downloadAsPDF()">📕 Save Media Plan as PDF</button>
+                <button class="btn-download btn-pdf" id="btnPdf" onclick="downloadAsPDF()">Save Media Plan as PDF</button>
                 <button class="btn-download btn-ppt" id="btnPpt" onclick="downloadAsPPT()">Save Media Plan as PPT</button>
             </div>
 
@@ -2270,9 +2275,88 @@ function getLoaderBudgetInfo(data) {
     };
 }
 
+function getLoaderKpiConfig(data) {
+    const raw = String((data && data.kpi) || 'ROAS (Return on Ad Spend)');
+    const value = raw.toLowerCase();
+    if (value.includes('cpa') || value.includes('acquisition')) return { key: 'cpa', label: 'CPA', format: 'currency', lowerIsBetter: true, pattern: /cpa|cost per acquisition|cost per lead|cost per conversion/i };
+    if (value.includes('ctr') || value.includes('click-through')) return { key: 'ctr', label: 'CTR', format: 'percent', lowerIsBetter: false, pattern: /ctr|click.?through/i };
+    if (value.includes('cpc') || value.includes('cost per click')) return { key: 'cpc', label: 'CPC', format: 'currency', lowerIsBetter: true, pattern: /cpc|cost per click/i };
+    if (value.includes('cpm') || value.includes('thousand')) return { key: 'cpm', label: 'CPM', format: 'currency', lowerIsBetter: true, pattern: /cpm|cost per thousand/i };
+    if (value.includes('conversion rate')) return { key: 'conversion_rate', label: 'CVR', format: 'percent', lowerIsBetter: false, pattern: /conversion rate|cvr/i };
+    if (value.includes('brand lift')) return { key: 'brand_lift', label: 'Brand Lift', format: 'percent', lowerIsBetter: false, pattern: /brand lift/i };
+    if (value.includes('share of voice')) return { key: 'sov', label: 'SOV', format: 'percent', lowerIsBetter: false, pattern: /share of voice|sov/i };
+    if (value.includes('customer lifetime') || value.includes('lifetime value') || value.includes('ltv')) return { key: 'clv', label: 'CLV', format: 'currency', lowerIsBetter: false, pattern: /customer lifetime|lifetime value|clv|ltv/i };
+    if (value.includes('engagement')) return { key: 'engagement_rate', label: 'Engagement', format: 'percent', lowerIsBetter: false, pattern: /engagement/i };
+    return { key: 'roas', label: 'ROAS', format: 'ratio', lowerIsBetter: false, pattern: /roas|return on ad spend/i };
+}
+
+function estimateLoaderKpiTarget(config, totalBudget, blendedCpm, impressionsEstimate, goal) {
+    const normalizedGoal = String(goal || '').toLowerCase();
+    const assumedCtr = normalizedGoal.includes('awareness') ? 0.009 : normalizedGoal.includes('lead') ? 0.018 : 0.014;
+    const assumedCvr = normalizedGoal.includes('lead') ? 0.055 : normalizedGoal.includes('sales') ? 0.032 : 0.026;
+    const clicks = Math.max(1, impressionsEstimate * assumedCtr);
+    const conversions = Math.max(1, clicks * assumedCvr);
+
+    if (config.key === 'cpa') return totalBudget / conversions;
+    if (config.key === 'cpc') return totalBudget / clicks;
+    if (config.key === 'cpm') return blendedCpm;
+    if (config.key === 'ctr') return assumedCtr * 100;
+    if (config.key === 'conversion_rate') return assumedCvr * 100;
+    if (config.key === 'brand_lift') return normalizedGoal.includes('awareness') ? 8.5 : 5.8;
+    if (config.key === 'sov') return Math.min(28, Math.max(7, totalBudget / 4200));
+    if (config.key === 'clv') return normalizedGoal.includes('retention') ? 520 : normalizedGoal.includes('sales') ? 360 : 280;
+    if (config.key === 'engagement_rate') return normalizedGoal.includes('awareness') ? 4.8 : 3.6;
+    return normalizedGoal.includes('sales') ? 4.35 : normalizedGoal.includes('lead') ? 3.15 : normalizedGoal.includes('awareness') ? 2.65 : 3.6;
+}
+
+function parseLoaderMetricValue(value, format) {
+    const text = String(value || '');
+    const match = text.match(/([\d.]+)/);
+    if (!match) return null;
+    const parsed = parseFloat(match[1]);
+    if (!Number.isFinite(parsed)) return null;
+    return parsed;
+}
+
+function formatLoaderMetricValue(value, format) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return '—';
+    if (format === 'ratio') return n.toFixed(2) + '<span class="riq-loader-kpi-unit">×</span>';
+    if (format === 'percent') return (n >= 10 ? n.toFixed(0) : n.toFixed(1)) + '<span class="riq-loader-kpi-unit">%</span>';
+    if (format === 'currency') {
+        const decimals = n < 10 ? 2 : n < 100 ? 0 : 0;
+        return '$' + n.toFixed(decimals);
+    }
+    return formatLoaderCompactNumber(n);
+}
+
+function findLoaderPlanMetric(plan, config) {
+    if (!plan || !config) return null;
+    if (config.key === 'roas') {
+        const roas = parseLoaderMetricValue(plan.target_roas, 'ratio');
+        if (roas !== null) return roas;
+    }
+    const benchmark = Array.isArray(plan.benchmarks)
+        ? plan.benchmarks.find(b => config.pattern.test(String(b.metric || '')))
+        : null;
+    if (benchmark) {
+        const value = parseLoaderMetricValue(benchmark.plan_target, config.format);
+        if (value !== null) return value;
+    }
+    const kpi = Array.isArray(plan.kpis)
+        ? plan.kpis.find(k => config.pattern.test(String(k.kpi || '')))
+        : null;
+    if (kpi) {
+        const value = parseLoaderMetricValue(kpi.target, config.format);
+        if (value !== null) return value;
+    }
+    return null;
+}
+
 function estimateRespondIqLoaderMetrics(data) {
     const budgetInfo = getLoaderBudgetInfo(data);
     const totalBudget = budgetInfo.monthlyBudget * budgetInfo.months;
+    const config = getLoaderKpiConfig(data);
     const platforms = data.platformList && data.platformList.length
         ? data.platformList
         : ['Programmatic Display', 'Meta Ads (Facebook)', 'Google Ads (Search)', 'YouTube Ads'];
@@ -2296,18 +2380,24 @@ function estimateRespondIqLoaderMetrics(data) {
     });
     blendedCpm = blendedCpm / Math.max(1, platforms.length);
 
-    const reachEstimate = Math.round((totalBudget / Math.max(1, blendedCpm)) * 1000);
+    const impressionsEstimate = Math.round((totalBudget / Math.max(1, blendedCpm)) * 1000);
     const goal = String(data.goal || '').toLowerCase();
-    const roasTarget = goal.includes('sales') ? 4.35 : goal.includes('lead') ? 3.15 : goal.includes('awareness') ? 2.65 : 3.6;
-    const cpaTarget = goal.includes('lead') ? 72 : goal.includes('sales') ? 42 : 54;
+    const kpiTarget = estimateLoaderKpiTarget(config, totalBudget, blendedCpm, impressionsEstimate, goal);
+    const primaryStart = config.lowerIsBetter ? kpiTarget * 1.45 : kpiTarget * 0.55;
 
     return {
-        roasStart: Math.max(1.4, roasTarget * 0.55),
-        roasEnd: roasTarget,
-        reachStart: Math.max(1000, reachEstimate * 0.08),
-        reachEnd: reachEstimate,
-        costStart: Math.round(cpaTarget * 1.45),
-        costEnd: cpaTarget
+        primaryLabel: 'Forecast ' + config.label,
+        primaryFormat: config.format,
+        primaryStart: Math.max(config.format === 'percent' ? 0.1 : 0.01, primaryStart),
+        primaryEnd: kpiTarget,
+        impressionsLabel: 'Est. Impressions',
+        impressionsStart: Math.max(1000, impressionsEstimate * 0.08),
+        impressionsEnd: impressionsEstimate,
+        modelLabel: config.label + ' Model',
+        modelFormat: config.format,
+        modelStart: Math.max(config.format === 'percent' ? 0.1 : 0.01, primaryStart),
+        modelEnd: kpiTarget,
+        kpiKey: config.key
     };
 }
 
@@ -2340,16 +2430,22 @@ function updateRespondIqLoaderMetrics() {
     if (!estimate) return;
     const progress = RESPONDIQ_LOADER_FINAL_METRICS ? 1 : Math.min(0.92, elapsed / 45000);
     const ease = 1 - Math.pow(1 - progress, 2);
-    const roas = estimate.roasStart + (estimate.roasEnd - estimate.roasStart) * ease;
-    const reach = estimate.reachStart + (estimate.reachEnd - estimate.reachStart) * ease;
-    const cost = estimate.costStart + (estimate.costEnd - estimate.costStart) * ease;
+    const primary = estimate.primaryStart + (estimate.primaryEnd - estimate.primaryStart) * ease;
+    const impressions = estimate.impressionsStart + (estimate.impressionsEnd - estimate.impressionsStart) * ease;
+    const model = estimate.modelStart + (estimate.modelEnd - estimate.modelStart) * ease;
 
+    const primaryLabelEl = document.getElementById('loaderKpiRoasLabel');
+    const impressionsLabelEl = document.getElementById('loaderKpiReachLabel');
+    const modelLabelEl = document.getElementById('loaderKpiCostLabel');
     const roasEl = document.getElementById('loaderKpiRoas');
     const reachEl = document.getElementById('loaderKpiReach');
     const costEl = document.getElementById('loaderKpiCost');
-    if (roasEl) roasEl.innerHTML = roas.toFixed(2) + '<span class="riq-loader-kpi-unit">×</span>';
-    if (reachEl) reachEl.textContent = formatLoaderCompactNumber(reach);
-    if (costEl) costEl.textContent = '$' + Math.round(cost);
+    if (primaryLabelEl) primaryLabelEl.textContent = estimate.primaryLabel || 'Forecast KPI';
+    if (impressionsLabelEl) impressionsLabelEl.textContent = estimate.impressionsLabel || 'Est. Impressions';
+    if (modelLabelEl) modelLabelEl.textContent = estimate.modelLabel || 'KPI Model';
+    if (roasEl) roasEl.innerHTML = formatLoaderMetricValue(primary, estimate.primaryFormat);
+    if (reachEl) reachEl.textContent = formatLoaderCompactNumber(impressions);
+    if (costEl) costEl.innerHTML = formatLoaderMetricValue(model, estimate.modelFormat);
 }
 
 function getRespondIqLoaderStepCount() {
@@ -2392,25 +2488,24 @@ function stopRespondIqLoader() {
 function updateRespondIqLoaderFromPlan(plan) {
     if (!plan) return;
     const current = RESPONDIQ_LOADER_ESTIMATE || {};
-    const roasMatch = String(plan.target_roas || '').match(/([\d.]+)/);
-    const reach = parseLoaderPlanNumber(plan.projected_impressions);
-    let cost = null;
-    if (Array.isArray(plan.benchmarks)) {
-        const cpa = plan.benchmarks.find(b => /cpa|cost per acquisition|cost per lead/i.test(String(b.metric || '')));
-        const cpc = plan.benchmarks.find(b => /cpc|cost per click/i.test(String(b.metric || '')));
-        const source = cpa || cpc;
-        if (source) {
-            const m = String(source.plan_target || '').match(/\$?([\d.]+)/);
-            if (m) cost = parseFloat(m[1]);
-        }
-    }
+    const config = getLoaderKpiConfig(FORM_DATA || {});
+    const finalKpi = findLoaderPlanMetric(plan, config);
+    const impressions = parseLoaderPlanNumber(plan.projected_impressions);
+    const target = Number.isFinite(finalKpi) ? finalKpi : (current.primaryEnd || current.modelEnd || 1);
+    const start = config.lowerIsBetter ? (current.primaryEnd || target * 1.25) : (current.primaryEnd || target * 0.75);
     RESPONDIQ_LOADER_FINAL_METRICS = {
-        roasStart: current.roasEnd || 2.1,
-        roasEnd: roasMatch ? parseFloat(roasMatch[1]) : (current.roasEnd || 3.6),
-        reachStart: current.reachEnd || 1000,
-        reachEnd: reach || current.reachEnd || 1000,
-        costStart: current.costEnd || 50,
-        costEnd: Number.isFinite(cost) ? cost : (current.costEnd || 50)
+        primaryLabel: 'Forecast ' + config.label,
+        primaryFormat: config.format,
+        primaryStart: start,
+        primaryEnd: target,
+        impressionsLabel: 'Est. Impressions',
+        impressionsStart: current.impressionsEnd || 1000,
+        impressionsEnd: impressions || current.impressionsEnd || 1000,
+        modelLabel: config.label + ' Model',
+        modelFormat: config.format,
+        modelStart: start,
+        modelEnd: target,
+        kpiKey: config.key
     };
     updateRespondIqLoaderMetrics();
 }
@@ -4098,6 +4193,8 @@ async function downloadAsPDF() {
     const originalText = btn ? btn.textContent : '';
     if (btn) {
         btn.disabled = true;
+        btn.classList.add('is-processing');
+        btn.setAttribute('aria-busy', 'true');
         btn.textContent = 'Preparing PDF...';
     }
 
@@ -4135,7 +4232,9 @@ async function downloadAsPDF() {
         setTimeout(() => {
             if (btn) {
                 btn.disabled = false;
-                btn.textContent = originalText || '📕 Save Media Plan as PDF';
+                btn.classList.remove('is-processing');
+                btn.removeAttribute('aria-busy');
+                btn.textContent = originalText || 'Save Media Plan as PDF';
             }
         }, 500);
     }
@@ -4147,6 +4246,8 @@ async function downloadAsPPT() {
     const originalText = btn ? btn.textContent : '';
     if (btn) {
         btn.disabled = true;
+        btn.classList.add('is-processing');
+        btn.setAttribute('aria-busy', 'true');
         btn.textContent = 'Preparing PPT...';
     }
 
@@ -4183,6 +4284,8 @@ async function downloadAsPPT() {
         setTimeout(() => {
             if (btn) {
                 btn.disabled = false;
+                btn.classList.remove('is-processing');
+                btn.removeAttribute('aria-busy');
                 btn.textContent = originalText || 'Save Media Plan as PPT';
             }
         }, 500);
