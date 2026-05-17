@@ -1501,7 +1501,7 @@
             <div class="form-header">
                 <div class="brand-logo">RespondIQ <span>by Responsive MTS</span></div>
                 <h1>Your Media Plan</h1>
-                <p>AI-generated strategy ready for review</p>
+                <p>Strategic media plan ready for review</p>
             </div>
 
             <!-- EXPORT ACTIONS -->
@@ -1611,11 +1611,11 @@
 
             <!-- ========== LEAD GEN CTA ========== -->
             <div class="cta-section">
-                <div class="cta-badge">Need More?</div>
-                <div class="cta-title">Connect With Our Expert Team</div>
+                <div class="cta-badge">Next Step</div>
+                <div class="cta-title">Turn This Plan Into a Live Campaign</div>
                 <p class="cta-subtitle">
-                    This AI-generated plan is your starting point. For deeper strategy, custom execution,
-                    full-service campaign management, and advanced analytics — our consulting team is ready to help.
+                    Use this plan as a strategic starting point. For channel validation, launch support,
+                    campaign management, and advanced measurement, our consulting team can help.
                 </p>
                 <div class="cta-services">
                     <span class="cta-service-tag">Full Campaign Execution</span>
@@ -3793,15 +3793,18 @@ function renderTemplate(data, plan) {
         const metaIntel = getMetaIntel(name);
         const pills = [];
         if (intel && intel.ad_count > 0) {
-            const tier = intel.ad_count > 100 ? 'high' : intel.ad_count > 20 ? 'moderate' : 'low';
             const accountCount = Number(intel.account_ad_count || intel.raw_ad_count || intel.ad_count || 0);
             const brandCount = Number(intel.ad_count || 0);
-            const isWeighted = accountCount > brandCount && String(intel.ad_count_scope || '').includes('weighted');
-            const label = isWeighted ? `${brandCount} weighted Google ads` : `${brandCount} Google ads`;
-            const title = isWeighted
-                ? `Google account shows ${accountCount} active ads. RespondIQ weighted this to ${brandCount} brand-relevant ads because the account may include client or third-party ads. ${intel.qualification_note || ''}`
-                : 'Verified via Google Ads Transparency Center';
-            pills.push(`<span class="ads-pill ${tier}${isWeighted ? ' weighted' : ''}" title="${escapeAttr(title)}">${escapeHtml(label)}</span>`);
+            const exactAllowed = intel.exact_ad_count_allowed !== false && (intel.ad_count_display_mode || 'count') === 'count';
+            if (exactAllowed) {
+                const tier = brandCount > 100 ? 'high' : brandCount > 20 ? 'moderate' : 'low';
+                pills.push(`<span class="ads-pill ${tier}" title="Verified via Google Ads Transparency Center">${brandCount} Google ads</span>`);
+            } else {
+                const activity = intel.google_activity_tier || intel.activity_level || (accountCount > 500 ? 'High' : accountCount > 50 ? 'Medium' : 'Low');
+                const tier = /high|very/i.test(activity) ? 'high' : /medium|moderate|active/i.test(activity) ? 'moderate' : 'low';
+                const title = `Google Transparency profile may include client or third-party ads, so RespondIQ shows a directional activity tier instead of an exact ad count. ${intel.qualification_note || ''}`;
+                pills.push(`<span class="ads-pill ${tier} weighted" title="${escapeAttr(title)}">${escapeHtml(activity)} Google activity</span>`);
+            }
         }
         if (metaIntel && metaIntel.ad_count > 0) {
             const tier = metaIntel.ad_count > 100 ? 'high' : metaIntel.ad_count > 20 ? 'moderate' : 'low';
@@ -3978,7 +3981,7 @@ function renderTemplate(data, plan) {
         <div class="subsection"><div class="subsection-title">Market Overview</div><p class="content-text">${plan.situation_analysis.market_overview}</p></div>
         <div class="subsection"><div class="subsection-title">Brand Position</div><p class="content-text">${plan.situation_analysis.brand_position}</p></div>
         <div class="subsection"><div class="subsection-title">Competitive Analysis</div><table class="tbl-slate dense-print competitive-analysis-table"><thead><tr><th>Competitor</th><th>Market Share</th><th>Key Strengths</th><th>Media Strategy</th></tr></thead><tbody>${plan.competitors.map(c=>`<tr><td>${c.name}${compBadge(c.name)}</td><td>${c.market_share}</td><td>${c.strengths}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></table>
-        <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with Google Ads Transparency Center intelligence' + (hasWeightedGoogleCounts ? '; agency-style account totals are weighted so client ads are not treated as brand-owned.' : '.') : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with Google Ads Transparency Center intelligence' + (hasWeightedGoogleCounts ? '; agency-style profiles are shown as directional activity tiers so client ads are not treated as brand-owned.' : '.') : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
     </div>
     <div class="section" data-group="audience"><div class="section-number">Section 03</div><div class="section-title">${M.audience}Target Audience</div>
         <div class="subsection"><div class="subsection-title">Primary Target</div><div class="info-grid"><div class="info-box"><div class="info-label">Demographics</div><div class="info-value">${plan.target_audience.demographics}</div></div><div class="info-box"><div class="info-label">Psychographics</div><div class="info-value">${plan.target_audience.psychographics}</div></div><div class="info-box"><div class="info-label">Geographic</div><div class="info-value">${plan.target_audience.geographic}</div></div><div class="info-box"><div class="info-label">Behavioral</div><div class="info-value">${plan.target_audience.behavioral}</div></div></div></div>
@@ -4073,7 +4076,7 @@ function renderTemplate(data, plan) {
         <table class="tbl-slate dense-print"><thead><tr><th>Brand</th><th>Est. Spend</th><th>SOV %</th><th>Channels</th><th>Messaging</th></tr></thead><tbody>${plan.competitive_sov.map(s=>`<tr><td>${s.brand}${adsPill(s.brand)}</td><td>${s.spend}</td><td>${s.sov_pct}</td><td>${s.channels}</td><td>${s.messaging}</td></tr>`).join('')}</tbody></table>
         ${metaCreativeEvidenceHtml()}
         ${plan.ai_data_confidence ? `<div class="ai-confidence-badge ai-confidence-${plan.ai_data_confidence}">${plan.ai_data_confidence === 'high' ? '●' : plan.ai_data_confidence === 'medium' ? '◐' : '○'} Data Confidence: ${plan.ai_data_confidence.charAt(0).toUpperCase() + plan.ai_data_confidence.slice(1)}</div>` : ''}
-        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' + (hasWeightedGoogleCounts ? ' Google account-level totals are weighted where profiles appear agency-managed or multi-brand.' : '') : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' + (hasWeightedGoogleCounts ? ' Google agency or multi-brand profiles are shown as High/Medium/Low activity tiers instead of exact ad totals.' : '') : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
         <div class="subsection"><div class="subsection-title">Market Opportunities</div><ul class="strategy-list">${plan.market_opportunities.map(o=>`<li>${o}</li>`).join('')}</ul></div>
         <div class="subsection"><div class="subsection-title">Monitoring & Response Strategy</div><table class="tbl-slate"><thead><tr><th>Tool</th><th>Frequency</th><th>Key Metrics</th><th>Trigger</th></tr></thead><tbody>${plan.monitoring_tools.map(m=>`<tr><td>${m.tool}</td><td>${m.frequency}</td><td>${m.metrics}</td><td>${m.trigger}</td></tr>`).join('')}</tbody></table></div>
     </div>
