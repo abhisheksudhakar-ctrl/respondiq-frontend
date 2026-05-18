@@ -631,6 +631,7 @@
         .ads-pill.high { background: rgba(0,113,227,0.1); color: #0071e3; border: 1px solid rgba(0,113,227,0.3); }
         .ads-pill.moderate { background: rgba(255,149,0,0.1); color: #d97e00; border: 1px solid rgba(255,149,0,0.3); }
         .ads-pill.low { background: var(--surface-2); color: var(--text-3); border: 1px solid var(--border); }
+        .ads-pill.nil { background: rgba(148,163,184,0.08); color: #64748b; border: 1px solid rgba(148,163,184,0.25); }
         .ads-pill.weighted { border-style: dashed; }
 
         /* Data Sources Bar (top of plan) */
@@ -2827,6 +2828,14 @@ async function generateMediaPlan(data) {
             window._metaAdsIntel = null;
         }
 
+        window._planningSignals = result._planning_signals || buildFrontendPlanningSignals(data, window._competitiveIntel, window._metaAdsIntel, null);
+        if (window._planningSignals) {
+            console.log('Planning signals stored:',
+                window._planningSignals.campaign_calibration?.modeled_target || 'no calibration',
+                '|',
+                window._planningSignals.competitive_pressure?.label || 'no pressure signal');
+        }
+
         // Log industry correction if backend detected a mismatch
         if (result._industry_override) {
             console.log('Industry corrected:', result._industry_override.form_industry, '->', result._industry_override.detected_industry,
@@ -2854,6 +2863,8 @@ async function generateMediaPlan(data) {
             plan = cleanPlanText(plan);
             // Math Firewall: enforce deterministic arithmetic using AI-provided rates
             plan = recalculatePlanMath(plan, bInfo.mid, months);
+            window._planningSignals = result._planning_signals || buildFrontendPlanningSignals(data, window._competitiveIntel, window._metaAdsIntel, plan);
+            plan = applyPlanningSignalCalibration(plan, data, window._planningSignals);
             updateRespondIqLoaderFromPlan(plan);
             setRespondIqLoaderStage(4);
             return plan;
@@ -3313,6 +3324,288 @@ function formatNumber(n) {
     return String(n);
 }
 
+function parseMoneyValue(value) {
+    const match = String(value || '').replace(/,/g, '').match(/([\d.]+)/);
+    if (!match) return null;
+    const n = parseFloat(match[1]);
+    return Number.isFinite(n) ? n : null;
+}
+
+function formatMoneyValue(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return '';
+    return '$' + (n >= 100 ? Math.round(n / 5) * 5 : Math.round(n));
+}
+
+function normalizeAdActivityTier(value, count) {
+    const text = String(value || '').toLowerCase();
+    const n = Number(count || 0);
+    if (/very high|high/.test(text) || n > 100) return 'High';
+    if (/moderate|medium|active/.test(text) || n > 20) return 'Medium';
+    if (/low/.test(text) || n > 0) return 'Low';
+    return 'Nil';
+}
+
+function adActivityLabel(tier) {
+    return tier === 'Nil' ? 'Nil ad activity' : tier + ' ad activity';
+}
+
+function adActivityClass(tier) {
+    if (tier === 'High') return 'high';
+    if (tier === 'Medium') return 'moderate';
+    if (tier === 'Low') return 'low';
+    return 'nil';
+}
+
+function adActivityScore(tier) {
+    if (tier === 'High') return 3;
+    if (tier === 'Medium') return 2;
+    if (tier === 'Low') return 1;
+    return 0;
+}
+
+function parseHistoricalPerformance(value) {
+    const text = String(value || '').trim();
+    if (!text) return null;
+    let match = text.match(/CPA\s+under\s+\$?([\d.]+)/i);
+    if (match) return { metric: 'CPA', label: 'Avg CPA under $' + match[1], high: Number(match[1]), bucket: text };
+    match = text.match(/CPA\s+\$?([\d.]+)\s*-\s*\$?([\d.]+)/i);
+    if (match) return { metric: 'CPA', label: 'Avg CPA $' + match[1] + '-$' + match[2], low: Number(match[1]), high: Number(match[2]), bucket: text };
+    match = text.match(/CPA\s+over\s+\$?([\d.]+)/i);
+    if (match) return { metric: 'CPA', label: 'Avg CPA over $' + match[1], low: Number(match[1]), bucket: text };
+    match = text.match(/ROAS\s+([\d.]+):1\s*-\s*([\d.]+):1/i);
+    if (match) return { metric: 'ROAS', label: 'ROAS ' + match[1] + ':1-' + match[2] + ':1', low: Number(match[1]), high: Number(match[2]), bucket: text };
+    match = text.match(/ROAS\s+([\d.]+):1\+/i);
+    if (match) return { metric: 'ROAS', label: 'ROAS ' + match[1] + ':1+', low: Number(match[1]), bucket: text };
+    return { metric: 'Other', label: text, bucket: text };
+}
+
+function buildCompetitivePressureSignal(googleIntel, metaIntel) {
+    const rows = [];
+    (Array.isArray(googleIntel) ? googleIntel : []).forEach(r => {
+        if (!r || !r.found) return;
+        const tier = normalizeAdActivityTier(r.google_activity_tier || r.activity_level, r.ad_count || r.account_ad_count || r.raw_ad_count);
+        rows.push({ source: 'Google Ads Transparency Center', brand: r.name || r.query, tier, score: adActivityScore(tier) });
+    });
+    (Array.isArray(metaIntel) ? metaIntel : []).forEach(r => {
+        if (!r || !r.found) return;
+        const tier = normalizeAdActivityTier(r.activity_level, r.ad_count);
+        rows.push({ source: 'Meta Ad Library', brand: r.page_name || r.query, tier, score: adActivityScore(tier) });
+    });
+
+    const totalScore = rows.reduce((sum, row) => sum + row.score, 0);
+    let level = 'Nil';
+    if (totalScore >= 8 || rows.filter(r => r.tier === 'High').length >= 2) level = 'High';
+    else if (totalScore >= 4 || rows.some(r => r.tier === 'High')) level = 'Medium';
+    else if (totalScore > 0) level = 'Low';
+
+    const rateAdjustmentPct = level === 'High' ? 15 : level === 'Medium' ? 8 : level === 'Low' ? 3 : 0;
+    return {
+        level,
+        label: adActivityLabel(level),
+        rate_adjustment_pct: rateAdjustmentPct,
+        verified_sources: rows.length,
+        high_activity_competitors: rows.filter(r => r.tier === 'High').length,
+        summary: rows.length
+            ? adActivityLabel(level) + ' across ' + rows.length + ' verified source match' + (rows.length === 1 ? '' : 'es') + '; model CPC/CPM sensitivity at +' + rateAdjustmentPct + '%.'
+            : 'No verified active ad-library signal found.',
+        rows
+    };
+}
+
+function getBenchmarkCpaFromPlan(plan) {
+    const rows = Array.isArray(plan && plan.benchmarks) ? plan.benchmarks : [];
+    const cpaRow = rows.find(r => /cpa|cost per acquisition|cost per lead/i.test(String(r.metric || '')));
+    return cpaRow ? parseMoneyValue(cpaRow.industry_avg || cpaRow.plan_target) : null;
+}
+
+function getPlanCpaTarget(plan) {
+    const benchmarkRows = Array.isArray(plan && plan.benchmarks) ? plan.benchmarks : [];
+    const cpaBench = benchmarkRows.find(r => /cpa|cost per acquisition|cost per lead/i.test(String(r.metric || '')));
+    const fromBench = cpaBench ? parseMoneyValue(cpaBench.plan_target) : null;
+    if (fromBench) return fromBench;
+    const kpiRows = Array.isArray(plan && plan.kpis) ? plan.kpis : [];
+    const cpaKpi = kpiRows.find(k => /cpa|cost per acquisition|cost per lead/i.test(String(k.kpi || '')));
+    return cpaKpi ? parseMoneyValue(cpaKpi.target) : null;
+}
+
+function buildCampaignCalibrationSignal(data, plan, pressure) {
+    const historical = parseHistoricalPerformance(data && data.pastPerformance);
+    if (!historical) return null;
+    const pressureMultiplier = 1 + ((pressure && pressure.rate_adjustment_pct) || 0) / 100;
+
+    if (historical.metric === 'CPA') {
+        const planTarget = getPlanCpaTarget(plan);
+        const benchmarkCpa = getBenchmarkCpaFromPlan(plan);
+        const adjustedBenchmark = benchmarkCpa ? benchmarkCpa * pressureMultiplier : null;
+        let modeled = planTarget || adjustedBenchmark || historical.high || historical.low || null;
+        let beatSupported = false;
+
+        if (historical.high) {
+            beatSupported = !!adjustedBenchmark && adjustedBenchmark <= historical.high * 0.9;
+            modeled = beatSupported
+                ? Math.min(adjustedBenchmark * 0.98, historical.high * 0.92)
+                : Math.max(adjustedBenchmark || 0, modeled || historical.high);
+        } else if (historical.low) {
+            beatSupported = !!adjustedBenchmark && adjustedBenchmark < historical.low;
+            modeled = adjustedBenchmark || modeled || historical.low * 0.85;
+        }
+
+        const target = parseMoneyValue(formatMoneyValue(modeled));
+        return {
+            metric: 'CPA',
+            reported_label: historical.label,
+            reported_bucket: historical.bucket,
+            benchmark_reference: adjustedBenchmark ? formatMoneyValue(adjustedBenchmark) : 'industry benchmark unavailable',
+            modeled_target: target ? formatMoneyValue(target) : '',
+            modeled_target_value: target,
+            beat_supported: beatSupported,
+            logic: beatSupported
+                ? 'Benchmarks support improving on the reported business-level CPA baseline.'
+                : 'Reported performance is treated as a blended business-level baseline; the plan uses a precise launch CPA supported by benchmarks and competitive pressure.'
+        };
+    }
+
+    if (historical.metric === 'ROAS') {
+        const targetRoas = parseFloat(String(plan && plan.target_roas || '').match(/[\d.]+/)?.[0] || '');
+        let modeled = Number.isFinite(targetRoas) ? targetRoas : (historical.high ? (historical.low + historical.high) / 2 : historical.low || 3);
+        let beatSupported = false;
+        if (historical.high && modeled > historical.high * 1.1) beatSupported = true;
+        else if (historical.high) modeled = Math.min(modeled, historical.high);
+        modeled = Math.round(modeled * 10) / 10;
+        return {
+            metric: 'ROAS',
+            reported_label: historical.label,
+            reported_bucket: historical.bucket,
+            benchmark_reference: 'plan benchmark',
+            modeled_target: modeled.toFixed(1) + ':1',
+            modeled_target_value: modeled,
+            beat_supported: beatSupported,
+            logic: beatSupported ? 'Benchmarks support improving on the reported ROAS range.' : 'The plan uses a precise ROAS target rather than copying the reported range.'
+        };
+    }
+
+    return { metric: historical.metric, reported_label: historical.label, reported_bucket: historical.bucket };
+}
+
+function buildFrontendPlanningSignals(data, googleIntel, metaIntel, plan) {
+    const pressure = buildCompetitivePressureSignal(googleIntel, metaIntel);
+    const calibration = buildCampaignCalibrationSignal(data || {}, plan || {}, pressure);
+    if (!calibration && pressure.level === 'Nil' && !(data && (data.webTraffic || data.salesCycle || data.crmTool || data.creativeAssets))) return null;
+    return {
+        campaign_calibration: calibration,
+        competitive_pressure: pressure,
+        website_traffic_signal: (data && data.webTraffic) || '',
+        sales_cycle_signal: (data && data.salesCycle) || '',
+        crm_signal: (data && data.crmTool) || '',
+        creative_signal: (data && data.creativeAssets) || ''
+    };
+}
+
+function upsertKpi(plan, metricName, target, tool, frequency) {
+    plan.kpis = Array.isArray(plan.kpis) ? plan.kpis : [];
+    const idx = plan.kpis.findIndex(k => /cpa|cost per acquisition|cost per lead/i.test(String(k.kpi || '')));
+    const row = { kpi: metricName, target, tool: tool || 'GA4 + platform reporting', frequency: frequency || 'Weekly' };
+    if (idx >= 0) plan.kpis[idx] = { ...plan.kpis[idx], target };
+    else plan.kpis.unshift(row);
+}
+
+function replaceCalibrationBucketText(value, calibration) {
+    if (!calibration || calibration.metric !== 'CPA' || !calibration.modeled_target || typeof value !== 'string') return value;
+    let text = value;
+    const target = calibration.modeled_target + ' modeled CPA';
+    const bucket = String(calibration.reported_bucket || '');
+    let high = null;
+    let low = null;
+    let match = bucket.match(/under\s+\$?([\d.]+)/i);
+    if (match) high = match[1];
+    match = bucket.match(/\$?([\d.]+)\s*-\s*\$?([\d.]+)/i);
+    if (match) { low = match[1]; high = match[2]; }
+    match = bucket.match(/over\s+\$?([\d.]+)/i);
+    if (match) low = match[1];
+
+    if (high && /under|below|less than/i.test(bucket)) {
+        const amount = high.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        text = text.replace(new RegExp('(?:under|below|less than)\\s*\\$?' + amount + '\\s*(?:average\\s*)?(?:CPA|cost per acquisition)?', 'gi'), target);
+    }
+    if (low && high && /-/.test(bucket)) {
+        const l = low.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const h = high.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        text = text.replace(new RegExp('\\$?' + l + '\\s*-\\s*\\$?' + h + '\\s*(?:average\\s*)?(?:CPA|cost per acquisition)?', 'gi'), target);
+    }
+    if (low && /over/i.test(bucket)) {
+        const amount = low.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        text = text.replace(new RegExp('(?:over|above|more than)\\s*\\$?' + amount + '\\s*(?:average\\s*)?(?:CPA|cost per acquisition)?', 'gi'), target);
+    }
+    return text;
+}
+
+function replaceCalibrationTextDeep(value, calibration) {
+    if (Array.isArray(value)) return value.map(item => replaceCalibrationTextDeep(item, calibration));
+    if (value && typeof value === 'object') {
+        const out = {};
+        Object.keys(value).forEach(key => {
+            out[key] = replaceCalibrationTextDeep(value[key], calibration);
+        });
+        return out;
+    }
+    return replaceCalibrationBucketText(value, calibration);
+}
+
+function applyPlanningSignalCalibration(plan, data, signals) {
+    if (!plan || !signals) return plan;
+    plan._planning_signals = signals;
+    const calibration = signals.campaign_calibration;
+
+    if (calibration && calibration.metric === 'CPA' && calibration.modeled_target) {
+        upsertKpi(plan, 'Blended CPA', calibration.modeled_target, (data && data.crmTool) ? data.crmTool + ' + platform reporting' : 'GA4 + platform reporting', 'Weekly');
+
+        plan.benchmarks = Array.isArray(plan.benchmarks) ? plan.benchmarks : [];
+        const industryAvg = calibration.benchmark_reference && calibration.benchmark_reference.startsWith('$')
+            ? calibration.benchmark_reference
+            : calibration.modeled_target;
+        const idx = plan.benchmarks.findIndex(b => /blended cpa|cpa|cost per acquisition|cost per lead/i.test(String(b.metric || '')));
+        const row = {
+            metric: 'Blended CPA',
+            plan_target: calibration.modeled_target,
+            industry_avg: industryAvg,
+            vs_benchmark: parseMoneyValue(calibration.modeled_target) <= parseMoneyValue(industryAvg) ? 'Below avg ✅' : 'Above avg ⚠️'
+        };
+        if (idx >= 0) plan.benchmarks[idx] = { ...plan.benchmarks[idx], ...row };
+        else plan.benchmarks.unshift(row);
+
+        const objective = 'Calibrate acquisition efficiency against the reported historical baseline (' + calibration.reported_label + ') with a modeled launch target of ' + calibration.modeled_target + ' CPA.';
+        plan.media_objectives = Array.isArray(plan.media_objectives) ? plan.media_objectives : [];
+        if (!plan.media_objectives.some(o => /reported historical baseline|modeled launch target/i.test(String(o)))) {
+            plan.media_objectives.unshift(objective);
+        }
+
+        plan.recommendations = Array.isArray(plan.recommendations) ? plan.recommendations : [];
+        if (!plan.recommendations.some(r => /historical.*baseline|blended CPA/i.test(String(r)))) {
+            plan.recommendations.push('Use the reported historical CPA as a baseline, not a copied target; optimize toward ' + calibration.modeled_target + ' using channel-level CPA, lead quality, and CRM conversion data.');
+        }
+
+        ['executive_summary', 'media_strategy', 'marketing_objectives', 'media_objectives', 'recommendations', 'risks', 'channels', 'monitoring_tools'].forEach(key => {
+            if (plan[key]) plan[key] = replaceCalibrationTextDeep(plan[key], calibration);
+        });
+    }
+
+    const pressure = signals.competitive_pressure;
+    if (pressure && pressure.level && pressure.level !== 'Nil') {
+        plan.risks = Array.isArray(plan.risks) ? plan.risks : [];
+        if (!plan.risks.some(r => /competitive.*pressure|ad activity/i.test(String(r.risk || r)))) {
+            plan.risks.push({
+                risk: pressure.label + ' may raise auction costs',
+                impact: pressure.level === 'High' ? 'High' : 'Medium',
+                probability: pressure.level === 'High' ? 'High' : 'Medium',
+                mitigation: 'Monitor CPC/CPM weekly, protect retargeting efficiency, refresh creative quickly, and reserve budget for high-intent segments if auction pressure rises above +' + pressure.rate_adjustment_pct + '%.'
+            });
+        }
+    }
+
+    return plan;
+}
+
 // ======================== UPGRADE 4: REFINE PLAN ========================
 // PLAN_DATA is declared in GLOBAL STATE above
 
@@ -3358,6 +3651,7 @@ async function refinePlan() {
             // Carry forward keyword data from original plan
             if (PLAN_DATA._keywordDataUsed) newPlan._keywordDataUsed = true;
             if (PLAN_DATA._keywordResults) newPlan._keywordResults = PLAN_DATA._keywordResults;
+            if (PLAN_DATA._planning_signals) newPlan._planning_signals = PLAN_DATA._planning_signals;
             // Carry forward industry mismatch data
             if (PLAN_DATA._selectedIndustry) newPlan._selectedIndustry = PLAN_DATA._selectedIndustry;
             if (!newPlan.detected_industry && PLAN_DATA.detected_industry) newPlan.detected_industry = PLAN_DATA.detected_industry;
@@ -3373,6 +3667,8 @@ async function refinePlan() {
             const mid = budgetMap[FORM_DATA.budget] || 17500;
             const mos = durationMonths[FORM_DATA.campaignDuration] || 3;
             newPlan = recalculatePlanMath(newPlan, mid, mos);
+            window._planningSignals = newPlan._planning_signals || window._planningSignals || buildFrontendPlanningSignals(FORM_DATA, window._competitiveIntel, window._metaAdsIntel, newPlan);
+            newPlan = applyPlanningSignalCalibration(newPlan, FORM_DATA, window._planningSignals);
 
             PLAN_DATA = newPlan;
             renderTemplate(FORM_DATA, newPlan);
@@ -3715,6 +4011,8 @@ function renderTemplate(data, plan) {
     const rawData = data || {};
     plan = normalizePlanForRender(plan, rawData);
     const rawPlan = plan;
+    const rawPlanningSignals = rawPlan._planning_signals || window._planningSignals || buildFrontendPlanningSignals(rawData, window._competitiveIntel, window._metaAdsIntel, rawPlan);
+    if (rawPlanningSignals && !rawPlan._planning_signals) rawPlan._planning_signals = rawPlanningSignals;
 
     // Fetch brand logo from website favicon
     let logoUrl = '';
@@ -3727,6 +4025,7 @@ function renderTemplate(data, plan) {
     const logoHtml = logoUrl ? `<img src="${escapeAttr(logoUrl)}" alt="${escapeAttr(rawData.brandName)}" class="client-logo" onerror="this.style.display='none'">` : '';
     data = sanitizeForRender(rawData);
     plan = sanitizeForRender(rawPlan);
+    const planningSignals = sanitizeForRender(rawPlanningSignals || {});
     const sourceTag = plan._source === 'ai'
         ? '<span style="display:inline-block;background:rgba(52,199,89,0.1);color:#1f9d4d;border:1px solid rgba(52,199,89,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">✦ AI GENERATED</span>'
         : '<span style="display:inline-block;background:rgba(255,107,53,0.1);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">⚠ SAMPLE DATA — Backend not connected</span>';
@@ -3816,23 +4115,16 @@ function renderTemplate(data, plan) {
         const intel = getCompIntel(name);
         const metaIntel = getMetaIntel(name);
         const pills = [];
-        if (intel && intel.ad_count > 0) {
+        if (intel) {
             const accountCount = Number(intel.account_ad_count || intel.raw_ad_count || intel.ad_count || 0);
             const brandCount = Number(intel.ad_count || 0);
-            const exactAllowed = intel.exact_ad_count_allowed !== false && (intel.ad_count_display_mode || 'count') === 'count';
-            if (exactAllowed) {
-                const tier = brandCount > 100 ? 'high' : brandCount > 20 ? 'moderate' : 'low';
-                pills.push(`<span class="ads-pill ${tier}" title="Verified via Google Ads Transparency Center">${brandCount} Google ads</span>`);
-            } else {
-                const activity = intel.google_activity_tier || intel.activity_level || (accountCount > 500 ? 'High' : accountCount > 50 ? 'Medium' : 'Low');
-                const tier = /high|very/i.test(activity) ? 'high' : /medium|moderate|active/i.test(activity) ? 'moderate' : 'low';
-                const title = `Google Transparency profile may include client or third-party ads, so RespondIQ shows a directional activity tier instead of an exact ad count. ${intel.qualification_note || ''}`;
-                pills.push(`<span class="ads-pill ${tier} weighted" title="${escapeAttr(title)}">${escapeHtml(activity)} Google activity</span>`);
-            }
+            const activity = normalizeAdActivityTier(intel.google_activity_tier || intel.activity_level, brandCount || accountCount);
+            const title = `Verified via Google Ads Transparency Center. RespondIQ shows a directional activity tier instead of an exact ad count. ${intel.qualification_note || ''}`;
+            pills.push(`<span class="ads-pill ${adActivityClass(activity)} weighted" title="${escapeAttr(title)}">${escapeHtml(adActivityLabel(activity))}</span>`);
         }
-        if (metaIntel && metaIntel.ad_count > 0) {
-            const tier = metaIntel.ad_count > 100 ? 'high' : metaIntel.ad_count > 20 ? 'moderate' : 'low';
-            pills.push(`<span class="ads-pill ${tier}">${escapeHtml(metaIntel.ad_count_indicator || metaIntel.ad_count)} Meta ads</span>`);
+        if (metaIntel) {
+            const activity = normalizeAdActivityTier(metaIntel.activity_level, metaIntel.ad_count);
+            pills.push(`<span class="ads-pill ${adActivityClass(activity)}" title="Verified via Meta Ad Library. RespondIQ shows a directional activity tier instead of an exact ad count.">${escapeHtml(adActivityLabel(activity))}</span>`);
         }
         return pills.length ? ' ' + pills.join(' ') : '';
     }
@@ -3903,6 +4195,37 @@ function renderTemplate(data, plan) {
         }
         dataSourcesHtml += '</div>';
     }
+
+    let planningSignalsHtml = '';
+    const calibrationSignal = planningSignals && planningSignals.campaign_calibration;
+    const pressureSignal = planningSignals && planningSignals.competitive_pressure;
+    const signalCards = [];
+    if (calibrationSignal && calibrationSignal.reported_label) {
+        signalCards.push('<div class="info-box"><div class="info-label">Reported Historical Baseline</div><div class="info-value">' +
+            calibrationSignal.reported_label +
+            (calibrationSignal.modeled_target ? '<br><span style="font-size:12px;color:#0d9488;font-weight:700;">Modeled target: ' + calibrationSignal.modeled_target + ' ' + calibrationSignal.metric + '</span>' : '') +
+            '</div></div>');
+    }
+    if (pressureSignal && pressureSignal.label && pressureSignal.level !== 'Nil') {
+        signalCards.push('<div class="info-box"><div class="info-label">Competitive Pressure</div><div class="info-value"><span class="ads-pill ' + adActivityClass(pressureSignal.level) + '">' +
+            pressureSignal.label + '</span><br><span style="font-size:12px;color:#64748b;">Auction sensitivity +' + pressureSignal.rate_adjustment_pct + '%</span></div></div>');
+    }
+    if (planningSignals && planningSignals.website_traffic_signal) {
+        signalCards.push('<div class="info-box"><div class="info-label">Website Traffic Signal</div><div class="info-value">' + planningSignals.website_traffic_signal + '</div></div>');
+    }
+    if (planningSignals && planningSignals.sales_cycle_signal) {
+        signalCards.push('<div class="info-box"><div class="info-label">Sales Cycle Signal</div><div class="info-value">' + planningSignals.sales_cycle_signal + '</div></div>');
+    }
+    if (signalCards.length) {
+        const note = calibrationSignal && calibrationSignal.logic
+            ? '<p class="content-text" style="margin-top:12px;font-size:12px;color:#64748b;">' + calibrationSignal.logic + '</p>'
+            : '';
+        planningSignalsHtml = '<div class="subsection" style="margin-top:24px;"><div class="subsection-title">Planning Signals</div><div class="info-grid">' + signalCards.join('') + '</div>' + note + '</div>';
+    }
+
+    const competitivePressureHtml = pressureSignal && pressureSignal.label && pressureSignal.level !== 'Nil'
+        ? '<div class="meta-creative-evidence"><div class="meta-creative-title">Competitive pressure signal</div><div class="meta-creative-grid"><div class="meta-creative-card"><div class="meta-creative-page"><span class="ads-pill ' + adActivityClass(pressureSignal.level) + '">' + pressureSignal.label + '</span></div><div class="meta-creative-copy">' + (pressureSignal.summary || 'Verified ad-library activity is used as a directional planning signal.') + '</div></div></div></div>'
+        : '';
 
     // ── Industry Mismatch Banner ──
     let industryMismatchHtml = '';
@@ -4023,6 +4346,7 @@ function renderTemplate(data, plan) {
         </div>
         <p class="content-text">${plan.executive_summary}</p>
         <div class="subsection investment-overview" style="margin-top:32px;"><div class="subsection-title">Investment Overview</div><div class="info-grid hero-metric-grid"><div class="metric-card hero hero-1"><div class="metric-value">${plan.total_investment}</div><div class="metric-label">Total Media Investment</div></div><div class="metric-card hero hero-2"><div class="metric-value">${plan.projected_impressions}</div><div class="metric-label">Projected Impressions</div></div>${['Sales & Conversions','Customer Retention'].includes(rawData.goal) ? `<div class="metric-card hero hero-3"><div class="metric-value">${plan.target_roas}</div><div class="metric-label">Target ROAS</div></div>` : `<div class="metric-card hero hero-3"><div class="metric-value">${data.kpi.split('(')[0].trim()}</div><div class="metric-label">Primary KPI</div></div>`}<div class="metric-card hero hero-4"><div class="metric-value">${plan.target_reach_pct}</div><div class="metric-label">Reach (Target Audience)</div></div></div></div>
+        ${planningSignalsHtml}
     </div>
     <div class="section" data-group="reference"><div class="section-number">Section 02</div><div class="section-title">${M.reference}Situation Analysis</div>
         <div class="subsection"><div class="subsection-title">Market Overview</div><p class="content-text">${plan.situation_analysis.market_overview}</p></div>
@@ -4121,6 +4445,7 @@ function renderTemplate(data, plan) {
         <div class="subsection"><div class="subsection-title">Share of Voice Analysis</div>
         ${sovChart(plan.competitive_sov, data.brandName)}
         <table class="tbl-slate dense-print"><thead><tr><th>Brand</th><th>Est. Spend</th><th>SOV %</th><th>Channels</th><th>Messaging</th></tr></thead><tbody>${plan.competitive_sov.map(s=>`<tr><td>${s.brand}${adsPill(s.brand)}</td><td>${s.spend}</td><td>${s.sov_pct}</td><td>${s.channels}</td><td>${s.messaging}</td></tr>`).join('')}</tbody></table>
+        ${competitivePressureHtml}
         ${metaCreativeEvidenceHtml()}
         ${plan.ai_data_confidence ? `<div class="ai-confidence-badge ai-confidence-${plan.ai_data_confidence}">${plan.ai_data_confidence === 'high' ? '●' : plan.ai_data_confidence === 'medium' ? '◐' : '○'} Data Confidence: ${plan.ai_data_confidence.charAt(0).toUpperCase() + plan.ai_data_confidence.slice(1)}</div>` : ''}
         <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' + (hasWeightedGoogleCounts ? ' Google agency or multi-brand profiles are shown as High/Medium/Low activity tiers instead of exact ad totals.' : '') : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
