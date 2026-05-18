@@ -1581,7 +1581,7 @@
                         <div class="pt-campaign" id="printClient2">Prepared for —</div>
                         <div class="pt-cta-box">
                             <div class="pt-cta-title">Need deeper strategy or full-service execution?</div>
-                            <div class="pt-cta-email"><a href="mailto:hello@responsivemts.com" style="color:inherit;text-decoration:none;">hello@responsivemts.com</a></div>
+                            <div class="pt-cta-email"><a href="mailto:info@responsivemts.com" style="color:inherit;text-decoration:none;">info@responsivemts.com</a></div>
                             <div class="pt-cta-web">responsivemts.com</div>
                             <div class="pt-contact-line">+1 (646) 757-1717 · 333 Hudson St, New York, NY</div>
                         </div>
@@ -1628,7 +1628,7 @@
                     <span class="cta-service-tag">Consulting & Workshops</span>
                 </div>
                 <div class="cta-buttons">
-                    <a class="cta-btn-primary" href="mailto:hello@responsivemts.com?subject=Media%20Plan%20Consultation%20Request&body=Hi%2C%20I%20just%20generated%20a%20media%20plan%20using%20RespondIQ%20and%20would%20like%20to%20discuss%20further%20support.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0AThanks%2C">
+                    <a class="cta-btn-primary" href="mailto:info@responsivemts.com?subject=Media%20Plan%20Consultation%20Request&body=Hi%2C%20I%20just%20generated%20a%20media%20plan%20using%20RespondIQ%20and%20would%20like%20to%20discuss%20further%20support.%0A%0APlease%20let%20me%20know%20your%20availability.%0A%0AThanks%2C">
                         ✉ Email Our Consulting Team
                     </a>
                     <a class="cta-btn-secondary" href="https://responsivemts.com" target="_blank">
@@ -2394,6 +2394,13 @@ function findLoaderPlanRate(plan, type) {
     return rates.reduce((sum, value) => sum + value, 0) / rates.length;
 }
 
+function getLoaderCostMetricConfig(key) {
+    if (key === 'cpc') return { key: 'cpc', label: 'CPC', format: 'currency', lowerIsBetter: true, pattern: /cpc|cost per click/i };
+    if (key === 'cpm') return { key: 'cpm', label: 'CPM', format: 'currency', lowerIsBetter: true, pattern: /cpm|cost per thousand/i };
+    if (key === 'cpa') return { key: 'cpa', label: 'CPA', format: 'currency', lowerIsBetter: true, pattern: /cpa|cost per acquisition|cost per lead|cost per conversion/i };
+    return null;
+}
+
 function findLoaderFinalCostModel(plan, config, current, totalBudget) {
     const impressions = parseLoaderPlanNumber(plan && plan.projected_impressions) || current.impressionsEnd || 1;
     const goal = FORM_DATA && FORM_DATA.goal;
@@ -2401,9 +2408,12 @@ function findLoaderFinalCostModel(plan, config, current, totalBudget) {
     const cpc = findLoaderPlanRate(plan, 'CPC');
     const cpm = findLoaderPlanRate(plan, 'CPM');
     const cpa = findLoaderPlanRate(plan, 'CPA');
+    const metricConfig = getLoaderCostMetricConfig(fallback.key);
+    const planMetric = metricConfig ? findLoaderPlanMetric(plan, metricConfig) : null;
     if (fallback.key === 'cpc' && cpc !== null) return { ...fallback, value: cpc };
     if (fallback.key === 'cpm' && cpm !== null) return { ...fallback, value: cpm };
     if (fallback.key === 'cpa' && cpa !== null) return { ...fallback, value: cpa };
+    if (planMetric !== null) return { ...fallback, value: planMetric };
     return fallback;
 }
 
@@ -2471,6 +2481,13 @@ function updateRespondIqLoaderSteps() {
     });
 }
 
+function getLoaderLiveProgress(elapsed) {
+    const seconds = Math.max(0, elapsed) / 1000;
+    const base = Math.min(0.975, 1 - Math.exp(-seconds / 42));
+    const pulse = Math.sin(seconds * 1.7) * 0.014 + Math.sin(seconds * 0.47) * 0.007;
+    return Math.max(0.04, Math.min(0.985, base + pulse));
+}
+
 function updateRespondIqLoaderMetrics() {
     if (!RESPONDIQ_LOADER_STARTED_AT) return;
     const elapsed = performance.now() - RESPONDIQ_LOADER_STARTED_AT;
@@ -2486,11 +2503,18 @@ function updateRespondIqLoaderMetrics() {
 
     const estimate = RESPONDIQ_LOADER_FINAL_METRICS || RESPONDIQ_LOADER_ESTIMATE;
     if (!estimate) return;
-    const progress = RESPONDIQ_LOADER_FINAL_METRICS ? 1 : Math.min(0.92, elapsed / 45000);
+    const progress = RESPONDIQ_LOADER_FINAL_METRICS ? 1 : getLoaderLiveProgress(elapsed);
     const ease = 1 - Math.pow(1 - progress, 2);
     const primary = estimate.primaryStart + (estimate.primaryEnd - estimate.primaryStart) * ease;
     const impressions = estimate.impressionsStart + (estimate.impressionsEnd - estimate.impressionsStart) * ease;
     const model = estimate.modelStart + (estimate.modelEnd - estimate.modelStart) * ease;
+    const isFinal = Boolean(RESPONDIQ_LOADER_FINAL_METRICS);
+    const livePrimaryFactor = isFinal ? 1 : 1 + Math.sin(elapsed / 860) * 0.018 + Math.sin(elapsed / 2400) * 0.007;
+    const liveImpressionsFactor = isFinal ? 1 : 1 + Math.sin(elapsed / 780) * 0.02 + Math.sin(elapsed / 2100) * 0.009;
+    const liveModelFactor = isFinal ? 1 : 1 + Math.sin(elapsed / 920) * 0.017 + Math.sin(elapsed / 2600) * 0.007;
+    const primaryDisplay = Math.max(0.01, primary * livePrimaryFactor);
+    const impressionsDisplay = Math.max(1, impressions * liveImpressionsFactor);
+    const modelDisplay = Math.max(0.01, model * liveModelFactor);
 
     const primaryLabelEl = document.getElementById('loaderKpiRoasLabel');
     const impressionsLabelEl = document.getElementById('loaderKpiReachLabel');
@@ -2501,9 +2525,9 @@ function updateRespondIqLoaderMetrics() {
     if (primaryLabelEl) primaryLabelEl.textContent = estimate.primaryLabel || 'Forecast KPI';
     if (impressionsLabelEl) impressionsLabelEl.textContent = estimate.impressionsLabel || 'Est. Impressions';
     if (modelLabelEl) modelLabelEl.textContent = estimate.modelLabel || 'KPI Model';
-    if (roasEl) roasEl.innerHTML = formatLoaderMetricValue(primary, estimate.primaryFormat);
-    if (reachEl) reachEl.textContent = formatLoaderCompactNumber(impressions);
-    if (costEl) costEl.innerHTML = formatLoaderMetricValue(model, estimate.modelFormat);
+    if (roasEl) roasEl.innerHTML = formatLoaderMetricValue(primaryDisplay, estimate.primaryFormat);
+    if (reachEl) reachEl.textContent = formatLoaderCompactNumber(impressionsDisplay);
+    if (costEl) costEl.innerHTML = formatLoaderMetricValue(modelDisplay, estimate.modelFormat);
 }
 
 function getRespondIqLoaderStepCount() {
@@ -3196,11 +3220,11 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
 
         // ── Sanitize benchmark units: fix AI mixing up $ and % ──
         // Cost metrics (CPC, CPM, CPA, CPL) must be dollar values, not percentages
-        // Rate metrics (CTR, conversion rate, ROAS) must be percentages or ratios, not dollars
+        // Rate/value metrics (CTR, CVR, ROAS, SOV, engagement) must be percentages or ratios, not dollars
         plan.benchmarks = plan.benchmarks.map(bm => {
             const metricLower = (bm.metric || '').toLowerCase();
             const isCostMetric = /cpc|cpm|cpa|cpl|cost/.test(metricLower);
-            const isRateMetric = /ctr|conversion|click.through|fill.rate/.test(metricLower);
+            const isRateMetric = /ctr|cvr|conversion|click.?through|fill.?rate|brand.?lift|share of voice|sov|engagement|roas/.test(metricLower);
 
             let fixedAvg = String(bm.industry_avg || '');
             let fixedTarget = String(bm.plan_target || '');
@@ -3236,7 +3260,7 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
 
         // ── Directionality: recalculate vs_benchmark status ──
         // Lower is better: CPC, CPM, CPA, CPL, cost metrics
-        // Higher is better: CTR, conversion rate, ROAS
+        // Higher is better: CTR, CVR, conversion rate, ROAS, SOV, engagement and value metrics
         plan.benchmarks = plan.benchmarks.map(bm => {
             const metricLower = (bm.metric || '').toLowerCase();
             const planVal = parseFloat(String(bm.plan_target).replace(/[$%,]/g, ''));
@@ -3245,7 +3269,7 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
 
             const ratio = planVal / indVal;
             const lowerIsBetter = /cpc|cpm|cpa|cpl|cost/.test(metricLower);
-            const higherIsBetter = /ctr|conversion|roas|click.through|fill.rate/.test(metricLower);
+            const higherIsBetter = /ctr|cvr|conversion|roas|click.?through|fill.?rate|brand.?lift|share of voice|sov|engagement|lifetime value|clv|ltv/.test(metricLower);
 
             let status;
             if (ratio >= 0.85 && ratio <= 1.15) {
@@ -3925,6 +3949,12 @@ function renderTemplate(data, plan) {
         const n = (name||'').toLowerCase();
         return n.includes('cpc') || n.includes('cpm') || n.includes('cpa') || n.includes('cost');
     }
+    function benchmarkMetricDirection(name) {
+        const n = (name || '').toLowerCase();
+        if (/cpc|cpm|cpa|cpl|cost/.test(n)) return 'lower';
+        if (/ctr|cvr|conversion|roas|click.?through|fill.?rate|brand.?lift|share of voice|sov|engagement|lifetime value|clv|ltv/.test(n)) return 'higher';
+        return 'neutral';
+    }
     function benchChart(rows) {
         if (!rows || !rows.length) return '';
         const items = rows.map(r => {
@@ -3951,9 +3981,26 @@ function renderTemplate(data, plan) {
     }
 
     // ── Section 16 pill renderer (replaces ⚠/✅ glyphs) ──
-    function benchPill(vs) {
+    function benchPill(vs, row) {
         const s = String(vs || '');
         const stripped = s.replace(/[✅⚠️]/g, '').trim();
+        const planVal = parseNum(row && row.plan_target);
+        const avgVal = parseNum(row && row.industry_avg);
+        const direction = benchmarkMetricDirection(row && row.metric);
+        if (!s.includes('✅') && !s.includes('⚠') && planVal !== null && avgVal !== null && avgVal !== 0) {
+            const ratio = planVal / avgVal;
+            if (ratio >= 0.85 && ratio <= 1.15) {
+                return `<span class="bench-pill bench-pill-good">${stripped || 'At benchmark'}</span>`;
+            }
+            if (direction === 'lower') {
+                const klass = planVal <= avgVal ? 'bench-pill-good' : 'bench-pill-over';
+                return `<span class="bench-pill ${klass}">${stripped || (planVal <= avgVal ? 'Below avg' : 'Above avg')}</span>`;
+            }
+            if (direction === 'higher') {
+                const klass = planVal >= avgVal ? 'bench-pill-good' : 'bench-pill-over';
+                return `<span class="bench-pill ${klass}">${stripped || (planVal >= avgVal ? 'Above avg' : 'Below avg')}</span>`;
+            }
+        }
         // Word boundaries on the regex so words like 'category' or 'beating'
         // don't accidentally match 'at' and turn a red flag green.
         if (s.includes('✅') || /\b(below|at|good|beat|beating)\b/i.test(s)) return `<span class="bench-pill bench-pill-good">${stripped || 'At/Below'}</span>`;
@@ -4104,7 +4151,7 @@ function renderTemplate(data, plan) {
     </div>` : ''}
     ${plan.benchmarks && plan.benchmarks.length ? `<div class="section benchmark-section" data-group="measurement"><div class="section-number">Section 16</div><div class="section-title">${M.measurement}Industry Benchmark Comparison</div>
         ${benchChart(plan.benchmarks)}
-        <table class="tbl-blue"><thead><tr><th>Metric</th><th>Plan Target</th><th>Industry Avg (${benchmarkIndustryLabel})</th><th>vs. Benchmark</th></tr></thead><tbody>${plan.benchmarks.map(b => `<tr><td>${b.metric}</td><td>${b.plan_target}</td><td>${b.industry_avg}</td><td>${benchPill(b.vs_benchmark)}</td></tr>`).join('')}</tbody></table>
+        <table class="tbl-blue"><thead><tr><th>Metric</th><th>Plan Target</th><th>Industry Avg (${benchmarkIndustryLabel})</th><th>vs. Benchmark</th></tr></thead><tbody>${plan.benchmarks.map(b => `<tr><td>${b.metric}</td><td>${b.plan_target}</td><td>${b.industry_avg}</td><td>${benchPill(b.vs_benchmark, b)}</td></tr>`).join('')}</tbody></table>
         <p class="ai-disclaimer">Benchmarks based on 2025-2026 industry aggregates. Actual performance varies by creative quality, landing page experience, and competitive landscape.</p>
     </div>` : ''}
     ${plan._keywordResults && plan._keywordResults.length > 0 ? `<div class="section" data-group="reference"><div class="section-number">Section 17</div><div class="section-title">${M.reference}Search Keyword Recommendations</div>
