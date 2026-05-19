@@ -398,8 +398,8 @@
             text-shadow: 0 0 14px var(--orange-glow);
         }
         .riq-loader-sparkle.blue { color: var(--blue); text-shadow: 0 0 14px var(--blue-glow); }
-        .riq-loader-sparkle.purple { color: var(--purple); text-shadow: 0 0 14px rgba(175,82,222,0.28); }
-        .riq-loader-sparkle.teal { color: var(--teal); text-shadow: 0 0 14px rgba(13,148,136,0.28); }
+        .riq-loader-sparkle.purple { color: var(--navy); text-shadow: 0 0 14px rgba(15,23,42,0.26); }
+        .riq-loader-sparkle.teal { color: #00b8ff; text-shadow: 0 0 14px rgba(0,184,255,0.28); }
         .riq-loader-sparkle.s1 { left: 6%; top: 12%; animation-delay: 0s; font-size: 18px; }
         .riq-loader-sparkle.s2 { left: 22%; top: 6%; animation-delay: 0.6s; font-size: 12px; }
         .riq-loader-sparkle.s3 { left: 78%; top: 9%; animation-delay: 1.1s; font-size: 16px; }
@@ -415,12 +415,12 @@
         .riq-loader-donut { position: absolute; inset: 0; width: 120px; height: 120px; margin: 0; }
         .riq-loader-donut svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
         .riq-loader-ring { fill: none; stroke-width: 12; stroke-linecap: butt; stroke-dasharray: 0 289; }
-        .riq-loader-track { stroke: var(--surface-hover); stroke-dasharray: none; }
+        .riq-loader-track { stroke: rgba(15,23,42,0.08); stroke-dasharray: none; }
         .riq-loader-seg-1 { stroke: var(--blue); animation: riqDonutSeg1 4s cubic-bezier(0.4,0,0.2,1) infinite; }
         .riq-loader-seg-2 { stroke: var(--orange); animation: riqDonutSeg2 4s cubic-bezier(0.4,0,0.2,1) infinite; }
-        .riq-loader-seg-3 { stroke: var(--teal); animation: riqDonutSeg3 4s cubic-bezier(0.4,0,0.2,1) infinite; }
-        .riq-loader-seg-4 { stroke: var(--amber); animation: riqDonutSeg4 4s cubic-bezier(0.4,0,0.2,1) infinite; }
-        .riq-loader-seg-5 { stroke: var(--purple); animation: riqDonutSeg5 4s cubic-bezier(0.4,0,0.2,1) infinite; }
+        .riq-loader-seg-3 { stroke: #00b8ff; animation: riqDonutSeg3 4s cubic-bezier(0.4,0,0.2,1) infinite; }
+        .riq-loader-seg-4 { stroke: var(--navy); animation: riqDonutSeg4 4s cubic-bezier(0.4,0,0.2,1) infinite; }
+        .riq-loader-seg-5 { stroke: #ff9500; animation: riqDonutSeg5 4s cubic-bezier(0.4,0,0.2,1) infinite; }
         .riq-loader-center {
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
             font-weight: 800; color: var(--orange); font-size: 24px; letter-spacing: 0.02em;
@@ -771,6 +771,48 @@
         .data-source-dot.active { background: #1f9d4d; }
         .data-source-dot.pending { background: var(--text-faint); }
 
+        /* Brand autocomplete */
+        .brand-search-group { position: relative; }
+        .brand-suggestions {
+            position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 40;
+            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(15,23,42,0.12); overflow: hidden;
+        }
+        .brand-suggestions[hidden], .brand-preview[hidden], .brand-logo-fallback[hidden] { display: none; }
+        .brand-suggestion {
+            width: 100%; border: 0; background: #fff; display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; cursor: pointer; text-align: left; transition: background 0.16s ease;
+        }
+        .brand-suggestion:hover, .brand-suggestion:focus { background: var(--surface-2); outline: none; }
+        .brand-logo-thumb, .brand-logo-fallback {
+            width: 34px; height: 34px; border-radius: 9px; flex: 0 0 34px;
+            border: 1px solid var(--border); background: var(--surface-2);
+        }
+        .brand-logo-thumb { object-fit: contain; padding: 4px; }
+        .brand-logo-fallback {
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: 0.04em;
+        }
+        .brand-suggestion-copy { min-width: 0; }
+        .brand-suggestion-name { display: block; color: var(--text); font-size: 13px; font-weight: 700; line-height: 1.25; }
+        .brand-suggestion-domain { display: block; color: var(--text-3); font-size: 11px; margin-top: 2px; }
+        .brand-suggestion-empty { padding: 12px 14px; color: var(--text-3); font-size: 12px; line-height: 1.45; }
+        .brand-logo-attribution {
+            padding: 8px 12px; border-top: 1px solid var(--border); background: var(--surface-2);
+            color: var(--text-3); font-size: 10.5px; line-height: 1.3;
+        }
+        .brand-logo-attribution a { color: var(--blue); font-weight: 700; text-decoration: none; }
+        .brand-logo-attribution a:hover { text-decoration: underline; }
+        .brand-preview {
+            margin-top: 12px; display: flex; align-items: center; gap: 12px;
+            border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+            background: linear-gradient(135deg, rgba(0,113,227,0.04), rgba(255,107,53,0.04));
+        }
+        .brand-preview-copy { min-width: 0; flex: 1; }
+        .brand-preview-name { color: var(--text); font-size: 13px; font-weight: 800; line-height: 1.3; }
+        .brand-preview-domain { color: var(--text-3); font-size: 11.5px; margin-top: 2px; }
+        .brand-preview .brand-logo-attribution { padding: 0; border: 0; background: transparent; margin-top: 5px; }
+
         /* Meta creative evidence */
         .meta-creative-evidence { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: rgba(52,199,89,0.06); border: 1px solid rgba(52,199,89,0.22); }
         .meta-creative-title { font-size: 11px; font-weight: 700; color: #1f9d4d; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
@@ -786,6 +828,8 @@
 
         @media (max-width: 768px) {
             .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+            .brand-suggestions { position: static; margin-top: 6px; }
+            .brand-preview { align-items: flex-start; }
             .form-card { padding: 28px 22px; }
             .form-header .brand-logo.brand-stack .brand-mts { font-size: 12px; }
             .engine-mark { padding: 1px 8px; }
@@ -1244,9 +1288,14 @@
                 <div class="form-card">
                     <div class="form-section-title">Client Information</div>
                     <div class="form-grid">
-                        <div class="form-group"><label class="form-label">Brand / Company Name *</label><input type="text" id="brandName" class="form-input" placeholder="e.g., Nike" required></div>
+                        <div class="form-group brand-search-group">
+                            <label class="form-label">Brand / Company Name *</label>
+                            <input type="text" id="brandName" class="form-input" placeholder="e.g., Nike" required autocomplete="off" aria-autocomplete="list" aria-controls="brandSuggestions">
+                            <div id="brandSuggestions" class="brand-suggestions" hidden></div>
+                        </div>
                         <div class="form-group"><label class="form-label">Website</label><input type="url" id="website" class="form-input" placeholder="https://example.com"></div>
                     </div>
+                    <div id="selectedBrandPreview" class="brand-preview" hidden></div>
                     <div class="form-grid">
                         <div class="form-group"><label class="form-label">Industry *</label>
                             <select id="industry" class="form-select">
@@ -1585,7 +1634,7 @@
                 <div class="riq-loader-status-row">
                     <span class="riq-loader-status-chip">
                         <span class="riq-loader-pulse"></span>
-                        <span><span id="loaderStatusLabel">AI working</span> · <span class="riq-loader-elapsed" id="loaderElapsed">0:00 elapsed</span></span>
+                        <span><span id="loaderStatusLabel">Respond IQ is working</span> · <span class="riq-loader-elapsed" id="loaderElapsed">0:00 elapsed</span></span>
                     </span>
                 </div>
                 <div class="riq-loader-ticker" aria-hidden="true">
@@ -1640,8 +1689,8 @@
         <div id="resultSection">
             <div class="form-header">
                 <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts">Responsive MTS</span></div>
-                <h1>Your Client-Ready Strategy Is Ready</h1>
-                <p>Your client-ready media plan is ready to review, refine, and export.</p>
+                <h1>Here's Your Media Strategy.</h1>
+                <p>Built in minutes. Ready to share with your client.</p>
             </div>
 
             <!-- EXPORT ACTIONS -->
@@ -2159,10 +2208,191 @@ function setEmailState(state, msg) {
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('userEmail').addEventListener('blur', validateEmail);
     document.getElementById('userEmail').addEventListener('input', function() { if (this.classList.contains('input-error')) validateEmail(); });
+    initBrandAutocomplete();
 });
 
 // Backend base URL
 const BACKEND_BASE = 'https://respondiq-backend-1.onrender.com';
+
+// ======================== BRAND SEARCH AUTOCOMPLETE ========================
+window.SELECTED_BRAND = null;
+
+function brandSearchEscapeHtml(value) {
+    return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function brandSearchEscapeAttr(value) {
+    return brandSearchEscapeHtml(value);
+}
+
+function brandSearchInitials(name, domain) {
+    const source = String(name || domain || 'B').trim();
+    const words = source.split(/[\s.-]+/).filter(Boolean);
+    return words.slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('') || 'B';
+}
+
+function brandLogoMarkup(brand) {
+    const alt = brandSearchEscapeAttr((brand && brand.name) || 'Brand logo');
+    const initials = brandSearchEscapeHtml(brandSearchInitials(brand && brand.name, brand && brand.domain));
+    if (!brand || !brand.logoUrl) return '<span class="brand-logo-fallback">' + initials + '</span>';
+    return '<img class="brand-logo-thumb" src="' + brandSearchEscapeAttr(brand.logoUrl) + '" alt="' + alt + '" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">' +
+        '<span class="brand-logo-fallback" hidden>' + initials + '</span>';
+}
+
+function logoDevAttributionMarkup() {
+    return 'Logo data powered by <a href="https://www.logo.dev" target="_blank" rel="noreferrer">Logo.dev</a>';
+}
+
+function normalizeWebsiteForBrand(domain) {
+    const clean = String(domain || '').trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '').split('/')[0];
+    return clean ? 'https://' + clean : '';
+}
+
+function hideBrandSuggestions() {
+    const box = document.getElementById('brandSuggestions');
+    if (box) {
+        box.hidden = true;
+        box.innerHTML = '';
+    }
+}
+
+function clearSelectedBrandPreview() {
+    window.SELECTED_BRAND = null;
+    const preview = document.getElementById('selectedBrandPreview');
+    if (preview) {
+        preview.hidden = true;
+        preview.innerHTML = '';
+    }
+}
+
+function renderSelectedBrandPreview(brand) {
+    const preview = document.getElementById('selectedBrandPreview');
+    if (!preview || !brand) return;
+    preview.innerHTML =
+        brandLogoMarkup(brand) +
+        '<div class="brand-preview-copy">' +
+            '<div class="brand-preview-name">' + brandSearchEscapeHtml(brand.name || 'Selected brand') + '</div>' +
+            '<div class="brand-preview-domain">' + brandSearchEscapeHtml(brand.domain || '') + '</div>' +
+            '<div class="brand-logo-attribution">' + logoDevAttributionMarkup() + '</div>' +
+        '</div>';
+    preview.hidden = false;
+}
+
+function selectBrandSuggestion(brand) {
+    if (!brand || !brand.domain) return;
+    window.SELECTED_BRAND = brand;
+    const brandInput = document.getElementById('brandName');
+    const websiteInput = document.getElementById('website');
+    if (brandInput) brandInput.value = brand.name || brand.domain;
+    if (websiteInput) websiteInput.value = normalizeWebsiteForBrand(brand.domain);
+    hideBrandSuggestions();
+    renderSelectedBrandPreview(brand);
+}
+
+function renderBrandSuggestions(results, message) {
+    const box = document.getElementById('brandSuggestions');
+    if (!box) return;
+
+    if (!results || !results.length) {
+        box.innerHTML =
+            '<div class="brand-suggestion-empty">' +
+                brandSearchEscapeHtml(message || 'No brand match found. You can continue by entering the website manually.') +
+            '</div>' +
+            '<div class="brand-logo-attribution">' + logoDevAttributionMarkup() + '</div>';
+        box.hidden = false;
+        return;
+    }
+
+    box.innerHTML = results.map((brand, idx) =>
+        '<button type="button" class="brand-suggestion" data-brand-index="' + idx + '">' +
+            brandLogoMarkup(brand) +
+            '<span class="brand-suggestion-copy">' +
+                '<span class="brand-suggestion-name">' + brandSearchEscapeHtml(brand.name || brand.domain) + '</span>' +
+                '<span class="brand-suggestion-domain">' + brandSearchEscapeHtml(brand.domain || '') + '</span>' +
+            '</span>' +
+        '</button>'
+    ).join('') + '<div class="brand-logo-attribution">' + logoDevAttributionMarkup() + '</div>';
+
+    Array.from(box.querySelectorAll('.brand-suggestion')).forEach(btn => {
+        btn.addEventListener('click', function() {
+            const selected = results[Number(this.getAttribute('data-brand-index'))];
+            selectBrandSuggestion(selected);
+        });
+    });
+    box.hidden = false;
+}
+
+function initBrandAutocomplete() {
+    const brandInput = document.getElementById('brandName');
+    const websiteInput = document.getElementById('website');
+    if (!brandInput) return;
+
+    let debounceTimer = null;
+    let activeController = null;
+    let requestSeq = 0;
+
+    brandInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (window.SELECTED_BRAND && query !== window.SELECTED_BRAND.name) clearSelectedBrandPreview();
+        if (debounceTimer) clearTimeout(debounceTimer);
+        if (activeController) activeController.abort();
+
+        if (!query) {
+            hideBrandSuggestions();
+            clearSelectedBrandPreview();
+            return;
+        }
+
+        if (query.length < 2) {
+            hideBrandSuggestions();
+            return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+            const seq = ++requestSeq;
+            activeController = new AbortController();
+            try {
+                const res = await fetch(BACKEND_BASE + '/api/brand-search?q=' + encodeURIComponent(query), {
+                    signal: activeController.signal
+                });
+                if (seq !== requestSeq) return;
+                if (!res.ok) {
+                    hideBrandSuggestions();
+                    return;
+                }
+                const payload = await res.json();
+                const results = Array.isArray(payload) ? payload : (payload.results || []);
+                renderBrandSuggestions(results);
+            } catch (err) {
+                if (err.name !== 'AbortError') hideBrandSuggestions();
+            }
+        }, 300);
+    });
+
+    brandInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') hideBrandSuggestions();
+    });
+
+    if (websiteInput) {
+        websiteInput.addEventListener('input', function() {
+            if (window.SELECTED_BRAND && this.value.trim() !== normalizeWebsiteForBrand(window.SELECTED_BRAND.domain)) {
+                window.SELECTED_BRAND = { ...window.SELECTED_BRAND, manuallyEditedWebsite: true };
+            }
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        const box = document.getElementById('brandSuggestions');
+        if (!box || box.hidden) return;
+        if (e.target === brandInput || box.contains(e.target)) return;
+        hideBrandSuggestions();
+    });
+}
 
 // ======================== GOOGLE SHEETS WEBHOOK ========================
 // Google Sheets webhook URL is stored server-side in Render Environment Variables
@@ -2204,6 +2434,8 @@ function getFormData() {
         // Client info
         brandName: document.getElementById('brandName').value.trim() || 'Brand',
         website: document.getElementById('website').value.trim() || 'N/A',
+        brandDomain: window.SELECTED_BRAND?.domain || '',
+        brandSource: window.SELECTED_BRAND?.source || '',
         industry: (function(){
             const v = document.getElementById('industry').value;
             // 'Auto-detect from URL' is value="__auto__" — send empty string so
@@ -2273,7 +2505,7 @@ function redactPersonalDataDeep(value, sourceData = {}) {
 function buildAiSafeFormData(data) {
     const allowed = {};
     [
-        'brandName', 'website', 'industry', 'industryAutoDetect', 'companySize', 'competitors',
+        'brandName', 'website', 'brandDomain', 'brandSource', 'industry', 'industryAutoDetect', 'companySize', 'competitors',
         'campaignName', 'campaignDuration', 'budget', 'goal', 'kpi',
         'pastPerformance', 'salesCycle', 'webTraffic', 'crmTool', 'creativeAssets',
         'location', 'locationList', 'ageRange', 'gender', 'income',
@@ -2497,7 +2729,7 @@ function setRespondIqLoaderCopy(title, subtitle) {
 
 function setRespondIqLoaderStatus(label) {
     const statusEl = document.getElementById('loaderStatusLabel');
-    if (statusEl) statusEl.textContent = label || 'AI working';
+    if (statusEl) statusEl.textContent = label || 'Respond IQ is working';
 }
 
 function getLoaderBudgetInfo(data) {
@@ -2789,7 +3021,7 @@ function startRespondIqLoader(data) {
     RESPONDIQ_LOADER_ESTIMATE = estimateRespondIqLoaderMetrics(data || {});
     RESPONDIQ_LOADER_FINAL_METRICS = null;
     setRespondIqLoaderCopy();
-    setRespondIqLoaderStatus('AI working');
+    setRespondIqLoaderStatus('Respond IQ is working');
     updateRespondIqLoaderInsights(data || {});
     updateRespondIqLoaderSteps();
     updateRespondIqLoaderMetrics();
@@ -3043,6 +3275,9 @@ async function generateMediaPlan(data) {
             window._metaAdsIntel = null;
         }
 
+        window._benchmarkSources = (result && result._benchmark_sources) ? result._benchmark_sources : [];
+        window._benchmarkIndustryLabel = (result && result._benchmark_industry_label) || '';
+
         window._planningSignals = result._planning_signals || buildFrontendPlanningSignals(data, window._competitiveIntel, window._metaAdsIntel, null);
         if (window._planningSignals) {
             console.log('Planning signals stored:',
@@ -3069,6 +3304,8 @@ async function generateMediaPlan(data) {
             plan._keywordDataUsed = !!keywordData;
             if (keywordData) plan._keywordResults = keywordData;
             plan._selectedIndustry = data.industry;
+            plan._benchmark_sources = window._benchmarkSources || [];
+            plan._benchmark_industry_label = window._benchmarkIndustryLabel || '';
             if (result._industry_override) {
                 plan._industryOverride = result._industry_override;
                 if (!plan.detected_industry) plan.detected_industry = result._industry_override.detected_industry;
@@ -3223,7 +3460,9 @@ function cleanPlanText(obj) {
             // Remove any remaining non-ASCII control characters
             .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
             // Fix occasional model spacing collapses in executive-summary copy
+            .replace(/(\$[\d,]+(?:\.\d+)?)(?=(?![KMB]\b)[A-Za-z])/gi, '$1 ')
             .replace(/(\$[\d,]+(?:\.\d+)?)\s*totalinvestment/gi, '$1 total investment')
+            .replace(/(\$[\d,]+(?:\.\d+)?)\s*total\s+investment/gi, '$1 total investment')
             .replace(/\btotalinvestment\b/gi, 'total investment')
             .trim();
     }
@@ -4396,8 +4635,10 @@ function renderTemplate(data, plan) {
     const hasMetaData = window._metaAdsIntel && window._metaAdsIntel.some(mi => mi.found);
     const verifiedAdSourceNames = [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ');
     const hasKeywordData = plan._keywordDataUsed || false;
+    const benchmarkSourcesForDisplay = window._benchmarkSources && window._benchmarkSources.length > 0 ? window._benchmarkSources : (plan._benchmark_sources || []);
+    const hasBenchmarkSources = benchmarkSourcesForDisplay.length > 0;
     let dataSourcesHtml = '';
-    if (hasTransparencyData || hasMetaData || hasKeywordData) {
+    if (hasTransparencyData || hasMetaData || hasKeywordData || hasBenchmarkSources) {
         dataSourcesHtml = '<div class="data-sources-bar"><span class="data-sources-label">Verified Data Sources</span>';
         if (hasTransparencyData) {
             const verifiedCount = window._competitiveIntel.filter(ci => ci.found).length;
@@ -4417,6 +4658,15 @@ function renderTemplate(data, plan) {
         if (hasKeywordData) {
             const kwCount = plan._keywordResults ? plan._keywordResults.length : 0;
             dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Google Keyword Planner (' + kwCount + ' keywords)</span>';
+        }
+        if (hasBenchmarkSources) {
+            const premium = benchmarkSourcesForDisplay.filter(s => s.tier === 'premium');
+            const displaySources = premium.length > 0 ? premium : benchmarkSourcesForDisplay;
+            const labels = displaySources.slice(0, 3).map(s => s.short_name).join(', ');
+            const more = displaySources.length > 3 ? ' +' + (displaySources.length - 3) + ' more' : '';
+            const tooltipText = benchmarkSourcesForDisplay.map(s => s.label).join(' | ');
+            dataSourcesHtml += '<span class="data-source-chip active" title="' + escapeAttr(tooltipText) +
+                '"><span class="data-source-dot active"></span>Benchmarks: ' + escapeHtml(labels + more) + '</span>';
         }
         dataSourcesHtml += '</div>';
     }
@@ -4467,7 +4717,18 @@ function renderTemplate(data, plan) {
 
     // ── Industry Mismatch Banner ──
     let industryMismatchHtml = '';
-    const benchmarkIndustryLabel = plan.detected_industry || data.industry || 'Auto-detected industry';
+    const benchmarkIndustryLabel = plan._benchmark_industry_label || window._benchmarkIndustryLabel || plan.detected_industry || data.industry || 'Auto-detected industry';
+    const benchmarkSourcePool = window._benchmarkSources && window._benchmarkSources.length > 0
+        ? window._benchmarkSources
+        : (plan._benchmark_sources || []);
+    const benchmarkAttributionSources = benchmarkSourcePool.filter(s => s.tier === 'premium').length
+        ? benchmarkSourcePool.filter(s => s.tier === 'premium').slice(0, 3)
+        : benchmarkSourcePool.slice(0, 3);
+    const benchmarkSourceLinks = benchmarkAttributionSources.length
+        ? ' via ' + benchmarkAttributionSources
+            .map(s => '<a href="' + escapeAttr(s.url) + '" target="_blank" rel="noopener" style="color:#0071e3;text-decoration:underline;">' + escapeHtml(s.short_name) + '</a>')
+            .join(', ')
+        : '';
     if (plan.industry_mismatch && plan.detected_industry && plan._selectedIndustry && !data.industryAutoDetect) {
         industryMismatchHtml = '<div style="margin:12px 0 8px;padding:12px 16px;border-radius:8px;background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.3);display:flex;align-items:flex-start;gap:10px;">' +
             '<span style="font-size:16px;line-height:1;">&#9888;</span>' +
@@ -4715,7 +4976,7 @@ function renderTemplate(data, plan) {
     ${plan.benchmarks && plan.benchmarks.length ? `<div class="section benchmark-section" data-group="measurement"><div class="section-number">Section 16</div><div class="section-title">${M.measurement}Industry Benchmark Comparison</div>
         ${benchChart(plan.benchmarks)}
         <table class="tbl-blue"><thead><tr><th>Metric</th><th>Plan Target</th><th>Industry Avg (${benchmarkIndustryLabel})</th><th>vs. Benchmark</th></tr></thead><tbody>${plan.benchmarks.map(b => `<tr><td>${b.metric}</td><td>${b.plan_target}</td><td>${b.industry_avg}</td><td>${benchPill(b.vs_benchmark, b)}</td></tr>`).join('')}</tbody></table>
-        <p class="ai-disclaimer">Benchmarks based on 2025-2026 industry aggregates. Actual performance varies by creative quality, landing page experience, and competitive landscape.</p>
+        <p class="ai-disclaimer">Benchmarks based on 2025-2026 industry aggregates${benchmarkSourceLinks}. Actual performance varies by creative quality, landing page experience, and competitive landscape.</p>
     </div>` : ''}
     ${plan._keywordResults && plan._keywordResults.length > 0 ? `<div class="section" data-group="reference"><div class="section-number">Section 17</div><div class="section-title">${M.reference}Search Keyword Recommendations</div>
         <p class="content-text" style="margin-bottom:16px;font-size:12px;color:#64748b;">Top keyword opportunities sourced from Google Keyword Planner. Use these to inform search campaign targeting, ad copy, and landing page SEO.</p>
