@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>RespondIQ | AI Media Planner by Responsive MTS</title>
+    <title>RespondIQ | Strategic Media Planner by Responsive MTS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- No external PDF libraries needed - uses browser Print to PDF -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -99,6 +99,48 @@
         }
         .form-header .brand-logo span { color: var(--text-3); font-weight: 400; letter-spacing: 0.05em; }
         .form-header p { font-size: 1.1rem; color: var(--text-2); }
+        .brand-logo.brand-stack {
+            display: inline-grid;
+            gap: 2px;
+            justify-items: center;
+            line-height: 1.08;
+            letter-spacing: 0.12em;
+        }
+        .brand-logo.brand-stack .brand-main { color: var(--orange); font-weight: 800; }
+        .brand-logo.brand-stack .brand-by { color: var(--text-3); font-size: 10px; font-weight: 500; letter-spacing: 0.22em; }
+        .brand-logo.brand-stack .brand-mts { color: var(--navy); font-size: 14px; font-weight: 800; letter-spacing: 0.1em; }
+        .engine-mark {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 10px;
+            border: 1px solid rgba(255,107,53,0.28);
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(0,113,227,0.08));
+            color: var(--navy);
+            font-weight: 800;
+            overflow: hidden;
+            box-shadow: 0 8px 26px -18px rgba(255,107,53,0.8);
+            vertical-align: baseline;
+            animation: enginePulse 3.6s ease-in-out infinite;
+        }
+        .engine-mark::after {
+            content: "";
+            position: absolute;
+            inset: -35% auto -35% -55%;
+            width: 45%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.78), transparent);
+            transform: skewX(-18deg);
+            animation: engineSweep 2.8s ease-in-out infinite;
+        }
+        @keyframes enginePulse {
+            0%, 100% { box-shadow: 0 8px 26px -18px rgba(255,107,53,0.8), 0 0 0 rgba(255,107,53,0); }
+            50% { box-shadow: 0 12px 34px -16px rgba(0,113,227,0.55), 0 0 0 5px rgba(255,107,53,0.08); }
+        }
+        @keyframes engineSweep {
+            0%, 35% { left: -55%; }
+            70%, 100% { left: 120%; }
+        }
 
         .form-card {
             background: var(--surface);
@@ -152,6 +194,91 @@
             letter-spacing: 0.08em; text-transform: uppercase; margin-top: 12px; margin-bottom: 6px; width: 100%;
         }
         .chip-category-label:first-child { margin-top: 0; }
+        .chip-accordion {
+            display: grid;
+            gap: 10px;
+        }
+        .chip-accordion .chip-category-label { display: none; }
+        .chip-group {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-2);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .chip-group[open] {
+            background: #fff;
+            border-color: rgba(0,113,227,0.22);
+            box-shadow: 0 12px 28px -22px rgba(0,113,227,0.45);
+        }
+        .chip-group summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+        }
+        .chip-group summary::-webkit-details-marker { display: none; }
+        .chip-group-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 750;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .chip-group-title::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255,107,53,0.1);
+            flex: none;
+        }
+        .chip-group-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 650;
+        }
+        .chip-group-count {
+            min-width: 24px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--text-3);
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+        .chip-group-arrow {
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: rotate(45deg) translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+        .chip-group[open] .chip-group-arrow { transform: rotate(225deg) translate(-1px, -1px); }
+        .chip-group-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 16px 16px;
+            border-top: 1px solid rgba(229,231,235,0.72);
+        }
+        .chip-group-options .chip { margin-top: 12px; }
 
         /* ── AGE RANGE SLIDER ── */
         .age-slider-wrap { padding: 8px 0; }
@@ -660,6 +787,10 @@
         @media (max-width: 768px) {
             .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
             .form-card { padding: 28px 22px; }
+            .form-header .brand-logo.brand-stack .brand-mts { font-size: 12px; }
+            .engine-mark { padding: 1px 8px; }
+            .chip-group summary { align-items: flex-start; }
+            .chip-group-meta { margin-top: 2px; }
             .template-content { padding: 30px 24px; }
             .info-grid { grid-template-columns: 1fr; }
             th, td { padding: 10px 12px; font-size: 12px; }
@@ -679,6 +810,9 @@
             .riq-loader-step-status { font-size: 9px; }
             .riq-loader-tip-row { height: 42px; margin-top: 22px; }
             .riq-loader-tip { flex-direction: column; gap: 4px; line-height: 1.35; font-size: 11.5px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .engine-mark, .engine-mark::after { animation: none !important; }
         }
         /* ═══════════ PRINT / PDF STYLES ═══════════ */
         @media print {
@@ -835,7 +969,8 @@
             .pt-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
             .pt-mark { display: flex; flex-direction: column; }
             .pt-mark .pt-brand { font-size: 16px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
-            .pt-mark .pt-sub { font-size: 10px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; }
+            .pt-mark .pt-by { font-size: 9px; color: rgba(255,255,255,0.58); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2px; }
+            .pt-mark .pt-sub { font-size: 13px; color: #ffffff; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
             .pt-corner-mark { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
             .pt-corner-mark span { display: block; height: 2px; background: var(--orange); border-radius: 2px; }
             .pt-corner-mark span:nth-child(1) { width: 28px; }
@@ -852,7 +987,8 @@
 
             .pt-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
             .pt-bottom-left .pt-copy { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.05em; }
-            .pt-bottom-left .pt-copy-sub { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+            .pt-bottom-left .pt-copy-sub { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.08em; }
+            .pt-bottom-left .pt-copy-sub strong { color: #fff; font-size: 12px; }
             .pt-ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,107,53,0.7); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(255,107,53,0.08); }
             .pt-ai-badge .pt-spark { color: var(--orange); font-size: 12px; }
 
@@ -869,7 +1005,8 @@
             }
             .print-cta-page .pt-top { display: flex; justify-content: space-between; align-items: flex-start; }
             .print-cta-page .pt-mark .pt-brand { font-size: 14px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
-            .print-cta-page .pt-mark .pt-sub { font-size: 10px; color: #64748b; letter-spacing: 0.05em; }
+            .print-cta-page .pt-mark .pt-by { font-size: 9px; color: #64748b; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2px; }
+            .print-cta-page .pt-mark .pt-sub { font-size: 13px; color: var(--navy); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
             .print-cta-page .pt-body { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
             .print-cta-page .pt-rule { width: 50px; height: 2px; background: var(--orange); margin-bottom: 22px; border-radius: 2px; }
             .print-cta-page .pt-title { font-size: 52px; font-weight: 800; color: var(--ink); letter-spacing: -0.035em; margin-bottom: 12px; line-height: 1.05; }
@@ -888,7 +1025,9 @@
             .print-cta-page .pt-cta-web { font-size: 13px; color: #475569; margin-top: 8px; }
             .print-cta-page .pt-contact-line { font-size: 11px; color: #64748b; letter-spacing: 0.04em; margin-top: 6px; }
             .print-cta-page .pt-bottom { display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; color: #94a3b8; letter-spacing: 0.05em; }
-            .print-cta-page .pt-bottom .pt-brand-mini { font-weight: 700; color: var(--navy); letter-spacing: 0.12em; text-transform: uppercase; }
+            .print-cta-page .pt-bottom .pt-brand-mini { font-weight: 700; color: var(--navy); letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.35; }
+            .print-cta-page .pt-bottom .pt-brand-mini span { color: #64748b; font-size: 9px; }
+            .print-cta-page .pt-bottom .pt-brand-mini strong { color: var(--navy); font-size: 12px; }
         }
 
         /* Hidden in screen, visible in print */
@@ -1077,9 +1216,9 @@
         <!-- ========== FORM ========== -->
         <div id="formSection">
             <div class="form-header">
-                <div class="brand-logo">RespondIQ <span>by Responsive MTS</span></div>
-                <h1>AI Media Planner</h1>
-                <p>Intelligent media strategy generation powered by AI</p>
+                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts">Responsive MTS</span></div>
+                <h1>Strategic Media Planner</h1>
+                <p>Intelligent media strategy generation powered by <span class="engine-mark">AI Engine</span></p>
             </div>
             <form id="mediaForm" onsubmit="return false;">
 
@@ -1500,9 +1639,9 @@
         <!-- ========== RESULTS ========== -->
         <div id="resultSection">
             <div class="form-header">
-                <div class="brand-logo">RespondIQ <span>by Responsive MTS</span></div>
-                <h1>Your Media Plan</h1>
-                <p>Strategic media plan ready for review</p>
+                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts">Responsive MTS</span></div>
+                <h1>Your Client-Ready Strategy Is Ready</h1>
+                <p>Your client-ready media plan is ready to review, refine, and export.</p>
             </div>
 
             <!-- EXPORT ACTIONS -->
@@ -1518,7 +1657,8 @@
                     <div class="pt-top">
                         <div class="pt-mark">
                             <div class="pt-brand">RESPONDIQ</div>
-                            <div class="pt-sub">by Responsive Media Tech Services</div>
+                            <div class="pt-by">by</div>
+                            <div class="pt-sub">Responsive MTS</div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -1532,7 +1672,7 @@
                     <div class="pt-bottom">
                         <div class="pt-bottom-left">
                             <div class="pt-copy">© 2026 RespondIQ</div>
-                            <div class="pt-copy-sub">by Responsive MTS</div>
+                            <div class="pt-copy-sub">by<br><strong>Responsive MTS</strong></div>
                         </div>
                         <div class="pt-ai-badge"><span class="pt-spark">✦</span><span>AI Generated</span></div>
                     </div>
@@ -1572,7 +1712,8 @@
                     <div class="pt-top">
                         <div class="pt-mark">
                             <div class="pt-brand">RESPONDIQ</div>
-                            <div class="pt-sub">by Responsive Media Tech Services</div>
+                            <div class="pt-by">by</div>
+                            <div class="pt-sub">Responsive MTS</div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -1588,11 +1729,11 @@
                         </div>
                     </div>
                     <div class="pt-bottom">
-                        <div class="pt-brand-mini">RespondIQ · by Responsive MTS</div>
+                        <div class="pt-brand-mini">RespondIQ<br><span>by</span><br><strong>Responsive MTS</strong></div>
                         <div>© 2026</div>
                     </div>
                 </div>
-                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong> by Responsive MTS</p></div>
+                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong><br><span style="font-size:11px;color:#64748b;">by</span><br><strong style="color:#0a1838;">Responsive MTS</strong></p></div>
             </div>
 
             <!-- ========== UPGRADE 4: REFINE PLAN ========== -->
@@ -1900,9 +2041,65 @@ function initGoalKpiFilter() {
 }
 
 // ======================== CHIP MULTI-SELECT ========================
+function updateChipGroupCount(group) {
+    if (!group) return;
+    const count = group.querySelectorAll('.chip.selected').length;
+    const countEl = group.querySelector('.chip-group-count');
+    if (countEl) countEl.textContent = count ? count + ' selected' : '0';
+}
+
+function initChipAccordions() {
+    ['platformChips', 'creativeChips'].forEach(containerId => {
+        const container = document.getElementById(containerId);
+        if (!container || container.classList.contains('chip-accordion-ready')) return;
+        const children = Array.from(container.children);
+        const groups = [];
+        let current = null;
+
+        children.forEach(child => {
+            if (child.classList && child.classList.contains('chip-category-label')) {
+                current = { label: child.textContent.trim(), chips: [] };
+                groups.push(current);
+            } else if (child.classList && child.classList.contains('chip')) {
+                if (!current) {
+                    current = { label: 'Recommended', chips: [] };
+                    groups.push(current);
+                }
+                current.chips.push(child);
+            }
+        });
+
+        if (groups.length < 2) return;
+        container.innerHTML = '';
+        container.classList.add('chip-accordion', 'chip-accordion-ready');
+
+        groups.forEach((group, index) => {
+            const details = document.createElement('details');
+            details.className = 'chip-group';
+            details.open = index === 0;
+
+            const summary = document.createElement('summary');
+            summary.innerHTML = '<span class="chip-group-title">' + group.label + '</span>' +
+                '<span class="chip-group-meta"><span class="chip-group-count">0</span><span class="chip-group-arrow" aria-hidden="true"></span></span>';
+
+            const options = document.createElement('div');
+            options.className = 'chip-group-options';
+            group.chips.forEach(chip => options.appendChild(chip));
+
+            details.appendChild(summary);
+            details.appendChild(options);
+            container.appendChild(details);
+            updateChipGroupCount(details);
+        });
+    });
+}
+
 function initChips() {
     document.querySelectorAll('.chip').forEach(chip => {
-        chip.addEventListener('click', () => { chip.classList.toggle('selected'); });
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('selected');
+            updateChipGroupCount(chip.closest('.chip-group'));
+        });
     });
 }
 function getSelectedChips(containerId) {
@@ -1910,7 +2107,7 @@ function getSelectedChips(containerId) {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
@@ -2042,6 +2239,47 @@ function getFormData() {
         creativeList: creatives,
         notes: document.getElementById('notes').value.trim()
     };
+}
+
+function redactPersonalTextForAI(value, sourceData = {}) {
+    if (typeof value !== 'string') return value;
+    let text = value;
+    const knownPersonalValues = [
+        sourceData.userName,
+        sourceData.userEmail,
+        sourceData.userPhone
+    ].filter(v => typeof v === 'string' && v.trim().length >= 3);
+
+    knownPersonalValues.forEach(raw => {
+        const escaped = raw.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        text = text.replace(new RegExp(escaped, 'gi'), '[redacted personal info]');
+    });
+
+    return text
+        .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted email]')
+        .replace(/(?:\+\d{1,3}[\s.-]?)?(?:\(\d{3}\)|\d{3})[\s.-]\d{3}[\s.-]\d{4}/g, '[redacted phone]');
+}
+
+function redactPersonalDataDeep(value, sourceData = {}) {
+    if (Array.isArray(value)) return value.map(item => redactPersonalDataDeep(item, sourceData));
+    if (value && typeof value === 'object') {
+        const out = {};
+        Object.keys(value).forEach(key => { out[key] = redactPersonalDataDeep(value[key], sourceData); });
+        return out;
+    }
+    return redactPersonalTextForAI(value, sourceData);
+}
+
+function buildAiSafeFormData(data) {
+    const allowed = {};
+    [
+        'brandName', 'website', 'industry', 'industryAutoDetect', 'companySize', 'competitors',
+        'campaignName', 'campaignDuration', 'budget', 'goal', 'kpi',
+        'pastPerformance', 'salesCycle', 'webTraffic', 'crmTool', 'creativeAssets',
+        'location', 'locationList', 'ageRange', 'gender', 'income',
+        'platform', 'platformList', 'creativeFormat', 'creativeList', 'notes'
+    ].forEach(key => { allowed[key] = data[key]; });
+    return redactPersonalDataDeep(allowed, data);
 }
 
 let RESPONDIQ_LOADER_TIMER = null;
@@ -2749,33 +2987,10 @@ async function generateMediaPlan(data) {
 
     // ── Send clean form_data to backend (NO prompts, NO system instructions) ──
     const BACKEND_URL = BACKEND_BASE + '/generate-plan';
+    const aiSafeData = buildAiSafeFormData(data);
 
     const requestBody = {
-        form_data: {
-            brandName: data.brandName,
-            website: data.website || '',
-            industry: data.industry,
-            companySize: data.companySize,
-            campaignName: data.campaignName,
-            campaignDuration: data.campaignDuration,
-            budget: data.budget,
-            goal: data.goal,
-            kpi: data.kpi,
-            location: data.location,
-            locationList: data.locationList || [],
-            ageRange: data.ageRange,
-            gender: data.gender,
-            income: data.income,
-            platform: data.platform,
-            creativeFormat: data.creativeFormat,
-            competitors: data.competitors || '',
-            notes: data.notes || '',
-            pastPerformance: data.pastPerformance || '',
-            salesCycle: data.salesCycle || '',
-            webTraffic: data.webTraffic || '',
-            crmTool: data.crmTool || '',
-            creativeAssets: data.creativeAssets || ''
-        },
+        form_data: aiSafeData,
         keyword_data: keywordData,
         competitor_intel_block: competitorIntelBlock,
         competitor_intel_results: competitorIntelResults,
@@ -3001,8 +3216,15 @@ function cleanPlanText(obj) {
             // Bullet / middle dot
             .replace(/\u2022/g, '-')
             .replace(/\u00B7/g, '-')
+            // Normalize common HTML entities before the render sanitizer escapes output
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'")
             // Remove any remaining non-ASCII control characters
             .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+            // Fix occasional model spacing collapses in executive-summary copy
+            .replace(/(\$[\d,]+(?:\.\d+)?)\s*totalinvestment/gi, '$1 total investment')
+            .replace(/\btotalinvestment\b/gi, 'total investment')
             .trim();
     }
     if (Array.isArray(obj)) {
@@ -3613,6 +3835,7 @@ async function refinePlan() {
     const instruction = document.getElementById('refineInput').value.trim();
     if (!instruction) { alert('Please describe what you want to change.'); return; }
     if (!PLAN_DATA || !FORM_DATA) { alert('No plan to refine. Generate a plan first.'); return; }
+    const aiSafeInstruction = redactPersonalTextForAI(instruction, FORM_DATA);
 
     const btn = document.getElementById('btnRefine');
     btn.disabled = true;
@@ -3620,13 +3843,13 @@ async function refinePlan() {
 
     try {
         const BACKEND_URL = BACKEND_BASE + '/generate-plan';
-        console.log('🔄 Refining plan:', instruction.substring(0, 60));
+        console.log('Refining plan:', aiSafeInstruction.substring(0, 60));
 
         const res = await fetch(BACKEND_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                refine_instruction: instruction,
+                refine_instruction: aiSafeInstruction,
                 current_plan: PLAN_DATA
             })
         });
@@ -3878,12 +4101,18 @@ function sanitizeForRender(value) {
 }
 
 function decodeHtmlForMatch(value) {
-    return String(value || '')
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
+    let text = String(value || '');
+    for (let i = 0; i < 3; i++) {
+        const decoded = text
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+        if (decoded === text) break;
+        text = decoded;
+    }
+    return text;
 }
 
 function normalizeText(value, fallback) {
@@ -4165,11 +4394,7 @@ function renderTemplate(data, plan) {
     // ── Build Data Sources bar ──
     const hasTransparencyData = window._competitiveIntel && window._competitiveIntel.some(ci => ci.found);
     const hasMetaData = window._metaAdsIntel && window._metaAdsIntel.some(mi => mi.found);
-    const hasWeightedGoogleCounts = window._competitiveIntel && window._competitiveIntel.some(ci => {
-        const accountCount = Number(ci.account_ad_count || ci.raw_ad_count || ci.ad_count || 0);
-        const brandCount = Number(ci.ad_count || 0);
-        return ci.found && accountCount > brandCount && String(ci.ad_count_scope || '').includes('weighted');
-    });
+    const verifiedAdSourceNames = [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ');
     const hasKeywordData = plan._keywordDataUsed || false;
     let dataSourcesHtml = '';
     if (hasTransparencyData || hasMetaData || hasKeywordData) {
@@ -4216,9 +4441,22 @@ function renderTemplate(data, plan) {
     if (planningSignals && planningSignals.sales_cycle_signal) {
         signalCards.push('<div class="info-box"><div class="info-label">Sales Cycle Signal</div><div class="info-value">' + planningSignals.sales_cycle_signal + '</div></div>');
     }
+    function planningCalibrationNote(signal) {
+        if (!signal || !signal.reported_label) return '';
+        const metric = decodeHtmlForMatch(signal.metric || 'KPI').toUpperCase();
+        const target = decodeHtmlForMatch(signal.modeled_target || '');
+        if (target && metric === 'CPA') {
+            return 'Reported performance is treated as a blended historical baseline. The modeled ' + escapeHtml(target) + ' CPA target reflects paid-media benchmarks, selected channels, and current competitive pressure.';
+        }
+        if (target && metric === 'ROAS') {
+            return 'Reported performance is treated as historical context. The modeled ' + escapeHtml(target) + ' ROAS target reflects paid-media benchmarks, selected channels, and current competitive pressure.';
+        }
+        return 'Reported performance is used as historical context and calibrated against benchmarks before setting plan targets.';
+    }
     if (signalCards.length) {
-        const note = calibrationSignal && calibrationSignal.logic
-            ? '<p class="content-text" style="margin-top:12px;font-size:12px;color:#64748b;">' + calibrationSignal.logic + '</p>'
+        const noteCopy = planningCalibrationNote(calibrationSignal);
+        const note = noteCopy
+            ? '<p class="content-text" style="margin-top:12px;font-size:12px;color:#64748b;">' + noteCopy + '</p>'
             : '';
         planningSignalsHtml = '<div class="subsection" style="margin-top:24px;"><div class="subsection-title">Planning Signals</div><div class="info-grid">' + signalCards.join('') + '</div>' + note + '</div>';
     }
@@ -4352,7 +4590,7 @@ function renderTemplate(data, plan) {
         <div class="subsection"><div class="subsection-title">Market Overview</div><p class="content-text">${plan.situation_analysis.market_overview}</p></div>
         <div class="subsection"><div class="subsection-title">Brand Position</div><p class="content-text">${plan.situation_analysis.brand_position}</p></div>
         <div class="subsection"><div class="subsection-title">Competitive Analysis</div><table class="tbl-slate dense-print competitive-analysis-table"><thead><tr><th>Competitor</th><th>Market Share</th><th>Key Strengths</th><th>Media Strategy</th></tr></thead><tbody>${plan.competitors.map(c=>`<tr><td>${c.name}${compBadge(c.name)}</td><td>${c.market_share}</td><td>${c.strengths}</td><td>${c.strategy}</td></tr>`).join('')}</tbody></table>
-        <p class="ai-disclaimer">${hasTransparencyData ? '&#10003; Competitor data enriched with Google Ads Transparency Center intelligence' + (hasWeightedGoogleCounts ? '; agency-style profiles are shown as directional activity tiers so client ads are not treated as brand-owned.' : '.') : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Competitor data enriched with verified ad-library signals from ' + verifiedAdSourceNames + '. Activity is shown directionally as High/Medium/Low/Nil; spend and market-share estimates remain directional.' : '&#9888;&#65039; Competitive data is AI-estimated based on industry patterns and should be validated with primary research.'}</p></div>
     </div>
     <div class="section" data-group="audience"><div class="section-number">Section 03</div><div class="section-title">${M.audience}Target Audience</div>
         <div class="subsection"><div class="subsection-title">Primary Target</div><div class="info-grid"><div class="info-box"><div class="info-label">Demographics</div><div class="info-value">${plan.target_audience.demographics}</div></div><div class="info-box"><div class="info-label">Psychographics</div><div class="info-value">${plan.target_audience.psychographics}</div></div><div class="info-box"><div class="info-label">Geographic</div><div class="info-value">${plan.target_audience.geographic}</div></div><div class="info-box"><div class="info-label">Behavioral</div><div class="info-value">${plan.target_audience.behavioral}</div></div></div></div>
@@ -4448,7 +4686,7 @@ function renderTemplate(data, plan) {
         ${competitivePressureHtml}
         ${metaCreativeEvidenceHtml()}
         ${plan.ai_data_confidence ? `<div class="ai-confidence-badge ai-confidence-${plan.ai_data_confidence}">${plan.ai_data_confidence === 'high' ? '●' : plan.ai_data_confidence === 'medium' ? '◐' : '○'} Data Confidence: ${plan.ai_data_confidence.charAt(0).toUpperCase() + plan.ai_data_confidence.slice(1)}</div>` : ''}
-        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + [hasTransparencyData ? 'Google Ads Transparency Center' : '', hasMetaData ? 'Meta Ad Library' : ''].filter(Boolean).join(' and ') + '. Spend estimates and SOV percentages remain AI-generated approximations.' + (hasWeightedGoogleCounts ? ' Google agency or multi-brand profiles are shown as High/Medium/Low activity tiers instead of exact ad totals.' : '') : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
+        <p class="ai-disclaimer">${hasTransparencyData || hasMetaData ? '&#10003; Active ad signals verified via ' + verifiedAdSourceNames + '. Activity is standardized as High/Medium/Low/Nil; spend estimates and SOV percentages remain AI-generated approximations.' : '&#9888;&#65039; Spend estimates and SOV percentages are AI-generated approximations based on industry patterns. Validate with tools like SEMrush or SimilarWeb for precise figures.'}</p></div>
         <div class="subsection"><div class="subsection-title">Market Opportunities</div><ul class="strategy-list">${plan.market_opportunities.map(o=>`<li>${o}</li>`).join('')}</ul></div>
         <div class="subsection"><div class="subsection-title">Monitoring & Response Strategy</div><table class="tbl-slate"><thead><tr><th>Tool</th><th>Frequency</th><th>Key Metrics</th><th>Trigger</th></tr></thead><tbody>${plan.monitoring_tools.map(m=>`<tr><td>${m.tool}</td><td>${m.frequency}</td><td>${m.metrics}</td><td>${m.trigger}</td></tr>`).join('')}</tbody></table></div>
     </div>
@@ -4494,7 +4732,7 @@ function renderTemplate(data, plan) {
     </div>` : ''}
     <div style="margin-top:32px;padding:16px 20px;border-radius:10px;background:#f8fafc;border:1px solid #e5e7eb;">
         <p style="font-size:11px;color:#64748b;line-height:1.6;margin:0;">
-            <strong style="color:#475569;">Important Notice:</strong> This media plan was generated using AI and should be treated as a strategic starting point, not a final deliverable. All budget allocations, estimated rates, audience estimates, and competitive data are approximations based on industry benchmarks and publicly available sources. Actual performance will vary based on creative quality, market conditions, targeting precision, and competitive dynamics. We recommend validating all figures using platform-specific tools (Google Ads, Meta Ads Manager, LinkedIn Campaign Manager, etc.) and consulting the media team before committing to spend. ${hasTransparencyData ? 'Where indicated, competitor ad activity has been verified using public transparency databases (Google Ads Transparency Center), but spend estimates remain directional.' : ''} RespondIQ is designed to accelerate the planning process, not replace professional media strategy expertise.
+            <strong style="color:#475569;">Important Notice:</strong> This media plan was generated using AI and should be treated as a strategic starting point, not a final deliverable. All budget allocations, estimated rates, audience estimates, and competitive data are approximations based on industry benchmarks and publicly available sources. Actual performance will vary based on creative quality, market conditions, targeting precision, and competitive dynamics. We recommend validating all figures using platform-specific tools (Google Ads, Meta Ads Manager, LinkedIn Campaign Manager, etc.) and consulting the media team before committing to spend. ${hasTransparencyData || hasMetaData ? 'Where indicated, competitor ad activity has been verified using public ad-library sources (' + verifiedAdSourceNames + '), but spend estimates remain directional.' : ''} RespondIQ is designed to accelerate the planning process, not replace professional media strategy expertise.
         </p>
     </div>`;
     // Render budget doughnut chart after DOM update
@@ -4512,7 +4750,7 @@ function renderBudgetChart(plan) {
     const brandColors = ['#0071e3', '#ff6b35', '#34c759', '#af52de', '#5ac8fa', '#ff9500', '#ff2d55', '#00b4f0', '#ffcc00', '#8e8e93'];
     plan.budget_breakdown.forEach(bb => {
         if (bb.item && bb.pct) {
-            labels.push(bb.item);
+            labels.push(decodeHtmlForMatch(bb.item));
             const pctNum = parseFloat(String(bb.pct).replace('%', ''));
             values.push(isNaN(pctNum) ? 0 : pctNum);
         }
@@ -4655,7 +4893,7 @@ async function downloadAsPDF() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                form_data: FORM_DATA,
+                form_data: buildAiSafeFormData(FORM_DATA),
                 plan: PLAN_DATA
             })
         });
@@ -4708,7 +4946,7 @@ async function downloadAsPPT() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                form_data: FORM_DATA,
+                form_data: buildAiSafeFormData(FORM_DATA),
                 plan: PLAN_DATA
             })
         });
@@ -4747,7 +4985,7 @@ function downloadAsPDFViaBrowserPrint() {
     // Populate print-only pages with data
     if (FORM_DATA) {
         document.getElementById('printCampaign').textContent = FORM_DATA.campaignName || 'Media Plan';
-        document.getElementById('printClient').textContent = 'Prepared for ' + FORM_DATA.brandName + (FORM_DATA.userName ? ' · ' + FORM_DATA.userName : '');
+        document.getElementById('printClient').textContent = 'Prepared for ' + FORM_DATA.brandName;
         document.getElementById('printClient2').textContent = 'Prepared for ' + FORM_DATA.brandName;
         const dateEl = document.getElementById('printPreparedDate');
         if (dateEl) {
