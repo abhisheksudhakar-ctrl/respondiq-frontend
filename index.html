@@ -80,6 +80,9 @@
             min-height: 100vh; color: var(--text); -webkit-font-smoothing: antialiased;
         }
 
+        #formSection, #loaderSection, #resultSection { display: none; }
+        body.is-authed #formSection { display: block; }
+
         .noise { display: none; }
 
         .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px 20px; }
@@ -99,6 +102,22 @@
         }
         .form-header .brand-logo span { color: var(--text-3); font-weight: 400; letter-spacing: 0.05em; }
         .form-header p { font-size: 1.1rem; color: var(--text-2); }
+        #signInSection { display: none; min-height: 70vh; align-items: center; justify-content: center; padding: 40px 20px; }
+        #signInSection.active { display: flex; }
+        .signin-card { max-width: 460px; width: 100%; background: #fff; border-radius: 18px; box-shadow: 0 12px 40px rgba(15,23,42,0.08); padding: 40px 36px; text-align: center; }
+        .signin-card h1 { font-size: 24px; margin: 24px 0 8px; color: #0f172a; }
+        .signin-card > p { color: #64748b; font-size: 14px; line-height: 1.5; margin-bottom: 28px; }
+        .signin-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .btn-signin { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.15s; color: #0f172a; }
+        .btn-signin:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-signin svg { flex-shrink: 0; }
+        .signin-error { background: #fef2f2; color: #b91c1c; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+        .signin-fineprint { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+        #userBadge { position: absolute; top: 16px; right: 20px; display: none; align-items: center; gap: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 13px; color: #0f172a; box-shadow: 0 2px 8px rgba(15,23,42,0.06); z-index: 100; }
+        #userBadge.active { display: inline-flex; }
+        #userBadge .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #0071e3, #ff6b35); color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        #userBadge .signout { background: none; border: none; color: #64748b; cursor: pointer; font-size: 12px; padding: 0 4px; }
+        #userBadge .signout:hover { color: #b91c1c; }
         .brand-logo.brand-stack {
             display: inline-grid;
             gap: 2px;
@@ -1350,6 +1369,38 @@
 <body>
     <div class="noise"></div>
     <div class="container">
+        <!-- ========== SIGN-IN GATE ========== -->
+        <div id="signInSection">
+            <div class="signin-card">
+                <div class="brand-logo brand-stack">
+                    <span class="brand-main">RespondIQ</span>
+                    <span class="brand-by">by</span>
+                    <span class="brand-mts brand-mts-logo">
+                        <img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS">
+                    </span>
+                </div>
+                <h1>Sign in to continue</h1>
+                <p>RespondIQ is for media planners and agencies. Use your work account to access the planner.</p>
+                <div class="signin-buttons">
+                    <button type="button" class="btn-signin btn-google" onclick="signInWith('google')">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Continue with Google
+                    </button>
+                    <button type="button" class="btn-signin btn-microsoft" onclick="signInWith('microsoft')">
+                        <svg width="20" height="20" viewBox="0 0 23 23"><path fill="#f3f3f3" d="M0 0h23v23H0z"/><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
+                        Continue with Microsoft
+                    </button>
+                </div>
+                <div id="signInError" class="signin-error" style="display:none;"></div>
+                <p class="signin-fineprint">By signing in you agree to our Terms of Use and Privacy Policy.</p>
+            </div>
+        </div>
+
+        <div id="userBadge">
+            <span class="avatar" id="userAvatar">?</span>
+            <span id="userBadgeName"></span>
+            <button type="button" class="signout" onclick="signOut()">Sign out</button>
+        </div>
 
         <!-- ========== FORM ========== -->
         <div id="formSection">
@@ -1359,24 +1410,6 @@
                 <p>Intelligent media strategy generation powered by <span class="engine-mark">AI Engine</span></p>
             </div>
             <form id="mediaForm" onsubmit="return false;">
-
-                <!-- CARD 0: LEAD CAPTURE -->
-                <div class="form-card" style="border-top:2px solid rgba(255,107,53,0.5);">
-                    <div class="form-section-title">Your Information <span style="font-weight:400;color:#94a3b8;font-size:11px;">(required to generate your plan)</span></div>
-                    <div class="form-grid-3">
-                        <div class="form-group"><label class="form-label">Your Full Name *</label><input type="text" id="userName" class="form-input" placeholder="e.g., John Smith" required></div>
-                        <div class="form-group">
-                            <label class="form-label">Work Email *</label>
-                            <input type="email" id="userEmail" class="form-input" placeholder="you@company.com" required>
-                            <div class="form-hint" id="emailHint">Business email required — free email providers not accepted</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Phone Number *</label>
-                            <input type="tel" id="userPhone" class="form-input" placeholder="+1 (555) 123-4567" required>
-                            <div class="form-hint">Include country code</div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- CARD 1: CLIENT INFO -->
                 <div class="form-card">
@@ -1935,6 +1968,70 @@
     </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Backend base URL
+const BACKEND_BASE = 'https://respondiq-backend-1.onrender.com';
+
+async function bootAuth() {
+    try {
+        const res = await fetch(BACKEND_BASE + '/api/auth/me', { credentials: 'include' });
+        if (!res.ok) throw new Error('not_authed');
+        const data = await res.json();
+        if (!data || !data.authenticated) throw new Error('not_authed');
+        showAuthedUI(data.user);
+    } catch {
+        showSignInUI();
+    }
+}
+
+function showSignInUI() {
+    document.body.classList.remove('is-authed');
+    document.getElementById('signInSection').classList.add('active');
+    const badge = document.getElementById('userBadge');
+    if (badge) badge.classList.remove('active');
+    // Surface OAuth errors from query string
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+    if (err) {
+        const map = {
+            business_email_required: 'Business email required. Free providers (Gmail, Yahoo, etc.) are not accepted.',
+            oauth_failed: 'Sign-in could not be completed. Please try again.',
+            blocked_domain: 'This email domain is not permitted. Please use your company account.'
+        };
+        const el = document.getElementById('signInError');
+        el.textContent = map[err] || 'Sign-in failed. Please try again.';
+        el.style.display = 'block';
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+}
+
+function showAuthedUI(user) {
+    document.body.classList.add('is-authed');
+    document.getElementById('signInSection').classList.remove('active');
+    const badge = document.getElementById('userBadge');
+    if (badge) {
+        badge.classList.add('active');
+        document.getElementById('userBadgeName').textContent = user.name || user.email;
+        document.getElementById('userAvatar').textContent = (user.name || user.email || '?').trim().charAt(0).toUpperCase();
+    }
+    // Stash on window so other code can read identity if needed
+    window.CURRENT_USER = user;
+}
+
+function signInWith(provider) {
+    const url = BACKEND_BASE + '/api/auth/' + provider + '/start?return_to=' + encodeURIComponent(window.location.origin + window.location.pathname);
+    window.location.href = url;
+}
+
+async function signOut() {
+    try {
+        await fetch(BACKEND_BASE + '/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch {}
+    window.location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', bootAuth);
+
 // ======================== LOCATION DATA ========================
 const LOCATIONS = {
     'Global': ['Global / Worldwide'],
@@ -2251,7 +2348,7 @@ function getSelectedChips(containerId) {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initRefineGuardrail(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initRefineGuardrail(); initBrandAutocomplete(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
@@ -2304,58 +2401,6 @@ function initRefineGuardrail() {
         chip.addEventListener('click', () => setRefineGuardrailMessage(''));
     });
 }
-
-// ======================== EMAIL VALIDATION ========================
-const BLOCKED_EMAIL_DOMAINS = [
-    'gmail.com','yahoo.com','yahoo.co.in','hotmail.com','outlook.com','aol.com','icloud.com','mail.com',
-    'protonmail.com','zoho.com','yandex.com','gmx.com','live.com','msn.com','me.com','inbox.com',
-    'fastmail.com','hushmail.com','mailinator.com','guerrillamail.com','tempmail.com','throwaway.email',
-    'sharklasers.com','guerrillamailblock.com','grr.la','test.com','example.com','temp-mail.org',
-    'yopmail.com','dispostable.com','fakeinbox.com','maildrop.cc','10minutemail.com','trashmail.com',
-    'rediffmail.com','qq.com','163.com','126.com','sina.com','tutanota.com','cock.li'
-];
-
-function validateEmail() {
-    const emailInput = document.getElementById('userEmail');
-    const hint = document.getElementById('emailHint');
-    const email = emailInput.value.trim().toLowerCase();
-    if (!email) { setEmailState('neutral'); return false; }
-    const atIdx = email.indexOf('@');
-    if (atIdx < 1 || email.indexOf('.', atIdx) < 0) { setEmailState('error', 'Please enter a valid email address'); return false; }
-    const domain = email.substring(atIdx + 1);
-    if (BLOCKED_EMAIL_DOMAINS.includes(domain)) {
-        setEmailState('error', 'Business email required — ' + domain + ' is not accepted. Please use your company email.');
-        return false;
-    }
-    // Check for obviously fake patterns
-    if (/^(test|fake|asdf|aaa|xxx|noemail|no-reply)@/.test(email)) {
-        setEmailState('error', 'Please enter your real business email address');
-        return false;
-    }
-    setEmailState('ok', '✓ Business email accepted');
-    return true;
-}
-
-function setEmailState(state, msg) {
-    const input = document.getElementById('userEmail');
-    const hint = document.getElementById('emailHint');
-    input.classList.remove('input-error');
-    hint.classList.remove('hint-error');
-    hint.style.color = '';
-    if (state === 'error') { input.classList.add('input-error'); hint.classList.add('hint-error'); hint.textContent = msg; }
-    else if (state === 'ok') { hint.style.color = '#34c759'; hint.textContent = msg; }
-    else { hint.textContent = 'Business email required — free email providers not accepted'; }
-}
-
-// Attach email validation
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('userEmail').addEventListener('blur', validateEmail);
-    document.getElementById('userEmail').addEventListener('input', function() { if (this.classList.contains('input-error')) validateEmail(); });
-    initBrandAutocomplete();
-});
-
-// Backend base URL
-const BACKEND_BASE = 'https://respondiq-backend-1.onrender.com';
 
 // ======================== BRAND SEARCH AUTOCOMPLETE ========================
 window.SELECTED_BRAND = null;
@@ -2500,6 +2545,7 @@ function initBrandAutocomplete() {
             activeController = new AbortController();
             try {
                 const res = await fetch(BACKEND_BASE + '/api/brand-search?q=' + encodeURIComponent(query), {
+                    credentials: 'include',
                     signal: activeController.signal
                 });
                 if (seq !== requestSeq) return;
@@ -2542,9 +2588,10 @@ async function sendToGoogleSheets(data) {
     try {
         await fetch(BACKEND_BASE + '/api/trigger-webhook', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userName: data.userName, userEmail: data.userEmail, userPhone: data.userPhone,
+                // identity will be injected by backend from session
                 brandName: data.brandName, website: data.website, industry: data.industry,
                 companySize: data.companySize, competitors: data.competitors,
                 campaignName: data.campaignName, campaignDuration: data.campaignDuration,
@@ -2569,10 +2616,7 @@ function getFormData() {
     const creatives = getSelectedChips('creativeChips');
     const assets = getSelectedChips('assetChips');
     return {
-        // Lead info
-        userName: document.getElementById('userName').value.trim(),
-        userEmail: document.getElementById('userEmail').value.trim(),
-        userPhone: document.getElementById('userPhone').value.trim(),
+        // Identity is pulled from the session on the backend; no client fields needed.
         // Client info
         brandName: document.getElementById('brandName').value.trim() || 'Brand',
         website: document.getElementById('website').value.trim() || 'N/A',
@@ -2617,19 +2661,7 @@ function getFormData() {
 
 function redactPersonalTextForAI(value, sourceData = {}) {
     if (typeof value !== 'string') return value;
-    let text = value;
-    const knownPersonalValues = [
-        sourceData.userName,
-        sourceData.userEmail,
-        sourceData.userPhone
-    ].filter(v => typeof v === 'string' && v.trim().length >= 3);
-
-    knownPersonalValues.forEach(raw => {
-        const escaped = raw.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        text = text.replace(new RegExp(escaped, 'gi'), '[redacted personal info]');
-    });
-
-    return text
+    return value
         .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted email]')
         .replace(/(?:\+\d{1,3}[\s.-]?)?(?:\(\d{3}\)|\d{3})[\s.-]\d{3}[\s.-]\d{4}/g, '[redacted phone]');
 }
@@ -3222,21 +3254,8 @@ async function completeRespondIqLoader(plan) {
 async function generateReport() {
     const data = getFormData();
 
-    // ---- Lead validation ----
-    if (!data.userName || data.userName.length < 2) {
-        alert('Please enter your full name.'); document.getElementById('userName').focus(); return;
-    }
-    if (!data.userEmail) {
-        alert('Please enter your work email address.'); document.getElementById('userEmail').focus(); return;
-    }
-    if (!validateEmail()) {
-        alert('Please enter a valid business email address. Free email providers (Gmail, Yahoo, etc.) are not accepted.');
-        document.getElementById('userEmail').focus(); return;
-    }
-    if (!data.userPhone || data.userPhone.replace(/[^0-9]/g, '').length < 7) {
-        alert('Please enter a valid phone number with country code.');
-        document.getElementById('userPhone').focus(); return;
-    }
+    // Identity comes from session, not the form. The backend re-fetches it
+    // from the cookie when /api/trigger-webhook is called.
 
     // ---- Consent validation ----
     if (!document.getElementById('consentRequired').checked) {
@@ -3301,6 +3320,7 @@ async function generateMediaPlan(data) {
         const seedKws = [data.brandName].filter(Boolean);
         const kwRes = await fetch(BACKEND_BASE + '/api/keyword-ideas', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 seedKeywords: seedKws,
@@ -3331,6 +3351,7 @@ async function generateMediaPlan(data) {
             if (compNames.length > 0) {
                 const ciRes = await fetch(BACKEND_BASE + '/api/competitive-intel', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         competitors: compNames,
@@ -3375,6 +3396,7 @@ async function generateMediaPlan(data) {
         console.log('Calling backend:', BACKEND_URL);
         const res = await fetch(BACKEND_URL, {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody)
         });
@@ -4242,6 +4264,7 @@ async function refinePlan() {
 
         const res = await fetch(BACKEND_URL, {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 refine_instruction: aiSafeInstruction,
@@ -5503,6 +5526,7 @@ async function downloadAsPDF() {
 
         const res = await fetch(BACKEND_BASE + '/api/export-pdf', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 form_data: buildAiSafeFormData(FORM_DATA),
@@ -5556,6 +5580,7 @@ async function downloadAsPPT() {
 
         const res = await fetch(BACKEND_BASE + '/api/export-pptx', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 form_data: buildAiSafeFormData(FORM_DATA),
