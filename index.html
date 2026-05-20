@@ -109,6 +109,29 @@
         .brand-logo.brand-stack .brand-main { color: var(--orange); font-weight: 800; }
         .brand-logo.brand-stack .brand-by { color: var(--text-3); font-size: 10px; font-weight: 500; letter-spacing: 0.22em; }
         .brand-logo.brand-stack .brand-mts { color: var(--navy); font-size: 14px; font-weight: 800; letter-spacing: 0.1em; }
+        .brand-logo.brand-stack .brand-mts-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            letter-spacing: 0;
+        }
+        .responsive-mts-logo {
+            display: block;
+            width: auto;
+            height: 22px;
+            max-width: 190px;
+            object-fit: contain;
+        }
+        .responsive-mts-logo.logo-sm { height: 18px; max-width: 155px; }
+        .responsive-mts-logo.logo-print { height: 20px; max-width: 170px; }
+        .responsive-mts-logo.logo-pill {
+            background: #fff;
+            border-radius: 999px;
+            padding: 5px 10px;
+            box-sizing: content-box;
+            box-shadow: 0 8px 24px rgba(15,23,42,0.16);
+        }
         .engine-mark {
             position: relative;
             display: inline-flex;
@@ -457,6 +480,7 @@
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 11px; font-weight: 600;
             letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2);
         }
+        #loaderStatusLabel { text-transform: none; letter-spacing: 0; }
         .riq-loader-pulse {
             width: 8px; height: 8px; border-radius: 50%; background: var(--success);
             position: relative; flex-shrink: 0;
@@ -737,6 +761,18 @@
         .refine-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
         .refine-chip { padding: 6px 14px; border-radius: 980px; font-size: 12px; cursor: pointer; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); transition: all 0.2s; }
         .refine-chip:hover { background: rgba(175,82,222,0.08); border-color: rgba(175,82,222,0.4); color: #8b3fc7; }
+        .refine-guardrail-message {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,107,53,0.28);
+            background: rgba(255,107,53,0.08);
+            color: #9a3412;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .refine-guardrail-message.is-visible { display: block; }
 
         /* ── Tech Stack Badge ── */
         .tech-stack-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); margin-bottom: 12px; }
@@ -1260,7 +1296,7 @@
         <!-- ========== FORM ========== -->
         <div id="formSection">
             <div class="form-header">
-                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts">Responsive MTS</span></div>
+                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts brand-mts-logo"><img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></span></div>
                 <h1>Strategic Media Planner</h1>
                 <p>Intelligent media strategy generation powered by <span class="engine-mark">AI Engine</span></p>
             </div>
@@ -1634,7 +1670,7 @@
                 <div class="riq-loader-status-row">
                     <span class="riq-loader-status-chip">
                         <span class="riq-loader-pulse"></span>
-                        <span><span id="loaderStatusLabel">Respond IQ is working</span> · <span class="riq-loader-elapsed" id="loaderElapsed">0:00 elapsed</span></span>
+                        <span><span id="loaderStatusLabel">RespondIQ is working</span> · <span class="riq-loader-elapsed" id="loaderElapsed">0:00 elapsed</span></span>
                     </span>
                 </div>
                 <div class="riq-loader-ticker" aria-hidden="true">
@@ -1688,7 +1724,7 @@
         <!-- ========== RESULTS ========== -->
         <div id="resultSection">
             <div class="form-header">
-                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts">Responsive MTS</span></div>
+                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts brand-mts-logo"><img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></span></div>
                 <h1>Here's Your Media Strategy.</h1>
                 <p>Built in minutes. Ready to share with your client.</p>
             </div>
@@ -1707,7 +1743,7 @@
                         <div class="pt-mark">
                             <div class="pt-brand">RESPONDIQ</div>
                             <div class="pt-by">by</div>
-                            <div class="pt-sub">Responsive MTS</div>
+                            <div class="pt-sub"><img class="responsive-mts-logo logo-print logo-pill" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -1721,7 +1757,7 @@
                     <div class="pt-bottom">
                         <div class="pt-bottom-left">
                             <div class="pt-copy">© 2026 RespondIQ</div>
-                            <div class="pt-copy-sub">by<br><strong>Responsive MTS</strong></div>
+                            <div class="pt-copy-sub">by<br><img class="responsive-mts-logo logo-sm logo-pill" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></div>
                         </div>
                         <div class="pt-ai-badge"><span class="pt-spark">✦</span><span>AI Generated</span></div>
                     </div>
@@ -1762,7 +1798,7 @@
                         <div class="pt-mark">
                             <div class="pt-brand">RESPONDIQ</div>
                             <div class="pt-by">by</div>
-                            <div class="pt-sub">Responsive MTS</div>
+                            <div class="pt-sub"><img class="responsive-mts-logo logo-print" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -1778,11 +1814,11 @@
                         </div>
                     </div>
                     <div class="pt-bottom">
-                        <div class="pt-brand-mini">RespondIQ<br><span>by</span><br><strong>Responsive MTS</strong></div>
+                        <div class="pt-brand-mini">RespondIQ<br><span>by</span><br><img class="responsive-mts-logo logo-sm" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></div>
                         <div>© 2026</div>
                     </div>
                 </div>
-                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong><br><span style="font-size:11px;color:#64748b;">by</span><br><strong style="color:#0a1838;">Responsive MTS</strong></p></div>
+                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong><br><span style="font-size:11px;color:#64748b;">by</span><br><img class="responsive-mts-logo logo-sm" style="margin:4px auto 0;" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></p></div>
             </div>
 
             <!-- ========== UPGRADE 4: REFINE PLAN ========== -->
@@ -1797,6 +1833,7 @@
                     <span class="refine-chip" onclick="document.getElementById('refineInput').value='Add a CTV/OTT channel for brand awareness with 15% of total budget'">📺 Add CTV</span>
                 </div>
                 <textarea id="refineInput" class="refine-textarea" placeholder="e.g., 'Shift 20% of budget from Display to TikTok' or 'Add a retargeting channel' or 'Focus competitors more on local agencies'"></textarea>
+                <div id="refineGuardrailMessage" class="refine-guardrail-message" role="alert" aria-live="polite"></div>
                 <button type="button" id="btnRefine" class="btn-refine" onclick="refinePlan()">✦ Update Plan</button>
             </div>
 
@@ -2156,11 +2193,59 @@ function getSelectedChips(containerId) {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initRefineGuardrail(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
 let FORM_DATA = null;
+
+const REFINE_PLAN_GUARDRAIL_MESSAGE = 'Please enter a media-plan refinement, such as changing budget, channels, audience, geography, creative, KPIs, competitors, timing, or recommendations.';
+
+function validateRefineInstruction(instruction) {
+    const normalized = String(instruction || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    if (!normalized) return { valid: false, message: 'Please describe what you want to change.' };
+
+    const planTerms = /\b(media plan|plan|campaign|budget|spend|allocation|channel|channels|platform|platforms|search|shopping|google|meta|facebook|instagram|linkedin|tiktok|youtube|ctv|ott|display|programmatic|email|audience|audiences|segment|segments|targeting|geo|geography|location|locations|market|markets|competitor|competitors|creative|format|formats|ad|ads|copy|keyword|keywords|cpm|cpc|cpa|cpl|roas|ctr|cvr|kpi|impression|impressions|reach|frequency|flight|timeline|week|weeks|month|months|duration|objective|goal|recommendation|recommendations|next step|next steps|risk|benchmark|reporting|measurement|attribution|retargeting|remarketing|landing page|conversion|conversions|lead|leads|sale|sales|awareness|traffic|offer|funnel|gen z|millennial|persona|personas|buyer|buyers|customer|customers|industry|sector)\b/;
+    const editTerms = /\b(add|remove|change|update|shift|increase|decrease|reduce|replace|adjust|reallocate|rebalance|frontload|prioritize|prioritise|focus|target|exclude|include|optimize|optimise|emphasize|revise|make|allocate|move|swap|expand|narrow|split|raise|lower|turn|use|recommend|model|set|more|less|heavier|lighter|aggressive)\b/;
+    const generalQuestion = /^(what|who|when|where|why|how|tell me|explain|define|write|create|draft)\b/;
+    const offTopicTerms = /\b(java|python|javascript|code|coding|recipe|poem|song|joke|weather|stock price|president|capital of|homework|essay|story|movie|sports|news)\b/;
+    const hasPlanTerm = planTerms.test(normalized);
+    const hasEditTerm = editTerms.test(normalized);
+
+    if (offTopicTerms.test(normalized) && !(hasPlanTerm && hasEditTerm)) {
+        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
+    }
+    if (generalQuestion.test(normalized) && !(hasPlanTerm && hasEditTerm)) {
+        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
+    }
+    if (!hasPlanTerm || !hasEditTerm) {
+        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
+    }
+    return { valid: true, message: '' };
+}
+
+function setRefineGuardrailMessage(message) {
+    const el = document.getElementById('refineGuardrailMessage');
+    if (!el) return;
+    el.textContent = message || '';
+    el.classList.toggle('is-visible', !!message);
+}
+
+function initRefineGuardrail() {
+    const input = document.getElementById('refineInput');
+    if (!input) return;
+    input.addEventListener('input', () => {
+        if (!input.value.trim()) {
+            setRefineGuardrailMessage('');
+            return;
+        }
+        const validation = validateRefineInstruction(input.value);
+        if (validation.valid) setRefineGuardrailMessage('');
+    });
+    document.querySelectorAll('.refine-chip').forEach(chip => {
+        chip.addEventListener('click', () => setRefineGuardrailMessage(''));
+    });
+}
 
 // ======================== EMAIL VALIDATION ========================
 const BLOCKED_EMAIL_DOMAINS = [
@@ -2729,7 +2814,7 @@ function setRespondIqLoaderCopy(title, subtitle) {
 
 function setRespondIqLoaderStatus(label) {
     const statusEl = document.getElementById('loaderStatusLabel');
-    if (statusEl) statusEl.textContent = label || 'Respond IQ is working';
+    if (statusEl) statusEl.textContent = label || 'RespondIQ is working';
 }
 
 function getLoaderBudgetInfo(data) {
@@ -3021,7 +3106,7 @@ function startRespondIqLoader(data) {
     RESPONDIQ_LOADER_ESTIMATE = estimateRespondIqLoaderMetrics(data || {});
     RESPONDIQ_LOADER_FINAL_METRICS = null;
     setRespondIqLoaderCopy();
-    setRespondIqLoaderStatus('Respond IQ is working');
+    setRespondIqLoaderStatus('RespondIQ is working');
     updateRespondIqLoaderInsights(data || {});
     updateRespondIqLoaderSteps();
     updateRespondIqLoaderMetrics();
@@ -3313,10 +3398,12 @@ async function generateMediaPlan(data) {
             }
             if (plan.detected_industry) updateRespondIqLoaderInsights(data, plan.detected_industry);
             plan = cleanPlanText(plan);
+            plan = constrainPlanToUserSelections(plan, data);
             // Math Firewall: enforce deterministic arithmetic using AI-provided rates
             plan = recalculatePlanMath(plan, bInfo.mid, months);
             window._planningSignals = result._planning_signals || buildFrontendPlanningSignals(data, window._competitiveIntel, window._metaAdsIntel, plan);
             plan = applyPlanningSignalCalibration(plan, data, window._planningSignals);
+            plan = constrainPlanToUserSelections(plan, data);
             updateRespondIqLoaderFromPlan(plan);
             setRespondIqLoaderStage(4);
             return plan;
@@ -4071,8 +4158,20 @@ function applyPlanningSignalCalibration(plan, data, signals) {
 // PLAN_DATA is declared in GLOBAL STATE above
 
 async function refinePlan() {
-    const instruction = document.getElementById('refineInput').value.trim();
-    if (!instruction) { alert('Please describe what you want to change.'); return; }
+    const refineInput = document.getElementById('refineInput');
+    const instruction = refineInput.value.trim();
+    setRefineGuardrailMessage('');
+    if (!instruction) {
+        setRefineGuardrailMessage('Please describe what you want to change.');
+        refineInput.focus();
+        return;
+    }
+    const refineValidation = validateRefineInstruction(instruction);
+    if (!refineValidation.valid) {
+        setRefineGuardrailMessage(refineValidation.message);
+        refineInput.focus();
+        return;
+    }
     if (!PLAN_DATA || !FORM_DATA) { alert('No plan to refine. Generate a plan first.'); return; }
     const aiSafeInstruction = redactPersonalTextForAI(instruction, FORM_DATA);
 
@@ -4095,7 +4194,13 @@ async function refinePlan() {
 
         if (!res.ok) {
             console.error('❌ Refine error:', res.status);
-            alert('Refinement failed. Please try again.');
+            let errorPayload = {};
+            try { errorPayload = await res.json(); } catch (e) {}
+            if (errorPayload.code === 'irrelevant_refine_instruction') {
+                setRefineGuardrailMessage(errorPayload.error || REFINE_PLAN_GUARDRAIL_MESSAGE);
+            } else {
+                alert('Refinement failed. Please try again.');
+            }
             btn.disabled = false;
             btn.textContent = '✦ Update Plan';
             return;
@@ -4119,6 +4224,7 @@ async function refinePlan() {
             if (!newPlan.detected_industry && PLAN_DATA.detected_industry) newPlan.detected_industry = PLAN_DATA.detected_industry;
             if (newPlan.industry_mismatch === undefined && PLAN_DATA.industry_mismatch) newPlan.industry_mismatch = PLAN_DATA.industry_mismatch;
             newPlan = cleanPlanText(newPlan);
+            newPlan = constrainPlanToUserSelections(newPlan, FORM_DATA);
             // Apply Math Firewall to refined plan too
             const budgetMap = {
                 '$1,000 - $5,000': 3000, '$5,000 - $10,000': 7500, '$10,000 - $25,000': 17500,
@@ -4131,6 +4237,7 @@ async function refinePlan() {
             newPlan = recalculatePlanMath(newPlan, mid, mos);
             window._planningSignals = newPlan._planning_signals || window._planningSignals || buildFrontendPlanningSignals(FORM_DATA, window._competitiveIntel, window._metaAdsIntel, newPlan);
             newPlan = applyPlanningSignalCalibration(newPlan, FORM_DATA, window._planningSignals);
+            newPlan = constrainPlanToUserSelections(newPlan, FORM_DATA);
 
             PLAN_DATA = newPlan;
             renderTemplate(FORM_DATA, newPlan);
@@ -4380,6 +4487,180 @@ function getFlightFallback(channel, duration) {
     return { ...base, wk1_3: 'Launch: setup, go live, and initial testing', wk4_6: 'Optimize: refine bids and creative', wk7_9: 'Scale: push top performers and expand audiences', wk10_12: 'Close: final optimization and reporting' };
 }
 
+function normalizePlanningName(value) {
+    return decodeHtmlForMatch(value)
+        .toLowerCase()
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function stripPlanningNoiseWords(words) {
+    const noise = new Set(['the', 'llc', 'inc', 'ltd', 'co', 'corp', 'corporation', 'company', 'group', 'official', 'usa', 'us', 'uk', 'global', 'international', 'page', 'brand', 'brands', 'se', 'sa', 'ag', 'gmbh', 'plc', 'limited']);
+    return words.filter(w => w && !noise.has(w));
+}
+
+function planningTokens(value) {
+    return stripPlanningNoiseWords(normalizePlanningName(value).split(/\s+/)).filter(Boolean);
+}
+
+function strictBrandNameMatches(candidate, needle) {
+    const c = normalizePlanningName(candidate);
+    const n = normalizePlanningName(needle);
+    if (!c || !n) return false;
+    if (c === n || c.replace(/\s+/g, '') === n.replace(/\s+/g, '')) return true;
+    const cTokens = planningTokens(c);
+    const nTokens = planningTokens(n);
+    if (!cTokens.length || !nTokens.length) return false;
+    const cSet = new Set(cTokens);
+    const overlap = nTokens.filter(t => cSet.has(t)).length;
+    const recall = overlap / nTokens.length;
+    const precision = overlap / cTokens.length;
+    if (nTokens.length === 1) {
+        const token = nTokens[0];
+        const allowedShortSuffixes = new Set(['football', 'running', 'basketball', 'motorsport', 'sport', 'sports']);
+        const extras = cTokens.filter(t => t !== token);
+        return (cTokens.length === 1 && cTokens[0] === token) ||
+            (cTokens[0] === token && extras.length <= 2 && extras.every(t => allowedShortSuffixes.has(t)));
+    }
+    return recall === 1 && precision >= 0.67;
+}
+
+function channelMatchesSelection(channelName, selectedChannel) {
+    const channel = normalizePlanningName(channelName);
+    const selected = normalizePlanningName(selectedChannel);
+    if (!channel || !selected) return false;
+    if (channel === selected || channel.includes(selected) || selected.includes(channel)) return true;
+    const channelTokens = new Set(planningTokens(channel));
+    const selectedTokens = planningTokens(selected);
+    if (!selectedTokens.length) return false;
+    return selectedTokens.filter(t => channelTokens.has(t)).length / selectedTokens.length >= 0.75;
+}
+
+function parsePctNumber(value) {
+    const n = parseFloat(String(value || '').replace('%', ''));
+    return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+function normalizedPercentages(items) {
+    const raw = items.map(item => parsePctNumber(item && (item.budget_pct || item.pct)));
+    const total = raw.reduce((sum, n) => sum + n, 0);
+    if (!total) {
+        const base = Math.floor(100 / Math.max(1, items.length));
+        return items.map((_, i) => i === items.length - 1 ? 100 - base * (items.length - 1) : base);
+    }
+    let used = 0;
+    return raw.map((n, i) => {
+        const pct = i === raw.length - 1 ? 100 - used : Math.round((n / total) * 100);
+        used += pct;
+        return pct;
+    });
+}
+
+function firstMatchingItem(items, selected, key) {
+    return (items || []).find(item => channelMatchesSelection(item && item[key], selected)) || null;
+}
+
+function containsUnselectedChannelMention(text, selectedChannels) {
+    const body = normalizePlanningName(text);
+    if (!body) return false;
+    const selectedText = normalizePlanningName(selectedChannels.join(' '));
+    const channelTerms = [
+        'google search', 'search', 'shopping', 'performance max', 'demand gen', 'bing', 'microsoft ads',
+        'meta', 'facebook', 'instagram', 'tiktok', 'linkedin', 'snapchat', 'pinterest', 'twitter', 'reddit',
+        'youtube', 'ctv', 'ott', 'streaming', 'hulu', 'netflix', 'video', 'display', 'programmatic',
+        'native', 'retargeting', 'remarketing', 'audio', 'podcast', 'spotify', 'dooh', 'out of home',
+        'email', 'sms', 'influencer', 'affiliate', 'creator'
+    ];
+    return channelTerms.some(term => {
+        const normalizedTerm = normalizePlanningName(term);
+        if (!body.includes(normalizedTerm)) return false;
+        return !selectedText.includes(normalizedTerm) && !selectedChannels.some(ch => channelMatchesSelection(ch, normalizedTerm));
+    });
+}
+
+function constrainPlanToUserSelections(plan, data) {
+    const p = plan && typeof plan === 'object' ? { ...plan } : {};
+    const selectedChannels = Array.isArray(data && data.platformList) ? data.platformList.filter(Boolean) : [];
+    const selectedCreatives = Array.isArray(data && data.creativeList) ? data.creativeList.filter(Boolean) : [];
+    const duration = data && data.campaignDuration ? data.campaignDuration : '12 Weeks (Quarter)';
+
+    if (selectedChannels.length) {
+        const sourceChannels = Array.isArray(p.channels) ? p.channels : [];
+        const sourceBudget = Array.isArray(p.budget_breakdown) ? p.budget_breakdown : [];
+        const sourceFlight = Array.isArray(p.flight_plan) ? p.flight_plan : [];
+        const sourceBriefs = Array.isArray(p.creative_briefs) ? p.creative_briefs : [];
+
+        const nextChannels = selectedChannels.map(selected => {
+            const match = firstMatchingItem(sourceChannels, selected, 'name') || {};
+            return {
+                name: selected,
+                budget_pct: normalizeText(match.budget_pct, '0%'),
+                rationale: normalizeText(match.rationale, 'User-selected channel. Budget and tactics are constrained to this channel by the planning brief.'),
+                tactics: normalizeArray(match.tactics, ['Launch controlled tests within the selected channel', 'Optimize targeting and creative weekly', 'Measure against the primary KPI']).map(t => normalizeText(t, 'Optimize weekly.'))
+            };
+        });
+        const pcts = normalizedPercentages(nextChannels);
+        p.channels = nextChannels.map((ch, i) => ({ ...ch, budget_pct: pcts[i] + '%' }));
+
+        p.budget_breakdown = selectedChannels.map((selected, i) => {
+            const match = firstMatchingItem(sourceBudget, selected, 'item') || {};
+            return {
+                item: selected,
+                pct: p.channels[i].budget_pct,
+                impressions: normalizeText(match.impressions, 'Pending recalculation'),
+                cpm: normalizeText(match.cpm, 'Pending')
+            };
+        });
+
+        p.flight_plan = selectedChannels.map(selected => {
+            const match = firstMatchingItem(sourceFlight, selected, 'channel') || {};
+            return { ...getFlightFallback(selected, duration), ...match, channel: selected };
+        });
+
+        p.creative_briefs = selectedChannels.map((selected, i) => {
+            const match = firstMatchingItem(sourceBriefs, selected, 'channel') || {};
+            const selectedFormat = selectedCreatives.length ? selectedCreatives[i % selectedCreatives.length] : '';
+            const currentFormat = normalizeText(match.format, 'Platform-native creative');
+            const formatIsAllowed = selectedCreatives.length
+                ? selectedCreatives.some(format => channelMatchesSelection(currentFormat, format) || channelMatchesSelection(format, currentFormat))
+                : true;
+            return {
+                channel: selected,
+                format: selectedCreatives.length ? (formatIsAllowed ? currentFormat : selectedFormat) : currentFormat,
+                headline_direction: normalizeArray(match.headline_direction, ['Clear value proposition', 'Proof-led message']).map(h => normalizeText(h, 'Proof-led message')),
+                cta: normalizeText(match.cta, 'Learn More'),
+                creative_notes: normalizeText(match.creative_notes, selectedCreatives.length ? 'Use only the selected creative format(s) for this channel.' : 'Align creative to the audience stage and campaign goal.')
+            };
+        });
+
+        const channelListText = selectedChannels.join(', ');
+        const lockSentence = 'This plan is constrained to the user-selected channel' + (selectedChannels.length === 1 ? '' : 's') + ': ' + channelListText + '.';
+        const currentStrategy = normalizeText(p.media_strategy, '');
+        p.media_strategy = containsUnselectedChannelMention(currentStrategy, selectedChannels)
+            ? lockSentence + ' Budget, tactics, flighting, creative, measurement, and optimization are focused only on the selected channel' + (selectedChannels.length === 1 ? '' : 's') + ' for this brief.'
+            : (currentStrategy.startsWith(lockSentence) ? currentStrategy : lockSentence + ' ' + currentStrategy);
+        const summaryLock = 'This media plan is scoped only to the user-selected channel' + (selectedChannels.length === 1 ? '' : 's') + ': ' + channelListText + '.';
+        const currentSummary = normalizeText(p.executive_summary, '');
+        p.executive_summary = containsUnselectedChannelMention(currentSummary, selectedChannels)
+            ? summaryLock + ' Budget allocation, projected delivery, creative, and optimization guidance are limited to the selected media scope.'
+            : (currentSummary.startsWith(summaryLock) ? currentSummary : summaryLock + ' ' + currentSummary);
+    } else if (selectedCreatives.length && Array.isArray(p.creative_briefs)) {
+        p.creative_briefs = p.creative_briefs.map((brief, i) => {
+            const currentFormat = normalizeText(brief && brief.format, '');
+            const formatIsAllowed = selectedCreatives.some(format => channelMatchesSelection(currentFormat, format) || channelMatchesSelection(format, currentFormat));
+            return {
+                ...brief,
+                format: formatIsAllowed ? currentFormat : selectedCreatives[i % selectedCreatives.length],
+                creative_notes: normalizeText(brief && brief.creative_notes, 'Use only the selected creative format(s) for this channel.')
+            };
+        });
+    }
+
+    return p;
+}
+
 function normalizePlanForRender(plan, data) {
     const p = plan && typeof plan === 'object' ? { ...plan } : {};
     const brand = normalizeText(data && data.brandName, 'the brand');
@@ -4477,7 +4758,8 @@ function normalizePlanForRender(plan, data) {
 // ======================== RENDER HTML TEMPLATE ========================
 function renderTemplate(data, plan) {
     const rawData = data || {};
-    plan = normalizePlanForRender(plan, rawData);
+    plan = normalizePlanForRender(constrainPlanToUserSelections(plan, rawData), rawData);
+    plan = constrainPlanToUserSelections(plan, rawData);
     const rawPlan = plan;
     const rawPlanningSignals = rawPlan._planning_signals || window._planningSignals || buildFrontendPlanningSignals(rawData, window._competitiveIntel, window._metaAdsIntel, rawPlan);
     if (rawPlanningSignals && !rawPlan._planning_signals) rawPlan._planning_signals = rawPlanningSignals;
@@ -4514,9 +4796,7 @@ function renderTemplate(data, plan) {
     }
 
     function intelNameMatches(candidate, needle) {
-        const c = normalizeIntelMatchName(candidate);
-        const n = normalizeIntelMatchName(needle);
-        return !!(c && n && (c.includes(n) || n.includes(c)));
+        return strictBrandNameMatches(normalizeIntelMatchName(candidate), normalizeIntelMatchName(needle));
     }
 
     function getCompIntel(name) {
@@ -4582,19 +4862,39 @@ function renderTemplate(data, plan) {
     function adsPill(name) {
         const intel = getCompIntel(name);
         const metaIntel = getMetaIntel(name);
-        const pills = [];
+        const sources = [];
+        let strongestActivity = null;
+        let strongestScore = -1;
+        const scoreActivity = activity => {
+            const label = adActivityLabel(activity).toLowerCase();
+            if (label.includes('high')) return 3;
+            if (label.includes('medium')) return 2;
+            if (label.includes('low')) return 1;
+            return 0;
+        };
         if (intel) {
             const accountCount = Number(intel.account_ad_count || intel.raw_ad_count || intel.ad_count || 0);
             const brandCount = Number(intel.ad_count || 0);
             const activity = normalizeAdActivityTier(intel.google_activity_tier || intel.activity_level, brandCount || accountCount);
-            const title = `Verified via Google Ads Transparency Center. RespondIQ shows a directional activity tier instead of an exact ad count. ${intel.qualification_note || ''}`;
-            pills.push(`<span class="ads-pill ${adActivityClass(activity)} weighted" title="${escapeAttr(title)}">${escapeHtml(adActivityLabel(activity))}</span>`);
+            sources.push('Google Ads Transparency Center');
+            const score = scoreActivity(activity);
+            if (score > strongestScore) {
+                strongestScore = score;
+                strongestActivity = activity;
+            }
         }
         if (metaIntel) {
             const activity = normalizeAdActivityTier(metaIntel.activity_level, metaIntel.ad_count);
-            pills.push(`<span class="ads-pill ${adActivityClass(activity)}" title="Verified via Meta Ad Library. RespondIQ shows a directional activity tier instead of an exact ad count.">${escapeHtml(adActivityLabel(activity))}</span>`);
+            sources.push('Meta Ad Library');
+            const score = scoreActivity(activity);
+            if (score > strongestScore) {
+                strongestScore = score;
+                strongestActivity = activity;
+            }
         }
-        return pills.length ? ' ' + pills.join(' ') : '';
+        if (!sources.length) return '';
+        const title = 'Verified via ' + sources.join(' and ') + '. RespondIQ shows one directional activity tier instead of duplicate source badges.';
+        return ' <span class="ads-pill ' + adActivityClass(strongestActivity) + ' weighted" title="' + escapeAttr(title) + '">' + escapeHtml(adActivityLabel(strongestActivity)) + '</span>';
     }
 
     function metaCreativeEvidenceHtml() {
@@ -4637,27 +4937,21 @@ function renderTemplate(data, plan) {
     const hasKeywordData = plan._keywordDataUsed || false;
     const benchmarkSourcesForDisplay = window._benchmarkSources && window._benchmarkSources.length > 0 ? window._benchmarkSources : (plan._benchmark_sources || []);
     const hasBenchmarkSources = benchmarkSourcesForDisplay.length > 0;
+    const pluralize = (count, singular, plural) => count + ' ' + (count === 1 ? singular : (plural || singular + 's'));
     let dataSourcesHtml = '';
     if (hasTransparencyData || hasMetaData || hasKeywordData || hasBenchmarkSources) {
         dataSourcesHtml = '<div class="data-sources-bar"><span class="data-sources-label">Verified Data Sources</span>';
         if (hasTransparencyData) {
             const verifiedCount = window._competitiveIntel.filter(ci => ci.found).length;
-            const transparencyLocations = (window._competitiveIntel.find(ci => ci.found && Array.isArray(ci.transparency_urls) && ci.transparency_urls.length)?.transparency_urls || []);
-            const locationCount = transparencyLocations.length;
-            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Google Ads Transparency Center (' + verifiedCount + ' competitors' + (locationCount > 1 ? ', ' + locationCount + ' locations' : '') + ')</span>';
+            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Google Ads Transparency Center (' + pluralize(verifiedCount, 'competitor') + ')</span>';
         }
         if (hasMetaData) {
             const metaFound = window._metaAdsIntel.filter(mi => mi.found);
-            const metaRegions = new Set();
-            metaFound.forEach(mi => {
-                const active = Array.isArray(mi.regions_active) && mi.regions_active.length ? mi.regions_active : [{ region: mi.region }];
-                active.forEach(r => { if (r.region) metaRegions.add(r.region); });
-            });
-            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Meta Ad Library (' + metaFound.length + ' competitors, ' + metaRegions.size + ' regions)</span>';
+            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Meta Ad Library (' + pluralize(metaFound.length, 'competitor') + ')</span>';
         }
         if (hasKeywordData) {
             const kwCount = plan._keywordResults ? plan._keywordResults.length : 0;
-            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Google Keyword Planner (' + kwCount + ' keywords)</span>';
+            dataSourcesHtml += '<span class="data-source-chip active"><span class="data-source-dot active"></span>Google Keyword Planner (' + pluralize(kwCount, 'keyword') + ')</span>';
         }
         if (hasBenchmarkSources) {
             const premium = benchmarkSourcesForDisplay.filter(s => s.tier === 'premium');
