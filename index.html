@@ -767,32 +767,6 @@
         .ai-disclaimer { font-size: 11px; color: var(--text-muted); font-style: italic; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--border); }
 
 
-        /* ── UPGRADE 4: Refine Plan UI ── */
-        .refine-section { margin-top: 40px; padding: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-md); }
-        .refine-section .refine-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-        .refine-section .refine-sub { font-size: 13px; color: var(--text-3); margin-bottom: 16px; }
-        .refine-textarea { width: 100%; padding: 14px 16px; background: var(--surface-2); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; min-height: 80px; resize: vertical; outline: none; transition: all 0.2s; }
-        .refine-textarea:focus { border-color: #af52de; box-shadow: 0 0 0 4px rgba(175,82,222,0.12); background: #fff; }
-        .refine-textarea::placeholder { color: var(--text-muted); }
-        .btn-refine { padding: 14px 28px; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(135deg, #af52de, #bf5af2); border: none; border-radius: 980px; cursor: pointer; transition: all 0.3s; margin-top: 12px; box-shadow: 0 8px 20px rgba(175,82,222,0.25); }
-        .btn-refine:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(175,82,222,0.35); }
-        .btn-refine:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .refine-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .refine-chip { padding: 6px 14px; border-radius: 980px; font-size: 12px; cursor: pointer; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2); transition: all 0.2s; }
-        .refine-chip:hover { background: rgba(175,82,222,0.08); border-color: rgba(175,82,222,0.4); color: #8b3fc7; }
-        .refine-guardrail-message {
-            display: none;
-            margin-top: 10px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,107,53,0.28);
-            background: rgba(255,107,53,0.08);
-            color: #9a3412;
-            font-size: 12px;
-            line-height: 1.45;
-        }
-        .refine-guardrail-message.is-visible { display: block; }
-
         /* ── Tech Stack Badge ── */
         .tech-stack-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); margin-bottom: 12px; }
         .tech-stack-label { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: 0.5px; text-transform: uppercase; margin-right: 4px; }
@@ -1850,7 +1824,7 @@
                             <div class="pt-copy">© 2026 RespondIQ</div>
                             <div class="pt-copy-sub">by<br><img class="responsive-mts-logo logo-sm logo-pill" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></div>
                         </div>
-                        <div class="pt-ai-badge"><span class="pt-spark">✦</span><span>AI Generated</span></div>
+                        <div class="pt-ai-badge"><span class="pt-spark">✦</span><span>Strategy Intelligence</span></div>
                     </div>
                 </div>
                 <!-- Print-only snapshot page (populated by renderSnapshotPage at PDF time) -->
@@ -1910,22 +1884,6 @@
                     </div>
                 </div>
                 <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong><br><span style="font-size:11px;color:#64748b;">by</span><br><img class="responsive-mts-logo logo-sm" style="margin:4px auto 0;" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></p></div>
-            </div>
-
-            <!-- ========== UPGRADE 4: REFINE PLAN ========== -->
-            <div class="refine-section" id="refineSection" style="display:none;">
-                <div class="refine-title">✦ Refine Your Plan</div>
-                <div class="refine-sub">Tell the AI what to change — it will update the full plan while keeping the math accurate.</div>
-                <div class="refine-chips">
-                    <span class="refine-chip" onclick="document.getElementById('refineInput').value='Focus more on Gen Z audiences (18-24) and shift budget toward TikTok and Instagram Reels'">🎯 Target Gen Z</span>
-                    <span class="refine-chip" onclick="document.getElementById('refineInput').value='Increase the budget allocation for Google Search to 50% and reduce display spend'">📈 More Search</span>
-                    <span class="refine-chip" onclick="document.getElementById('refineInput').value='Add LinkedIn Ads as a new channel with 20% budget allocation for B2B lead generation'">💼 Add LinkedIn</span>
-                    <span class="refine-chip" onclick="document.getElementById('refineInput').value='Make the campaign more aggressive in weeks 1-2 with higher spend frontloading'">🚀 Frontload Spend</span>
-                    <span class="refine-chip" onclick="document.getElementById('refineInput').value='Add a CTV/OTT channel for brand awareness with 15% of total budget'">📺 Add CTV</span>
-                </div>
-                <textarea id="refineInput" class="refine-textarea" placeholder="e.g., 'Shift 20% of budget from Display to TikTok' or 'Add a retargeting channel' or 'Focus competitors more on local agencies'"></textarea>
-                <div id="refineGuardrailMessage" class="refine-guardrail-message" role="alert" aria-live="polite"></div>
-                <button type="button" id="btnRefine" class="btn-refine" onclick="refinePlan()">✦ Update Plan</button>
             </div>
 
             <!-- ========== LEAD GEN CTA ========== -->
@@ -2348,59 +2306,11 @@ function getSelectedChips(containerId) {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initRefineGuardrail(); initBrandAutocomplete(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
 let FORM_DATA = null;
-
-const REFINE_PLAN_GUARDRAIL_MESSAGE = 'Please enter a media-plan refinement, such as changing budget, channels, audience, geography, creative, KPIs, competitors, timing, or recommendations.';
-
-function validateRefineInstruction(instruction) {
-    const normalized = String(instruction || '').trim().toLowerCase().replace(/\s+/g, ' ');
-    if (!normalized) return { valid: false, message: 'Please describe what you want to change.' };
-
-    const planTerms = /\b(media plan|plan|campaign|budget|spend|allocation|channel|channels|platform|platforms|search|shopping|google|meta|facebook|instagram|linkedin|tiktok|youtube|ctv|ott|display|programmatic|email|audience|audiences|segment|segments|targeting|geo|geography|location|locations|market|markets|competitor|competitors|creative|format|formats|ad|ads|copy|keyword|keywords|cpm|cpc|cpa|cpl|roas|ctr|cvr|kpi|impression|impressions|reach|frequency|flight|timeline|week|weeks|month|months|duration|objective|goal|recommendation|recommendations|next step|next steps|risk|benchmark|reporting|measurement|attribution|retargeting|remarketing|landing page|conversion|conversions|lead|leads|sale|sales|awareness|traffic|offer|funnel|gen z|millennial|persona|personas|buyer|buyers|customer|customers|industry|sector)\b/;
-    const editTerms = /\b(add|remove|change|update|shift|increase|decrease|reduce|replace|adjust|reallocate|rebalance|frontload|prioritize|prioritise|focus|target|exclude|include|optimize|optimise|emphasize|revise|make|allocate|move|swap|expand|narrow|split|raise|lower|turn|use|recommend|model|set|more|less|heavier|lighter|aggressive)\b/;
-    const generalQuestion = /^(what|who|when|where|why|how|tell me|explain|define|write|create|draft)\b/;
-    const offTopicTerms = /\b(java|python|javascript|code|coding|recipe|poem|song|joke|weather|stock price|president|capital of|homework|essay|story|movie|sports|news)\b/;
-    const hasPlanTerm = planTerms.test(normalized);
-    const hasEditTerm = editTerms.test(normalized);
-
-    if (offTopicTerms.test(normalized) && !(hasPlanTerm && hasEditTerm)) {
-        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
-    }
-    if (generalQuestion.test(normalized) && !(hasPlanTerm && hasEditTerm)) {
-        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
-    }
-    if (!hasPlanTerm || !hasEditTerm) {
-        return { valid: false, message: REFINE_PLAN_GUARDRAIL_MESSAGE };
-    }
-    return { valid: true, message: '' };
-}
-
-function setRefineGuardrailMessage(message) {
-    const el = document.getElementById('refineGuardrailMessage');
-    if (!el) return;
-    el.textContent = message || '';
-    el.classList.toggle('is-visible', !!message);
-}
-
-function initRefineGuardrail() {
-    const input = document.getElementById('refineInput');
-    if (!input) return;
-    input.addEventListener('input', () => {
-        if (!input.value.trim()) {
-            setRefineGuardrailMessage('');
-            return;
-        }
-        const validation = validateRefineInstruction(input.value);
-        if (validation.valid) setRefineGuardrailMessage('');
-    });
-    document.querySelectorAll('.refine-chip').forEach(chip => {
-        chip.addEventListener('click', () => setRefineGuardrailMessage(''));
-    });
-}
 
 // ======================== BRAND SEARCH AUTOCOMPLETE ========================
 window.SELECTED_BRAND = null;
@@ -4233,109 +4143,6 @@ function applyPlanningSignalCalibration(plan, data, signals) {
     return plan;
 }
 
-// ======================== UPGRADE 4: REFINE PLAN ========================
-// PLAN_DATA is declared in GLOBAL STATE above
-
-async function refinePlan() {
-    const refineInput = document.getElementById('refineInput');
-    const instruction = refineInput.value.trim();
-    setRefineGuardrailMessage('');
-    if (!instruction) {
-        setRefineGuardrailMessage('Please describe what you want to change.');
-        refineInput.focus();
-        return;
-    }
-    const refineValidation = validateRefineInstruction(instruction);
-    if (!refineValidation.valid) {
-        setRefineGuardrailMessage(refineValidation.message);
-        refineInput.focus();
-        return;
-    }
-    if (!PLAN_DATA || !FORM_DATA) { alert('No plan to refine. Generate a plan first.'); return; }
-    const aiSafeInstruction = redactPersonalTextForAI(instruction, FORM_DATA);
-
-    const btn = document.getElementById('btnRefine');
-    btn.disabled = true;
-    btn.textContent = '✦ Updating plan...';
-
-    try {
-        const BACKEND_URL = BACKEND_BASE + '/generate-plan';
-        console.log('Refining plan:', aiSafeInstruction.substring(0, 60));
-
-        const res = await fetch(BACKEND_URL, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                refine_instruction: aiSafeInstruction,
-                current_plan: PLAN_DATA
-            })
-        });
-
-        if (!res.ok) {
-            console.error('❌ Refine error:', res.status);
-            let errorPayload = {};
-            try { errorPayload = await res.json(); } catch (e) {}
-            if (errorPayload.code === 'irrelevant_refine_instruction') {
-                setRefineGuardrailMessage(errorPayload.error || REFINE_PLAN_GUARDRAIL_MESSAGE);
-            } else {
-                alert('Refinement failed. Please try again.');
-            }
-            btn.disabled = false;
-            btn.textContent = '✦ Update Plan';
-            return;
-        }
-
-        const result = await res.json();
-        const text = result.choices?.[0]?.message?.content || '';
-        // Strip markdown fences before JSON extraction
-        const cleanedRefineText = text.replace(/^```(?:json)?\s*\n?/gm, '').replace(/\n?```\s*$/gm, '').trim();
-        const refinedObj = extractOuterJSON(cleanedRefineText);
-
-        if (refinedObj) {
-            let newPlan = refinedObj;
-            newPlan._source = 'ai';
-            // Carry forward keyword data from original plan
-            if (PLAN_DATA._keywordDataUsed) newPlan._keywordDataUsed = true;
-            if (PLAN_DATA._keywordResults) newPlan._keywordResults = PLAN_DATA._keywordResults;
-            if (PLAN_DATA._planning_signals) newPlan._planning_signals = PLAN_DATA._planning_signals;
-            // Carry forward industry mismatch data
-            if (PLAN_DATA._selectedIndustry) newPlan._selectedIndustry = PLAN_DATA._selectedIndustry;
-            if (!newPlan.detected_industry && PLAN_DATA.detected_industry) newPlan.detected_industry = PLAN_DATA.detected_industry;
-            if (newPlan.industry_mismatch === undefined && PLAN_DATA.industry_mismatch) newPlan.industry_mismatch = PLAN_DATA.industry_mismatch;
-            newPlan = cleanPlanText(newPlan);
-            newPlan = constrainPlanToUserSelections(newPlan, FORM_DATA);
-            // Apply Math Firewall to refined plan too
-            const budgetMap = {
-                '$1,000 - $5,000': 3000, '$5,000 - $10,000': 7500, '$10,000 - $25,000': 17500,
-                '$25,000 - $50,000': 37500, '$50,000 - $100,000': 75000, '$100,000 - $250,000': 175000,
-                '$250,000 - $500,000': 375000, '$500,000 - $1,000,000': 750000, '$1,000,000+': 1500000
-            };
-            const durationMonths = { '4 Weeks': 1, '8 Weeks': 2, '12 Weeks (Quarter)': 3, '6 Months': 6, '12 Months (Annual)': 12 };
-            const mid = budgetMap[FORM_DATA.budget] || 17500;
-            const mos = durationMonths[FORM_DATA.campaignDuration] || 3;
-            newPlan = recalculatePlanMath(newPlan, mid, mos);
-            window._planningSignals = newPlan._planning_signals || window._planningSignals || buildFrontendPlanningSignals(FORM_DATA, window._competitiveIntel, window._metaAdsIntel, newPlan);
-            newPlan = applyPlanningSignalCalibration(newPlan, FORM_DATA, window._planningSignals);
-            newPlan = constrainPlanToUserSelections(newPlan, FORM_DATA);
-
-            PLAN_DATA = newPlan;
-            renderTemplate(FORM_DATA, newPlan);
-            document.getElementById('refineInput').value = '';
-            console.log('✅ Plan refined successfully');
-            window.scrollTo({ top: document.getElementById('templateOutput').offsetTop - 20, behavior: 'smooth' });
-        } else {
-            alert('Could not parse the refined plan. Please try a different instruction.');
-        }
-    } catch (err) {
-        console.error('❌ Refine error:', err);
-        alert('Refinement failed: ' + err.message);
-    }
-
-    btn.disabled = false;
-    btn.textContent = '✦ Update Plan';
-}
-
 // ======================== MOCK DATA ========================
 async function generateMockPlan(data) {
     await new Promise(r => setTimeout(r, 2500));
@@ -4857,7 +4664,7 @@ function renderTemplate(data, plan) {
     plan = sanitizeForRender(rawPlan);
     const planningSignals = sanitizeForRender(rawPlanningSignals || {});
     const sourceTag = plan._source === 'ai'
-        ? '<span style="display:inline-block;background:rgba(52,199,89,0.1);color:#1f9d4d;border:1px solid rgba(52,199,89,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">✦ AI GENERATED</span>'
+        ? '<span style="display:inline-block;background:rgba(52,199,89,0.1);color:#1f9d4d;border:1px solid rgba(52,199,89,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">✦ STRATEGY INTELLIGENCE</span>'
         : '<span style="display:inline-block;background:rgba(255,107,53,0.1);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">⚠ SAMPLE DATA — Backend not connected</span>';
 
     // Build social media presence bar (detected from website scrape)
