@@ -87,6 +87,7 @@
 
         .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; padding: 40px 20px; }
         body:not(.is-authed) .container { max-width: none; padding: 0; }
+        body.is-authed .container { max-width: none; padding: 0; }
 
         /* ── FORM ── */
         #formSection { animation: fadeInUp 0.8s ease-out; }
@@ -1101,12 +1102,12 @@
             --shadow-med: 0 2px 4px rgba(26,24,20,.04), 0 24px 60px -28px rgba(26,24,20,.18);
 
             position: relative;
-            left: 50%;
-            width: min(1240px, calc(100vw - 64px));
-            min-height: calc(100vh - 80px);
+            left: auto;
+            width: 100vw;
+            min-height: 100vh;
             margin: 0;
             padding: 0 0 80px;
-            transform: translateX(-50%);
+            transform: none;
             overflow: hidden;
             isolation: isolate;
             color: var(--ink);
@@ -1254,13 +1255,23 @@
         }
 
         #formSection .form-brand-by {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 7px;
             margin-top: 4px;
             font-size: 10px;
             font-weight: 500;
             color: var(--ink-4);
             letter-spacing: .22em;
             text-transform: uppercase;
+        }
+
+        #formSection .form-brand-by .responsive-mts-logo {
+            display: block;
+            height: 30px;
+            max-width: 240px;
+            filter: saturate(.88) contrast(1.02);
+            opacity: .96;
         }
 
         #formSection .form-top-note {
@@ -1384,6 +1395,7 @@
             overflow: visible;
             background: rgba(255,255,255,.88);
             border: 1px solid var(--hair);
+            border-left: 5px solid var(--card-color, var(--orange));
             border-radius: var(--radius-l);
             box-shadow: var(--shadow-soft);
             backdrop-filter: blur(14px);
@@ -1395,10 +1407,11 @@
             content: "";
             position: absolute;
             inset: 0 auto 0 0;
-            width: 4px;
+            width: 0;
             border-radius: var(--radius-l) 0 0 var(--radius-l);
             background: var(--card-color, var(--orange));
-            opacity: .9;
+            opacity: 0;
+            display: none;
         }
 
         #formSection .fcard.client { --card-color: var(--orange); }
@@ -1717,6 +1730,227 @@
 
         #formSection .chip-group-options .chip { margin-top: 12px; }
 
+        #formSection .fcard.channels {
+            --card-color: var(--green);
+        }
+
+        #formSection .fcard.channels .chip-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        #formSection .fcard.channels .chip-group {
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        #formSection .fcard.channels .chip-group[open] {
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        #formSection .fcard.channels .chip-group summary {
+            padding: 8px 0 12px;
+            border-top: 1px solid var(--hair);
+        }
+
+        #formSection .fcard.channels .chip-group:first-child summary {
+            border-top: 0;
+        }
+
+        #formSection .fcard.channels .chip-group-title {
+            letter-spacing: .22em;
+            color: var(--ink-3);
+        }
+
+        #formSection .fcard.channels .chip-group-title::before {
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 0 5px rgba(46,152,102,.12);
+        }
+
+        #formSection .fcard.channels .chip-group-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(188px, 1fr));
+            gap: 12px;
+            padding: 10px 0 18px;
+            border-top: 0;
+        }
+
+        #formSection #platformChips .chip,
+        #formSection #creativeChips .chip {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 128px;
+            margin: 0;
+            padding: 18px 48px 18px 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(26,24,20,.13);
+            background: rgba(255,255,255,.82);
+            color: var(--ink);
+            box-shadow: 0 1px 0 rgba(26,24,20,.02);
+            text-align: left;
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.18;
+            white-space: normal;
+        }
+
+        #formSection #platformChips .chip::before,
+        #formSection #creativeChips .chip::before {
+            content: "•";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 2px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,107,53,.18);
+            background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,244,237,.9));
+            color: var(--orange);
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -.04em;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+        }
+
+        #formSection #platformChips .chip::after,
+        #formSection #creativeChips .chip::after {
+            content: "";
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(26,24,20,.16);
+            background: rgba(255,255,255,.72);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            transition: background .18s ease, border-color .18s ease, transform .18s ease;
+        }
+
+        #formSection #platformChips .chip:hover,
+        #formSection #creativeChips .chip:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,107,53,.42);
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 18px 34px -28px rgba(26,24,20,.35);
+        }
+
+        #formSection #platformChips .chip.selected,
+        #formSection #creativeChips .chip.selected {
+            border-color: var(--orange);
+            background: linear-gradient(135deg, rgba(255,107,53,.09), rgba(255,255,255,.92));
+            color: var(--ink);
+            box-shadow: 0 18px 38px -32px rgba(255,107,53,.8), inset 0 0 0 1px rgba(255,107,53,.08);
+        }
+
+        #formSection #platformChips .chip.selected::after,
+        #formSection #creativeChips .chip.selected::after {
+            content: "✓";
+            border-color: var(--orange);
+            background: var(--orange);
+            transform: scale(1.04);
+        }
+
+        #formSection #platformChips .chip[data-val*="Google"]::before { content: "G"; color: #1a73e8; border-bottom: 4px solid #34a853; }
+        #formSection #platformChips .chip[data-val*="Bing"]::before { content: "b"; color: #0089d6; background: #E6F6FF; border-color: rgba(0,137,214,.12); }
+        #formSection #platformChips .chip[data-val*="Apple"]::before { content: "⌕"; color: #1A1814; background: #F1EFEB; border-color: rgba(26,24,20,.08); }
+        #formSection #platformChips .chip[data-val*="Amazon"]::before { content: "a"; color: #111; border-bottom: 4px solid #ff9900; }
+        #formSection #platformChips .chip[data-val*="Walmart"]::before { content: "W"; color: #0071CE; background: #EEF7FF; }
+        #formSection #platformChips .chip[data-val*="Instacart"]::before { content: "I"; color: #43B02A; background: #EFFBEA; }
+        #formSection #platformChips .chip[data-val*="Meta"]::before { content: "M"; color: #1877F2; background: #EEF5FF; }
+        #formSection #platformChips .chip[data-val*="TikTok"]::before { content: "♪"; color: #111; background: #fff; }
+        #formSection #platformChips .chip[data-val*="LinkedIn"]::before { content: "in"; color: #0A66C2; background: #EEF6FF; font-size: 17px; letter-spacing: -.08em; }
+        #formSection #platformChips .chip[data-val*="Snapchat"]::before { content: "S"; color: #111; background: #FFF9C7; }
+        #formSection #platformChips .chip[data-val*="Pinterest"]::before { content: "P"; color: #BD081C; background: #FFECEF; }
+        #formSection #platformChips .chip[data-val^="X"]::before { content: "X"; color: #111; background: #F3F3F1; }
+        #formSection #platformChips .chip[data-val*="Reddit"]::before { content: "R"; color: #FF4500; background: #FFF0EA; }
+        #formSection #platformChips .chip[data-val*="Quora"]::before { content: "Q"; color: #A82400; background: #FFF2EE; }
+        #formSection #platformChips .chip[data-val*="Threads"]::before { content: "@"; color: #111; background: #F6F6F2; }
+        #formSection #platformChips .chip[data-val*="Bluesky"]::before { content: "B"; color: #1185FE; background: #EEF7FF; }
+        #formSection #platformChips .chip[data-val*="Nextdoor"]::before { content: "N"; color: #00A862; background: #EDFFF7; }
+        #formSection #platformChips .chip[data-val*="YouTube"]::before { content: "▶"; color: #FF0000; background: #FFF0F0; }
+        #formSection #platformChips .chip[data-val*="TV"]::before,
+        #formSection #platformChips .chip[data-val*="Streaming"]::before,
+        #formSection #platformChips .chip[data-val*="OTT"]::before,
+        #formSection #platformChips .chip[data-val*="Hulu"]::before,
+        #formSection #platformChips .chip[data-val*="Netflix"]::before,
+        #formSection #platformChips .chip[data-val*="Disney"]::before,
+        #formSection #platformChips .chip[data-val*="Peacock"]::before,
+        #formSection #platformChips .chip[data-val*="Roku"]::before,
+        #formSection #platformChips .chip[data-val*="Fire TV"]::before,
+        #formSection #platformChips .chip[data-val*="Samsung"]::before { content: "▭"; color: var(--blue); background: #EEF5FF; }
+        #formSection #platformChips .chip[data-val*="Programmatic"]::before,
+        #formSection #platformChips .chip[data-val*="Display"]::before,
+        #formSection #platformChips .chip[data-val*="Native"]::before,
+        #formSection #platformChips .chip[data-val*="Taboola"]::before,
+        #formSection #platformChips .chip[data-val*="Outbrain"]::before,
+        #formSection #platformChips .chip[data-val*="DOOH"]::before,
+        #formSection #platformChips .chip[data-val*="OOH"]::before,
+        #formSection #platformChips .chip[data-val*="Retargeting"]::before,
+        #formSection #platformChips .chip[data-val*="DCO"]::before,
+        #formSection #platformChips .chip[data-val*="Contextual"]::before { content: "⌘"; color: var(--green); background: #ECFAF2; }
+        #formSection #platformChips .chip[data-val*="Influencer"]::before,
+        #formSection #platformChips .chip[data-val*="Creator"]::before,
+        #formSection #platformChips .chip[data-val*="UGC"]::before,
+        #formSection #platformChips .chip[data-val*="Content"]::before,
+        #formSection #platformChips .chip[data-val*="Podcast"]::before,
+        #formSection #platformChips .chip[data-val*="Affiliate"]::before { content: "✦"; color: var(--violet); background: #F3F0FF; }
+        #formSection #platformChips .chip[data-val*="Spotify"]::before,
+        #formSection #platformChips .chip[data-val*="Pandora"]::before,
+        #formSection #platformChips .chip[data-val*="Radio"]::before,
+        #formSection #platformChips .chip[data-val*="Audio"]::before,
+        #formSection #platformChips .chip[data-val*="Sirius"]::before { content: "≈"; color: var(--gold); background: #FFF7E3; }
+        #formSection #platformChips .chip[data-val*="Email"]::before,
+        #formSection #platformChips .chip[data-val*="SMS"]::before,
+        #formSection #platformChips .chip[data-val*="Push"]::before,
+        #formSection #platformChips .chip[data-val*="In-App"]::before,
+        #formSection #platformChips .chip[data-val*="Direct Mail"]::before,
+        #formSection #platformChips .chip[data-val*="Chatbot"]::before { content: "↗"; color: var(--orange); background: #FFF2EA; }
+        #formSection #platformChips .chip[data-val*="AI-"]::before,
+        #formSection #platformChips .chip[data-val*="Game"]::before,
+        #formSection #platformChips .chip[data-val*="AR"]::before,
+        #formSection #platformChips .chip[data-val*="VR"]::before,
+        #formSection #platformChips .chip[data-val*="Cinema"]::before,
+        #formSection #platformChips .chip[data-val*="Print"]::before,
+        #formSection #platformChips .chip[data-val*="Event"]::before,
+        #formSection #platformChips .chip[data-val*="Sponsorship"]::before { content: "◇"; color: var(--violet); background: #F4F1FF; }
+        #formSection #creativeChips .chip[data-val*="Video"]::before,
+        #formSection #creativeChips .chip[data-val*="CTV"]::before,
+        #formSection #creativeChips .chip[data-val*="Livestream"]::before { content: "▶"; color: #FF3B30; background: #FFF0F0; }
+        #formSection #creativeChips .chip[data-val*="Display"]::before,
+        #formSection #creativeChips .chip[data-val*="Banner"]::before,
+        #formSection #creativeChips .chip[data-val*="HTML5"]::before,
+        #formSection #creativeChips .chip[data-val*="Rich"]::before,
+        #formSection #creativeChips .chip[data-val*="DCO"]::before { content: "▦"; color: var(--blue); background: #EEF5FF; }
+        #formSection #creativeChips .chip[data-val*="Carousel"]::before,
+        #formSection #creativeChips .chip[data-val*="Stories"]::before,
+        #formSection #creativeChips .chip[data-val*="Feed"]::before,
+        #formSection #creativeChips .chip[data-val*="Collection"]::before,
+        #formSection #creativeChips .chip[data-val*="Playable"]::before,
+        #formSection #creativeChips .chip[data-val*="Poll"]::before,
+        #formSection #creativeChips .chip[data-val*="Influencer"]::before { content: "▱"; color: var(--orange); background: #FFF2EA; }
+        #formSection #creativeChips .chip[data-val*="Search"]::before,
+        #formSection #creativeChips .chip[data-val*="Shopping"]::before,
+        #formSection #creativeChips .chip[data-val*="Product"]::before,
+        #formSection #creativeChips .chip[data-val*="Lead"]::before,
+        #formSection #creativeChips .chip[data-val*="Catalog"]::before { content: "⌕"; color: var(--green); background: #ECFAF2; }
+
         #formSection .age-slider-wrap {
             padding: 12px 0 2px;
         }
@@ -2012,6 +2246,12 @@
             background: rgba(255,255,255,.74);
         }
 
+        #formSection .generate-action {
+            display: block;
+            margin: -4px 0 0;
+            padding: 0 4px;
+        }
+
         #formSection .consent-row {
             display: flex;
             align-items: flex-start;
@@ -2089,11 +2329,13 @@
             color: #fff;
             cursor: pointer;
             background: linear-gradient(135deg, var(--orange), #FF8A5C 58%, var(--blue));
+            background-size: 220% 100%;
             box-shadow: 0 18px 42px -22px rgba(255,107,53,.8);
             font: 800 15px/1 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
             letter-spacing: .08em;
             text-transform: uppercase;
             transition: transform .25s ease, box-shadow .25s ease, opacity .2s ease;
+            animation: ctaGradientFlow 4.2s ease-in-out infinite;
         }
 
         #formSection .btn-generate::after {
@@ -2106,6 +2348,7 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,.30), transparent);
             transform: skewX(-20deg);
             transition: left .8s ease;
+            animation: ctaSweep 3.2s ease-in-out infinite;
         }
 
         #formSection .btn-generate:hover {
@@ -2123,6 +2366,17 @@
             opacity: .55;
             cursor: not-allowed;
             transform: none;
+            animation: none;
+        }
+
+        @keyframes ctaGradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes ctaSweep {
+            0%, 34% { left: -150%; }
+            62%, 100% { left: 150%; }
         }
 
         @media (max-width: 980px) {
@@ -3245,7 +3499,7 @@
                         <span class="sparkle"></span>
                         <span>
                             <span class="form-brand-name">RespondIQ</span>
-                            <span class="form-brand-by">by Responsive MTS</span>
+            <span class="form-brand-by">by <img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></span>
                         </span>
                     </div>
                     <span class="form-top-note"><span class="dot"></span> Strategic Media Planner</span>
@@ -3545,7 +3799,7 @@
 
                     <div class="form-card fcard generate">
                         <div class="fcard-head">
-                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">07</span><span>Consent &amp; Generate</span></div>
+                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">07</span><span>Consent, Generate</span></div>
                             <div class="fcard-meta">Required before generation</div>
                         </div>
                         <div class="consent-block">
@@ -3564,6 +3818,9 @@
                             </div>
                             <div id="consentError" class="consent-required-note">Please accept the Terms of Use and Privacy Policy to continue.</div>
                         </div>
+                    </div>
+
+                    <div class="generate-action">
                         <button type="button" onclick="generateReport()" id="btnSubmit" class="btn-generate">✦ Generate Media Plan With RespondIQ</button>
                     </div>
                 </form>
