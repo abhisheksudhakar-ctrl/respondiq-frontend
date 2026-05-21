@@ -6,9 +6,6 @@
     
     <title>RespondIQ | Strategic Media Planner by Responsive MTS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- No external PDF libraries needed - uses browser Print to PDF -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -106,361 +103,643 @@
         .form-header .brand-logo span { color: var(--text-3); font-weight: 400; letter-spacing: 0.05em; }
         .form-header p { font-size: 1.1rem; color: var(--text-2); }
         #signInSection {
-            --bg-cream: #FAF7F2;
-            --bg-cream-deep: #F2EDE5;
-            --ink: #1A1814;
-            --ink-soft: #5C564E;
-            --ink-faint: #9C958A;
-            --accent-orange: #FF6B35;
-            --accent-blue: #0071E3;
+            --paper: #FAF7F2;
+            --paper-2: #F4EFE6;
+            --paper-3: #EEE7DA;
             --surface: #FFFFFF;
-            --border-soft: rgba(26, 24, 20, 0.08);
+            --surface-2: #FDFBF7;
+            --ink: #1A1814;
+            --ink-2: #3F3A33;
+            --ink-3: #6E665B;
+            --ink-4: #9A9285;
+            --hair: rgba(26,24,20,0.08);
+            --hair-2: rgba(26,24,20,0.14);
+            --orange: #FF6B35;
+            --orange-2: #E55A26;
+            --peach: #FFD4BC;
+            --blue: #0071E3;
+            --sky: #BFDDFF;
+            --violet: #7C6BFF;
+            --lavender: #DCD3FF;
+            --green: #2E9866;
+            --mint: #C8EBD5;
+            --gold: #C99A2B;
+            --radius-l: 22px;
+            --radius-m: 14px;
+            --radius-s: 10px;
+            --shadow-soft: 0 1px 1px rgba(26,24,20,.03), 0 12px 30px -18px rgba(26,24,20,.12);
+            --shadow-med: 0 2px 4px rgba(26,24,20,.04), 0 24px 60px -28px rgba(26,24,20,.18);
 
             display: none;
             position: relative;
-            isolation: isolate;
-            width: min(100%, 560px);
+            left: 50%;
+            width: min(1200px, calc(100vw - 64px));
             min-height: calc(100vh - 80px);
-            margin: 0 auto;
-            padding: 64px 0;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
+            isolation: isolate;
+            transform: translateX(-50%);
             color: var(--ink);
-            font-family: 'Inter Tight', sans-serif;
-            text-align: center;
+            background: var(--paper);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            letter-spacing: -0.005em;
+            text-align: left;
         }
 
-        #signInSection.active { display: flex; }
+        #signInSection.active { display: block; }
 
-        #signInSection::before {
-            content: '';
-            position: fixed;
+        #signInSection .bg {
+            position: absolute;
             inset: 0;
-            z-index: -3;
-            background: var(--bg-cream);
+            z-index: 0;
             pointer-events: none;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 70% 50% at 50% -10%, #F6EDDF 0%, transparent 60%),
+                linear-gradient(180deg, #FAF7F2 0%, #F7F2E9 100%);
         }
 
-        .signin-blob {
-            position: fixed;
-            z-index: -2;
-            width: 360px;
-            height: 360px;
-            border-radius: 999px;
+        #signInSection .bg .orb {
+            position: absolute;
+            border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.35;
-            pointer-events: none;
-            transform: translate3d(0, 0, 0);
+            opacity: .55;
+            will-change: transform;
         }
 
-        .signin-blob-orange {
-            top: -96px;
-            left: -80px;
-            background: var(--accent-orange);
-            animation: signinBlobOrange 60s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+        #signInSection .bg .orb.o1 {
+            width: 46vw;
+            height: 46vw;
+            top: -12%;
+            left: -10%;
+            background: radial-gradient(circle, #FFD4BC, transparent 70%);
+            animation: drift1 32s ease-in-out infinite alternate;
         }
 
-        .signin-blob-blue {
-            right: -120px;
-            bottom: -104px;
-            background: var(--accent-blue);
-            opacity: 0.22;
-            animation: signinBlobBlue 75s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+        #signInSection .bg .orb.o2 {
+            width: 42vw;
+            height: 42vw;
+            top: -5%;
+            right: -12%;
+            background: radial-gradient(circle, #BFDDFF, transparent 70%);
+            opacity: .45;
+            animation: drift2 38s ease-in-out infinite alternate;
         }
 
-        .signin-blob-peach {
-            top: 28%;
-            left: 46%;
-            background: var(--bg-cream-deep);
-            opacity: 0.62;
-            animation: signinBlobPeach 45s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+        #signInSection .bg .orb.o3 {
+            width: 34vw;
+            height: 34vw;
+            bottom: -15%;
+            left: 30%;
+            background: radial-gradient(circle, #DCD3FF, transparent 70%);
+            opacity: .42;
+            animation: drift3 46s ease-in-out infinite alternate;
         }
 
-        .signin-shell {
+        #signInSection .bg .orb.o4 {
+            width: 30vw;
+            height: 30vw;
+            top: 35%;
+            left: 60%;
+            background: radial-gradient(circle, #C8EBD5, transparent 70%);
+            opacity: .32;
+            animation: drift4 52s ease-in-out infinite alternate;
+        }
+
+        #signInSection .bg-dots {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(26,24,20,.07) 1px, transparent 1px);
+            background-size: 28px 28px;
+            mask-image: radial-gradient(ellipse 100% 80% at 50% 30%, #000 30%, transparent 85%);
+            -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 30%, #000 30%, transparent 85%);
+        }
+
+        #signInSection .bg-spark {
+            position: absolute;
+            inset: 0;
+        }
+
+        #signInSection .bg-spark i {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--orange);
+            opacity: .5;
+            box-shadow: 0 0 8px rgba(255,107,53,.5);
+            will-change: transform;
+        }
+
+        #signInSection .bg-spark i.b {
+            background: var(--blue);
+            box-shadow: 0 0 8px rgba(0,113,227,.5);
+        }
+
+        #signInSection .bg-spark i.v {
+            background: var(--violet);
+            box-shadow: 0 0 8px rgba(124,107,255,.5);
+        }
+
+        #signInSection .sso-app {
             position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 560px;
+            z-index: 2;
+            min-height: inherit;
             display: flex;
             flex-direction: column;
+        }
+
+        #signInSection .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 22px 32px;
+            gap: 20px;
+        }
+
+        #signInSection .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #signInSection .brand .sparkle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: linear-gradient(135deg,#fff 0%, #FFEEDB 100%);
+            border: 1px solid rgba(255,107,53,.25);
+            color: var(--orange);
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 4px 14px -4px rgba(255,107,53,.4), inset 0 1px 0 rgba(255,255,255,.8);
+            position: relative;
+        }
+
+        #signInSection .brand .sparkle::before {
+            content: "✦";
+            display: block;
+            animation: rot 8s linear infinite;
+        }
+
+        #signInSection .brand .name {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            color: var(--ink);
+            line-height: 1;
+        }
+
+        #signInSection .brand .by {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--ink-4);
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            margin-top: 4px;
+            display: block;
+        }
+
+        #signInSection #viewSSO {
+            flex: 1;
+            padding: 30px 32px 60px;
             align-items: center;
         }
 
-        .signin-brand-mark,
-        .signin-hero,
-        .signin-subhead,
-        .signin-stats,
-        .signin-card,
-        .signin-fineprint {
-            opacity: 0;
-            transform: translateY(8px);
-            animation: signinFadeUp 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        .signin-brand-mark { margin-bottom: 24px; animation-delay: 0ms; }
-        .signin-hero { animation-delay: 60ms; }
-        .signin-subhead { animation-delay: 120ms; }
-        .signin-stats { animation-delay: 180ms; }
-        .signin-card { animation-delay: 240ms; }
-        .signin-fineprint { animation-delay: 300ms; }
-
-        .signin-brand-name {
-            display: block;
-            font-family: 'Instrument Serif', serif;
-            font-size: 22px;
-            font-style: italic;
-            font-weight: 500;
-            line-height: 1;
-            color: var(--ink);
-        }
-
-        .signin-brand-by {
-            display: block;
-            margin-top: 4px;
-            font-family: 'Inter Tight', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            line-height: 1;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-        }
-
-        .signin-hero {
-            max-width: 560px;
-            margin: 0 0 16px;
-            font-family: 'Instrument Serif', serif;
-            font-size: 56px;
-            font-weight: 400;
-            line-height: 1.05;
-            letter-spacing: 0;
-            color: var(--ink);
-        }
-
-        .signin-hero .hero-num {
-            color: var(--accent-orange);
-            font-weight: 500;
-        }
-
-        .signin-subhead {
-            max-width: 440px;
-            margin: 0 0 32px;
-            font-family: 'Inter Tight', sans-serif;
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.55;
-            color: var(--ink-soft);
-        }
-
-        .signin-stats {
-            width: 100%;
-            max-width: 520px;
+        #signInSection .sso-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            margin-bottom: 32px;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 64px;
+            align-items: center;
+            width: min(1200px,100%);
+            margin: 30px auto 0;
         }
 
-        .signin-stat {
+        #signInSection .sso-hero .sso-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 14px 5px 5px;
+            border: 1px solid var(--hair);
+            border-radius: 999px;
+            background: rgba(255,255,255,.7);
+            font-size: 12.5px;
+            color: var(--ink-2);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        #signInSection .sso-hero .sso-tag .b {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg,var(--orange),#FF8A5C);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .12em;
+        }
+
+        #signInSection .sso-hero .sso-tag .arr {
+            color: var(--ink-3);
+            transition: transform .25s;
+        }
+
+        #signInSection .sso-hero .sso-tag:hover .arr {
+            transform: translateX(3px);
+        }
+
+        #signInSection .sso-hero h1 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            font-weight: 700;
+            font-size: clamp(46px, 5.8vw, 84px);
+            line-height: 1.02;
+            letter-spacing: -.035em;
+            color: var(--ink);
+            max-width: 720px;
+        }
+
+        #signInSection .sso-hero h1 .num {
             position: relative;
-            display: grid;
-            gap: 8px;
-            justify-items: center;
-            padding: 0 24px;
+            display: inline-block;
+            font-style: italic;
+            color: transparent;
+            background: linear-gradient(135deg,#FF6B35 0%, #E94B5E 45%, #7C6BFF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            padding-right: .04em;
+            white-space: nowrap;
         }
 
-        .signin-stat + .signin-stat::before {
-            content: '';
+        #signInSection .sso-hero h1 .num::after {
+            content: "";
             position: absolute;
             left: 0;
-            top: 50%;
-            width: 1px;
-            height: 32px;
-            background: var(--border-soft);
-            transform: translateY(-50%);
+            right: .04em;
+            bottom: -6px;
+            height: 3px;
+            background: linear-gradient(90deg,transparent,var(--orange),transparent);
+            filter: blur(1px);
+            transform-origin: center;
+            animation: underglow 4s ease-in-out infinite;
         }
 
-        .stat-num {
-            font-family: 'Instrument Serif', serif;
-            font-size: 24px;
-            font-weight: 400;
+        #signInSection .sso-hero h1 em {
+            font-style: italic;
+            color: var(--ink-2);
+        }
+
+        #signInSection .sso-sub {
+            margin-top: 24px;
+            max-width: 560px;
+            color: var(--ink-2);
+            font-size: 17px;
+            line-height: 1.55;
+        }
+
+        #signInSection .sso-stats {
+            display: grid;
+            grid-template-columns: repeat(3,auto);
+            gap: 0;
+            margin-top: 40px;
+            max-width: 600px;
+        }
+
+        #signInSection .sso-stat {
+            padding: 6px 28px 6px 0;
+            position: relative;
+        }
+
+        #signInSection .sso-stat + .sso-stat {
+            padding-left: 28px;
+            border-left: 1px solid var(--hair);
+        }
+
+        #signInSection .sso-stat .n {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            font-size: 38px;
+            font-weight: 700;
             line-height: 1;
+            letter-spacing: -.03em;
             color: var(--ink);
+            display: flex;
+            align-items: baseline;
         }
 
-        .stat-label {
-            font-family: 'Inter Tight', sans-serif;
+        #signInSection .sso-stat .n em {
+            font-style: normal;
+            color: var(--orange);
+            margin-left: 2px;
+        }
+
+        #signInSection .sso-stat .l {
+            margin-top: 10px;
             font-size: 11px;
-            font-weight: 500;
-            line-height: 1.2;
-            letter-spacing: 0.15em;
+            letter-spacing: .18em;
             text-transform: uppercase;
-            color: var(--ink-faint);
+            color: var(--ink-4);
+            font-weight: 500;
         }
 
-        .signin-card {
-            width: 100%;
-            max-width: 420px;
-            padding: 32px;
-            border: 1px solid var(--border-soft);
-            border-radius: 16px;
-            background: var(--surface);
-            box-shadow: 0 8px 32px rgba(26, 24, 20, 0.04);
-            text-align: center;
-        }
-
-        .signin-card h1 {
-            margin: 0 0 24px;
-            font-family: 'Instrument Serif', serif;
-            font-size: 20px;
-            font-weight: 400;
-            line-height: 1.2;
-            color: var(--ink);
-        }
-
-        .signin-buttons {
+        #signInSection .sso-card {
+            padding: 38px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 22px;
+            width: min(460px,100%);
+            justify-self: end;
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--hair);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-soft);
         }
 
-        .btn-signin {
+        #signInSection .sso-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,212,188,.4), transparent 70%);
+            pointer-events: none;
+            animation: cardOrb 10s ease-in-out infinite alternate;
+        }
+
+        #signInSection .sso-card > * {
+            position: relative;
+        }
+
+        #signInSection .sso-card .ribbon {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 18px;
+            border-bottom: 1px dashed var(--hair-2);
+        }
+
+        #signInSection .sso-card .ribbon .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--ink-3);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        #signInSection .sso-card .ribbon .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px rgba(46,152,102,.5);
+            animation: pulseDot 1.8s infinite;
+        }
+
+        #signInSection .sso-card .ribbon .right {
+            font-size: 11px;
+            color: var(--ink-4);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        #signInSection .sso-card h2 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            font-weight: 600;
+            font-size: 30px;
+            line-height: 1.15;
+            letter-spacing: -.02em;
+            color: var(--ink);
+        }
+
+        #signInSection .sso-card h2 em {
+            font-style: italic;
+            color: var(--ink-2);
+        }
+
+        #signInSection .btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #signInSection .sso-btn {
             position: relative;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 14px;
             width: 100%;
-            min-height: 48px;
-            padding: 0 16px;
-            border: 1px solid var(--border-soft);
-            border-radius: 10px;
-            background: var(--surface);
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 1px solid var(--hair-2);
+            background: #fff;
             color: var(--ink);
-            font-family: 'Inter Tight', sans-serif;
-            font-size: 15px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
             cursor: pointer;
-            transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+            transition: all .25s ease;
+            font: 500 14.5px/1 'Inter';
+            letter-spacing: -.005em;
+            overflow: hidden;
+            box-shadow: 0 1px 0 rgba(26,24,20,.02);
         }
 
-        .btn-signin:hover {
-            background: var(--bg-cream-deep);
-            border-color: rgba(26, 24, 20, 0.16);
+        #signInSection .sso-btn .ic {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: none;
+        }
+
+        #signInSection .sso-btn .label {
+            flex: 1;
+            text-align: left;
+        }
+
+        #signInSection .sso-btn .arr {
+            color: var(--ink-3);
+            transition: transform .3s, color .3s;
+            font-size: 13px;
+        }
+
+        #signInSection .sso-btn:hover {
+            border-color: rgba(26,24,20,.22);
             transform: translateY(-1px);
+            box-shadow: 0 8px 20px -8px rgba(26,24,20,.15);
         }
 
-        .btn-signin svg {
+        #signInSection .sso-btn:hover .arr {
+            transform: translateX(4px);
+            color: var(--orange);
+        }
+
+        #signInSection .sso-btn::after {
+            content: "";
             position: absolute;
-            left: 20px;
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
+            top: 0;
+            bottom: 0;
+            width: 120%;
+            left: -150%;
+            background: linear-gradient(90deg,transparent,rgba(255,107,53,.10),transparent);
+            transform: skewX(-20deg);
+            transition: left .8s ease;
         }
 
-        .btn-signin span {
-            display: block;
-            width: 100%;
-            text-align: center;
+        #signInSection .sso-btn:hover::after {
+            left: 150%;
         }
 
-        .signin-error {
-            margin: 0 0 16px;
+        #signInSection .signin-error {
+            margin: 0;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #FDF2F0;
             color: #C04E2F;
-            font-family: 'Inter Tight', sans-serif;
             font-size: 13px;
             font-weight: 500;
             line-height: 1.4;
             text-align: left;
         }
 
-        .signin-fineprint {
-            max-width: 420px;
-            margin-top: 16px;
-            font-family: 'Inter Tight', sans-serif;
+        #signInSection .fine {
             font-size: 12px;
-            font-weight: 400;
-            line-height: 1.45;
-            color: var(--ink-faint);
+            line-height: 1.6;
+            color: var(--ink-3);
+            text-align: center;
+            margin-top: 2px;
         }
 
-        .signin-fineprint a {
-            color: inherit;
+        #signInSection .fine a {
+            color: var(--ink);
             text-decoration: underline;
-            text-decoration-thickness: 1px;
+            text-decoration-color: var(--hair-2);
             text-underline-offset: 3px;
         }
 
-        @keyframes signinFadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
+        @keyframes drift1 {
+            from { transform: translate3d(0,0,0) scale(1); }
+            to { transform: translate3d(5vw,4vh,0) scale(1.08); }
+        }
+
+        @keyframes drift2 {
+            from { transform: translate3d(0,0,0) scale(1.05); }
+            to { transform: translate3d(-4vw,3vh,0) scale(.95); }
+        }
+
+        @keyframes drift3 {
+            from { transform: translate3d(0,0,0) scale(1); }
+            to { transform: translate3d(3vw,-3vh,0) scale(1.06); }
+        }
+
+        @keyframes drift4 {
+            from { transform: translate3d(0,0,0) scale(.95); }
+            to { transform: translate3d(-3vw,-4vh,0) scale(1.05); }
+        }
+
+        @keyframes rot {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseDot {
+            0% { box-shadow: 0 0 0 0 rgba(46,152,102,.5); }
+            70% { box-shadow: 0 0 0 8px rgba(46,152,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(46,152,102,0); }
+        }
+
+        @keyframes underglow {
+            0%, 100% { opacity: .2; transform: scaleX(.5); }
+            50% { opacity: .85; transform: scaleX(1); }
+        }
+
+        @keyframes cardOrb {
+            from { transform: translate(0,0); }
+            to { transform: translate(-5%,8%); }
+        }
+
+        @keyframes floatP {
+            0% { transform: translate3d(0,0,0); opacity: .5; }
+            50% { transform: translate3d(20px,-30px,0); opacity: .6; }
+            100% { transform: translate3d(-15px,-70px,0); opacity: 0; }
+        }
+
+        @media (max-width: 980px) {
+            #signInSection {
+                width: min(100%, calc(100vw - 40px));
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            #signInSection .sso-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
             }
-        }
 
-        @keyframes signinBlobOrange {
-            from { transform: translate3d(0, 0, 0); }
-            to { transform: translate3d(48px, 32px, 0); }
-        }
+            #signInSection .sso-card {
+                justify-self: stretch;
+            }
 
-        @keyframes signinBlobBlue {
-            from { transform: translate3d(0, 0, 0); }
-            to { transform: translate3d(-56px, -40px, 0); }
-        }
+            #signInSection .top-bar {
+                padding: 18px 20px;
+            }
 
-        @keyframes signinBlobPeach {
-            from { transform: translate3d(0, 0, 0); }
-            to { transform: translate3d(32px, -48px, 0); }
+            #signInSection .sso-hero h1 {
+                font-size: 46px;
+            }
         }
 
         @media (max-width: 640px) {
             #signInSection {
-                min-height: calc(100vh - 80px);
-                padding: 48px 0;
+                width: 100%;
+                min-height: calc(100vh - 40px);
             }
 
-            .signin-brand-mark { margin-bottom: 24px; }
-
-            .signin-hero {
-                max-width: 360px;
-                font-size: 36px;
+            #signInSection #viewSSO {
+                padding: 24px 20px 44px;
             }
 
-            .signin-subhead {
-                max-width: 360px;
+            #signInSection .sso-grid {
+                margin-top: 20px;
+                gap: 32px;
+            }
+
+            #signInSection .sso-hero .sso-tag {
                 margin-bottom: 24px;
+            }
+
+            #signInSection .sso-hero h1 {
+                font-size: 40px;
+            }
+
+            #signInSection .sso-sub {
                 font-size: 15px;
             }
 
-            .signin-stats {
-                max-width: 360px;
-                margin-bottom: 24px;
+            #signInSection .sso-stats {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                margin-top: 32px;
             }
 
-            .signin-stat {
-                gap: 8px;
-                padding: 0 12px;
+            #signInSection .sso-stat {
+                padding: 0;
             }
 
-            .stat-num { font-size: 22px; }
-            .stat-label { font-size: 10px; }
-
-            .signin-card {
-                max-width: 100%;
-                padding: 24px;
+            #signInSection .sso-stat + .sso-stat {
+                padding-left: 0;
+                border-left: 0;
             }
 
-            .signin-blob {
-                width: 280px;
-                height: 280px;
-                filter: blur(72px);
+            #signInSection .sso-card {
+                padding: 28px;
             }
         }
         #userBadge { position: absolute; top: 16px; right: 20px; display: none; align-items: center; gap: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 13px; color: #0f172a; box-shadow: 0 2px 8px rgba(15,23,42,0.06); z-index: 100; }
@@ -1695,51 +1974,80 @@
     <div class="container">
         <!-- ========== SIGN-IN GATE ========== -->
         <div id="signInSection">
-            <div class="signin-blob signin-blob-orange" aria-hidden="true"></div>
-            <div class="signin-blob signin-blob-blue" aria-hidden="true"></div>
-            <div class="signin-blob signin-blob-peach" aria-hidden="true"></div>
+            <div class="bg" aria-hidden="true">
+                <div class="orb o1"></div>
+                <div class="orb o2"></div>
+                <div class="orb o3"></div>
+                <div class="orb o4"></div>
+                <div class="bg-dots"></div>
+                <div class="bg-spark" id="bgSpark"></div>
+            </div>
 
-            <div class="signin-shell">
-                <div class="signin-brand-mark">
-                    <span class="signin-brand-name">RespondIQ</span>
-                    <span class="signin-brand-by">BY RESPONSIVE MTS</span>
-                </div>
-
-                <h1 class="signin-hero">From brief to plan in <span class="hero-num">90</span> seconds</h1>
-
-                <p class="signin-subhead">AI-generated, cross-channel media plans for media planners and agencies. Sign in to get started.</p>
-
-                <div class="signin-stats" aria-label="RespondIQ planning stats">
-                    <div class="signin-stat">
-                        <!-- STAT: plans-generated --><span class="stat-num">500+</span>
-                        <span class="stat-label">PLANS GENERATED</span>
-                    </div>
-                    <div class="signin-stat">
-                        <!-- STAT: industries-covered --><span class="stat-num">13</span>
-                        <span class="stat-label">INDUSTRIES COVERED</span>
-                    </div>
-                    <div class="signin-stat">
-                        <!-- STAT: avg-generation-time --><span class="stat-num">90s</span>
-                        <span class="stat-label">AVG GENERATION TIME</span>
+            <div class="sso-app">
+                <div class="top-bar">
+                    <div class="brand">
+                        <span class="sparkle"></span>
+                        <div>
+                            <span class="name">RespondIQ</span>
+                            <span class="by">by Responsive MTS</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="signin-card">
-                    <h1>Sign in to continue</h1>
-                    <div class="signin-buttons">
-                        <button type="button" class="btn-signin btn-google" onclick="signInWith('google')">
-                            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                            <span>Continue with Google</span>
-                        </button>
-                        <button type="button" class="btn-signin btn-microsoft" onclick="signInWith('microsoft')">
-                            <svg width="20" height="20" viewBox="0 0 23 23"><path fill="#f3f3f3" d="M0 0h23v23H0z"/><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
-                            <span>Continue with Microsoft</span>
-                        </button>
-                    </div>
-                    <div id="signInError" class="signin-error" style="display:none;"></div>
-                </div>
+                <section id="viewSSO" class="sso-grid" aria-label="RespondIQ sign-in">
+                    <div class="sso-hero">
+                        <div class="sso-tag">
+                            <span class="b">NEW</span>
+                            <span>Cross-channel media plans, on-demand</span>
+                            <span class="arr">›</span>
+                        </div>
 
-                <p class="signin-fineprint">By signing in you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+                        <h1>From brief to plan in<br> <span class="num">90 seconds</span> — <em>not weeks.</em></h1>
+
+                        <p class="sso-sub">AI-generated, cross-channel media plans for planners and agencies. Audience, channel mix, budget pacing and KPI forecasts — built on benchmarks across 13 industries.</p>
+
+                        <div class="sso-stats">
+                            <div class="sso-stat">
+                                <div class="n"><span class="cv" data-count="500">0</span><em>+</em></div>
+                                <div class="l">Plans generated</div>
+                            </div>
+                            <div class="sso-stat">
+                                <div class="n"><span class="cv" data-count="13">0</span></div>
+                                <div class="l">Industries covered</div>
+                            </div>
+                            <div class="sso-stat">
+                                <div class="n"><span class="cv" data-count="90">0</span><em>s</em></div>
+                                <div class="l">Avg generation time</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sso-card">
+                        <div class="ribbon">
+                            <div class="left"><span class="dot"></span><span>Secure access · TLS 1.3</span></div>
+                            <div class="right">SSO</div>
+                        </div>
+
+                        <h2>Sign in to continue<br><em>to your planning workspace.</em></h2>
+
+                        <div class="btns">
+                            <button class="sso-btn" type="button" onclick="signInWith('google')">
+                                <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></span>
+                                <span class="label">Continue with Google</span>
+                                <span class="arr">→</span>
+                            </button>
+                            <button class="sso-btn" type="button" onclick="signInWith('microsoft')">
+                                <span class="ic"><svg width="20" height="20" viewBox="0 0 23 23"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg></span>
+                                <span class="label">Continue with Microsoft</span>
+                                <span class="arr">→</span>
+                            </button>
+                        </div>
+
+                        <div id="signInError" class="signin-error" style="display:none;"></div>
+
+                        <p class="fine">By signing in you agree to our <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. SSO verifies your work email — no passwords stored.</p>
+                    </div>
+                </section>
             </div>
         </div>
 
@@ -2302,6 +2610,58 @@
 // Backend base URL
 const BACKEND_BASE = 'https://respondiq-backend-1.onrender.com';
 
+function runSigninCountUp() {
+    const section = document.getElementById('signInSection');
+    if (!section || !section.classList.contains('active')) return;
+
+    section.querySelectorAll('.cv[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count, 10) || 0;
+        const duration = 1500;
+        const start = performance.now();
+
+        el.textContent = '0';
+
+        function step(now) {
+            if (!section.classList.contains('active')) return;
+
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = String(Math.round(target * eased));
+
+            if (progress < 1) requestAnimationFrame(step);
+        }
+
+        requestAnimationFrame(step);
+    });
+}
+
+function initSigninParticles() {
+    const section = document.getElementById('signInSection');
+    if (!section || !section.classList.contains('active')) return;
+    if (window._signinParticlesInit) return;
+
+    const spark = section.querySelector('#bgSpark');
+    if (!spark) return;
+
+    window._signinParticlesInit = true;
+    spark.textContent = '';
+
+    const classes = ['', 'b', 'v'];
+    for (let i = 0; i < 22; i++) {
+        const p = document.createElement('i');
+        if (classes[i % 3]) p.className = classes[i % 3];
+
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = 16 + Math.random() * 20;
+        const delay = -Math.random() * 30;
+        const opacity = 0.25 + Math.random() * 0.4;
+
+        p.style.cssText = 'top:' + top + '%;left:' + left + '%;opacity:' + opacity + ';animation:floatP ' + duration + 's linear ' + delay + 's infinite';
+        spark.appendChild(p);
+    }
+}
+
 async function bootAuth() {
     try {
         const res = await fetch(BACKEND_BASE + '/api/auth/me', { credentials: 'include' });
@@ -2317,6 +2677,8 @@ async function bootAuth() {
 function showSignInUI() {
     document.body.classList.remove('is-authed');
     document.getElementById('signInSection').classList.add('active');
+    initSigninParticles();
+    runSigninCountUp();
     const badge = document.getElementById('userBadge');
     if (badge) badge.classList.remove('active');
     // Surface OAuth errors from query string
