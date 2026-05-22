@@ -29,6 +29,20 @@
             --accent-gradient: linear-gradient(135deg, #ff3b30 0%, #ff9500 100%);
             --orange: #ff6b35;
             --orange-glow: rgba(255, 107, 53, 0.25);
+            --cat-search: #0071E3;
+            --cat-search-soft: rgba(0,113,227,0.08);
+            --cat-social: #7C6BFF;
+            --cat-social-soft: rgba(124,107,255,0.10);
+            --cat-video: #E24B4A;
+            --cat-video-soft: rgba(226,75,74,0.08);
+            --cat-programmatic: #FF6B35;
+            --cat-programmatic-soft: rgba(255,107,53,0.10);
+            --cat-audio: #2E9866;
+            --cat-audio-soft: rgba(46,152,102,0.10);
+            --cat-messaging: #C99A2B;
+            --cat-messaging-soft: rgba(201,154,43,0.10);
+            --cat-emerging: #1A1814;
+            --cat-emerging-soft: rgba(26,24,20,0.06);
 
             --bg: #f5f7fa;
             --surface: #ffffff;
@@ -1775,7 +1789,7 @@
 
         #formSection .fcard.channels .chip-group-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(188px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
             padding: 10px 0 18px;
             border-top: 0;
@@ -1785,171 +1799,168 @@
         #formSection #creativeChips .chip {
             position: relative;
             display: flex;
-            align-items: flex-start;
-            justify-content: flex-end;
-            flex-direction: column;
-            gap: 12px;
-            min-height: 128px;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            min-height: 64px;
             margin: 0;
-            padding: 18px 48px 18px 18px;
-            border-radius: 18px;
-            border: 1px solid rgba(26,24,20,.13);
-            background: rgba(255,255,255,.82);
-            color: var(--ink);
-            box-shadow: 0 1px 0 rgba(26,24,20,.02);
-            text-align: left;
-            font-size: 15px;
-            font-weight: 800;
-            line-height: 1.18;
-            white-space: normal;
-        }
-
-        #formSection #platformChips .chip::before,
-        #formSection #creativeChips .chip::before {
-            content: "•";
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            margin-bottom: 2px;
+            padding: 14px 38px 14px 14px;
             border-radius: 14px;
-            border: 1px solid rgba(255,107,53,.18);
-            background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,244,237,.9));
-            color: var(--orange);
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: -.04em;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
-        }
-
-        #formSection #platformChips .chip::after,
-        #formSection #creativeChips .chip::after {
-            content: "";
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid rgba(26,24,20,.16);
-            background: rgba(255,255,255,.72);
-            color: #fff;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 900;
-            transition: background .18s ease, border-color .18s ease, transform .18s ease;
+            border: .5px solid rgba(26,24,20,.14);
+            background: #fff;
+            color: var(--ink);
+            box-shadow: none;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.25;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: border-color .25s, transform .2s, box-shadow .25s, background .25s;
         }
 
         #formSection #platformChips .chip:hover,
         #formSection #creativeChips .chip:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255,107,53,.42);
-            background: rgba(255,255,255,.96);
-            box-shadow: 0 18px 34px -28px rgba(26,24,20,.35);
+            border-color: rgba(26,24,20,.28);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -14px rgba(26,24,20,.18);
+        }
+
+        #formSection #platformChips .chip.recommended,
+        #formSection #creativeChips .chip.recommended {
+            background: rgba(46,152,102,.04);
+            border-color: rgba(46,152,102,.35);
         }
 
         #formSection #platformChips .chip.selected,
         #formSection #creativeChips .chip.selected {
-            border-color: var(--orange);
-            background: linear-gradient(135deg, rgba(255,107,53,.09), rgba(255,255,255,.92));
+            background: rgba(46,152,102,.10);
+            border-color: rgba(46,152,102,.55);
             color: var(--ink);
-            box-shadow: 0 18px 38px -32px rgba(255,107,53,.8), inset 0 0 0 1px rgba(255,107,53,.08);
+            box-shadow: none;
         }
 
-        #formSection #platformChips .chip.selected::after,
-        #formSection #creativeChips .chip.selected::after {
-            content: "✓";
-            border-color: var(--orange);
-            background: var(--orange);
-            transform: scale(1.04);
+        #formSection #platformChips .chip .icon-wrap,
+        #formSection #creativeChips .chip .icon-wrap {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 34px;
+            background: var(--cat-soft);
+            border: .5px solid rgba(26,24,20,.05);
+            overflow: hidden;
         }
 
-        #formSection #platformChips .chip[data-val*="Google"]::before { content: "G"; color: #1a73e8; border-bottom: 4px solid #34a853; }
-        #formSection #platformChips .chip[data-val*="Bing"]::before { content: "b"; color: #0089d6; background: #E6F6FF; border-color: rgba(0,137,214,.12); }
-        #formSection #platformChips .chip[data-val*="Apple"]::before { content: "⌕"; color: #1A1814; background: #F1EFEB; border-color: rgba(26,24,20,.08); }
-        #formSection #platformChips .chip[data-val*="Amazon"]::before { content: "a"; color: #111; border-bottom: 4px solid #ff9900; }
-        #formSection #platformChips .chip[data-val*="Walmart"]::before { content: "W"; color: #0071CE; background: #EEF7FF; }
-        #formSection #platformChips .chip[data-val*="Instacart"]::before { content: "I"; color: #43B02A; background: #EFFBEA; }
-        #formSection #platformChips .chip[data-val*="Meta"]::before { content: "M"; color: #1877F2; background: #EEF5FF; }
-        #formSection #platformChips .chip[data-val*="TikTok"]::before { content: "♪"; color: #111; background: #fff; }
-        #formSection #platformChips .chip[data-val*="LinkedIn"]::before { content: "in"; color: #0A66C2; background: #EEF6FF; font-size: 17px; letter-spacing: -.08em; }
-        #formSection #platformChips .chip[data-val*="Snapchat"]::before { content: "S"; color: #111; background: #FFF9C7; }
-        #formSection #platformChips .chip[data-val*="Pinterest"]::before { content: "P"; color: #BD081C; background: #FFECEF; }
-        #formSection #platformChips .chip[data-val^="X"]::before { content: "X"; color: #111; background: #F3F3F1; }
-        #formSection #platformChips .chip[data-val*="Reddit"]::before { content: "R"; color: #FF4500; background: #FFF0EA; }
-        #formSection #platformChips .chip[data-val*="Quora"]::before { content: "Q"; color: #A82400; background: #FFF2EE; }
-        #formSection #platformChips .chip[data-val*="Threads"]::before { content: "@"; color: #111; background: #F6F6F2; }
-        #formSection #platformChips .chip[data-val*="Bluesky"]::before { content: "B"; color: #1185FE; background: #EEF7FF; }
-        #formSection #platformChips .chip[data-val*="Nextdoor"]::before { content: "N"; color: #00A862; background: #EDFFF7; }
-        #formSection #platformChips .chip[data-val*="YouTube"]::before { content: "▶"; color: #FF0000; background: #FFF0F0; }
-        #formSection #platformChips .chip[data-val*="TV"]::before,
-        #formSection #platformChips .chip[data-val*="Streaming"]::before,
-        #formSection #platformChips .chip[data-val*="OTT"]::before,
-        #formSection #platformChips .chip[data-val*="Hulu"]::before,
-        #formSection #platformChips .chip[data-val*="Netflix"]::before,
-        #formSection #platformChips .chip[data-val*="Disney"]::before,
-        #formSection #platformChips .chip[data-val*="Peacock"]::before,
-        #formSection #platformChips .chip[data-val*="Roku"]::before,
-        #formSection #platformChips .chip[data-val*="Fire TV"]::before,
-        #formSection #platformChips .chip[data-val*="Samsung"]::before { content: "▭"; color: var(--blue); background: #EEF5FF; }
-        #formSection #platformChips .chip[data-val*="Programmatic"]::before,
-        #formSection #platformChips .chip[data-val*="Display"]::before,
-        #formSection #platformChips .chip[data-val*="Native"]::before,
-        #formSection #platformChips .chip[data-val*="Taboola"]::before,
-        #formSection #platformChips .chip[data-val*="Outbrain"]::before,
-        #formSection #platformChips .chip[data-val*="DOOH"]::before,
-        #formSection #platformChips .chip[data-val*="OOH"]::before,
-        #formSection #platformChips .chip[data-val*="Retargeting"]::before,
-        #formSection #platformChips .chip[data-val*="DCO"]::before,
-        #formSection #platformChips .chip[data-val*="Contextual"]::before { content: "⌘"; color: var(--green); background: #ECFAF2; }
-        #formSection #platformChips .chip[data-val*="Influencer"]::before,
-        #formSection #platformChips .chip[data-val*="Creator"]::before,
-        #formSection #platformChips .chip[data-val*="UGC"]::before,
-        #formSection #platformChips .chip[data-val*="Content"]::before,
-        #formSection #platformChips .chip[data-val*="Podcast"]::before,
-        #formSection #platformChips .chip[data-val*="Affiliate"]::before { content: "✦"; color: var(--violet); background: #F3F0FF; }
-        #formSection #platformChips .chip[data-val*="Spotify"]::before,
-        #formSection #platformChips .chip[data-val*="Pandora"]::before,
-        #formSection #platformChips .chip[data-val*="Radio"]::before,
-        #formSection #platformChips .chip[data-val*="Audio"]::before,
-        #formSection #platformChips .chip[data-val*="Sirius"]::before { content: "≈"; color: var(--gold); background: #FFF7E3; }
-        #formSection #platformChips .chip[data-val*="Email"]::before,
-        #formSection #platformChips .chip[data-val*="SMS"]::before,
-        #formSection #platformChips .chip[data-val*="Push"]::before,
-        #formSection #platformChips .chip[data-val*="In-App"]::before,
-        #formSection #platformChips .chip[data-val*="Direct Mail"]::before,
-        #formSection #platformChips .chip[data-val*="Chatbot"]::before { content: "↗"; color: var(--orange); background: #FFF2EA; }
-        #formSection #platformChips .chip[data-val*="AI-"]::before,
-        #formSection #platformChips .chip[data-val*="Game"]::before,
-        #formSection #platformChips .chip[data-val*="AR"]::before,
-        #formSection #platformChips .chip[data-val*="VR"]::before,
-        #formSection #platformChips .chip[data-val*="Cinema"]::before,
-        #formSection #platformChips .chip[data-val*="Print"]::before,
-        #formSection #platformChips .chip[data-val*="Event"]::before,
-        #formSection #platformChips .chip[data-val*="Sponsorship"]::before { content: "◇"; color: var(--violet); background: #F4F1FF; }
-        #formSection #creativeChips .chip[data-val*="Video"]::before,
-        #formSection #creativeChips .chip[data-val*="CTV"]::before,
-        #formSection #creativeChips .chip[data-val*="Livestream"]::before { content: "▶"; color: #FF3B30; background: #FFF0F0; }
-        #formSection #creativeChips .chip[data-val*="Display"]::before,
-        #formSection #creativeChips .chip[data-val*="Banner"]::before,
-        #formSection #creativeChips .chip[data-val*="HTML5"]::before,
-        #formSection #creativeChips .chip[data-val*="Rich"]::before,
-        #formSection #creativeChips .chip[data-val*="DCO"]::before { content: "▦"; color: var(--blue); background: #EEF5FF; }
-        #formSection #creativeChips .chip[data-val*="Carousel"]::before,
-        #formSection #creativeChips .chip[data-val*="Stories"]::before,
-        #formSection #creativeChips .chip[data-val*="Feed"]::before,
-        #formSection #creativeChips .chip[data-val*="Collection"]::before,
-        #formSection #creativeChips .chip[data-val*="Playable"]::before,
-        #formSection #creativeChips .chip[data-val*="Poll"]::before,
-        #formSection #creativeChips .chip[data-val*="Influencer"]::before { content: "▱"; color: var(--orange); background: #FFF2EA; }
-        #formSection #creativeChips .chip[data-val*="Search"]::before,
-        #formSection #creativeChips .chip[data-val*="Shopping"]::before,
-        #formSection #creativeChips .chip[data-val*="Product"]::before,
-        #formSection #creativeChips .chip[data-val*="Lead"]::before,
-        #formSection #creativeChips .chip[data-val*="Catalog"]::before { content: "⌕"; color: var(--green); background: #ECFAF2; }
+        #formSection #platformChips .chip .icon-wrap svg,
+        #formSection #creativeChips .chip .icon-wrap svg {
+            width: 18px;
+            height: 18px;
+            color: var(--cat-color);
+        }
+
+        #formSection #platformChips .chip .chip-label,
+        #formSection #creativeChips .chip .chip-label {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #formSection #platformChips .chip .tile-check,
+        #formSection #creativeChips .chip .tile-check {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.2px solid rgba(26,24,20,.22);
+            background: transparent;
+            transition: all .25s;
+            pointer-events: none;
+        }
+
+        #formSection #platformChips .chip.selected .tile-check,
+        #formSection #creativeChips .chip.selected .tile-check {
+            background: var(--green);
+            border-color: var(--green);
+            box-shadow: inset 0 0 0 2px #fff;
+        }
+
+        #formSection #platformChips .chip.selected .icon-wrap,
+        #formSection #creativeChips .chip.selected .icon-wrap,
+        #formSection #platformChips .chip .icon-wrap.is-animating,
+        #formSection #creativeChips .chip .icon-wrap.is-animating {
+            animation: iconPop .55s cubic-bezier(.34,1.56,.64,1) 1;
+        }
+
+        #formSection #platformChips .chip.selected .ic-a,
+        #formSection #creativeChips .chip.selected .ic-a,
+        #formSection #platformChips .chip .icon-wrap.is-animating .ic-a,
+        #formSection #creativeChips .chip .icon-wrap.is-animating .ic-a {
+            animation-play-state: running !important;
+        }
+
+        #formSection .chip.cat-search { --cat-color: var(--cat-search); --cat-soft: var(--cat-search-soft); }
+        #formSection .chip.cat-social { --cat-color: var(--cat-social); --cat-soft: var(--cat-social-soft); }
+        #formSection .chip.cat-video { --cat-color: var(--cat-video); --cat-soft: var(--cat-video-soft); }
+        #formSection .chip.cat-programmatic { --cat-color: var(--cat-programmatic); --cat-soft: var(--cat-programmatic-soft); }
+        #formSection .chip.cat-audio { --cat-color: var(--cat-audio); --cat-soft: var(--cat-audio-soft); }
+        #formSection .chip.cat-messaging { --cat-color: var(--cat-messaging); --cat-soft: var(--cat-messaging-soft); }
+        #formSection .chip.cat-emerging { --cat-color: var(--cat-emerging); --cat-soft: var(--cat-emerging-soft); }
+
+        #formSection .ic-a {
+            animation-duration: .7s;
+            animation-timing-function: cubic-bezier(.34,1.56,.64,1);
+            animation-fill-mode: forwards;
+            animation-play-state: paused;
+            transform-origin: center;
+            transform-box: fill-box;
+        }
+
+        @keyframes iconPop {
+            0% { transform: scale(1) rotate(0); }
+            35% { transform: scale(1.18) rotate(-4deg); }
+            70% { transform: scale(.96) rotate(2deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        @keyframes drawIn {
+            0% { stroke-dashoffset: 60; opacity: 0; }
+            30% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+
+        @keyframes pulseGrow {
+            0% { transform: scale(.5); opacity: 0; }
+            60% { transform: scale(1.12); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(6px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-6px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes spinIn {
+            0% { transform: rotate(-90deg) scale(.6); opacity: 0; }
+            100% { transform: rotate(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes barRise {
+            0% { transform: scaleY(.2); opacity: 0; }
+            100% { transform: scaleY(1); opacity: 1; }
+        }
 
         #formSection .age-slider-wrap {
             padding: 12px 0 2px;
@@ -3043,7 +3054,12 @@
         @keyframes riqDonutSeg5 { 0%,45%{stroke-dasharray:0 289} 60%,90%{stroke-dasharray:35 289} 100%{stroke-dasharray:0 289} }
 
         /* ── RESULTS ── */
-        #resultSection { display: none; animation: fadeInUp 0.8s ease-out; }
+        #resultSection {
+            display: none;
+            width: min(1120px, calc(100% - 64px));
+            margin: 40px auto 80px;
+            animation: fadeInUp 0.8s ease-out;
+        }
         .result-actions { display: flex; gap: 16px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
         .btn-download { position: relative; padding: 16px 32px; font-size: 16px; font-weight: 500; border: none; border-radius: 980px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
         .btn-download:hover { transform: translateY(-3px) scale(1.02); }
@@ -3364,6 +3380,10 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
+            #resultSection {
+                width: calc(100% - 32px);
+                margin: 24px auto 56px;
+            }
             .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
             .brand-suggestions { position: static; margin-top: 6px; }
             .brand-preview { align-items: flex-start; }
@@ -3436,7 +3456,7 @@
 
             /* Show only the media plan content */
             .container { max-width: 100% !important; padding: 0 !important; }
-            #resultSection { display: block !important; }
+            #resultSection { display: block !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
             .template-wrapper { border: none !important; border-radius: 0 !important; box-shadow: none !important; background: #ffffff !important; }
             /* Padding here is a defensive layer for users who pick "Margins:
                None" in the print dialog. With default margins, this adds a
@@ -4976,6 +4996,466 @@ function initGoalKpiFilter() {
 }
 
 // ======================== CHIP MULTI-SELECT ========================
+const ICON_SVG = {
+    "search": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle class="ic-a" style="animation-name: pulseGrow;" cx="11" cy="11" r="6"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 14;" x1="15.5" y1="15.5" x2="20" y2="20"/>
+</svg>`,
+    "shopping": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: slideUp;" d="M5 8h14l-1.5 9.5A2 2 0 0 1 15.5 19h-7a2 2 0 0 1-2-1.5L5 8z"/>
+<path class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 22;" d="M9 8V6a3 3 0 0 1 6 0v2"/>
+</svg>`,
+    "marketplace": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="4" y="8" width="16" height="10" rx="1"/>
+<path class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 20;" d="M4 8l2-3h12l2 3"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 8;" x1="10" y1="13" x2="14" y2="13"/>
+</svg>`,
+    "grocery": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: slideUp;" d="M5 4l1.5 4M7.5 8h12l-2 8H10L7.5 8z"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.18s;" cx="10" cy="20" r="1" fill="currentColor"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" cx="16" cy="20" r="1" fill="currentColor"/>
+</svg>`,
+    "discovery": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: pulseGrow;" d="M12 3a4 4 0 0 1 4 4c0 2-1.5 3-1.5 5h-5C9.5 10 8 9 8 7a4 4 0 0 1 4-4z"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 8;" x1="10" y1="15" x2="14" y2="15"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 8;" x1="10.5" y1="18" x2="13.5" y2="18"/>
+</svg>`,
+    "social-feed": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle class="ic-a" style="animation-name: pulseGrow;" cx="7" cy="9" r="2"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.08s;" cx="17" cy="9" r="2"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.16s;" cx="12" cy="17" r="2"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 10;" x1="8.5" y1="10.5" x2="10.5" y2="15"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 10;" x1="15.5" y1="10.5" x2="13.5" y2="15"/>
+</svg>`,
+    "photo-social": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="4" y="4" width="16" height="16" rx="4"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" cx="12" cy="12" r="3.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.25s; stroke-dasharray: 4;" x1="17" y1="7" x2="17.01" y2="7"/>
+</svg>`,
+    "short-video": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="7" y="3" width="10" height="18" rx="2"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.15s;" d="M11 10v4l3-2-3-2z" fill="currentColor"/>
+</svg>`,
+    "professional": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="6" width="18" height="14" rx="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.1s;" cx="12" cy="11" r="2"/>
+<path class="ic-a" style="animation-name: drawIn; animation-delay: 0.2s; stroke-dasharray: 16;" d="M8 17c0-2 2-3 4-3s4 1 4 3"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 8;" x1="9" y1="3" x2="15" y2="3"/>
+</svg>`,
+    "community": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: pulseGrow;" d="M4 8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-6l-4 3v-3H7a3 3 0 0 1-3-3V8z"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 8;" x1="9" y1="10" x2="15" y2="10"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 6;" x1="9" y1="13" x2="13" y2="13"/>
+</svg>`,
+    "microblog": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: drawIn; stroke-dasharray: 50;" d="M4 14V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 4v-4H6a2 2 0 0 1-2-2z"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 6;" x1="8" y1="9" x2="14" y2="9"/>
+</svg>`,
+    "neighborhood": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: slideUp;" d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9z"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" x="10" y="14" width="4" height="7"/>
+</svg>`,
+    "video-platform": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="2"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.15s;" d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/>
+</svg>`,
+    "ctv": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="5" width="18" height="12" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 8;" x1="9" y1="20" x2="15" y2="20"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 4;" x1="12" y1="17" x2="12" y2="20"/>
+</svg>`,
+    "streaming": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: pulseGrow;" d="M12 3v18M4 8a8 8 0 0 1 16 0M4 16a8 8 0 0 0 16 0"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.18s;" cx="12" cy="12" r="2" fill="currentColor"/>
+</svg>`,
+    "linear-tv": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="7" width="18" height="11" rx="1.5"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 14;" points="7 4 12 7 17 4"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 4;" x1="11" y1="13" x2="13" y2="13"/>
+</svg>`,
+    "short-vertical": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="6" y="3" width="12" height="18" rx="2"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 4;" x1="9" y1="18" x2="15" y2="18"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.18s;" d="M10 9v5l4-2.5-4-2.5z" fill="currentColor"/>
+</svg>`,
+    "programmatic": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<circle class="ic-a" style="animation-name: spinIn;" cx="12" cy="12" r="3"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.1s;" cx="5" cy="5" r="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.16s;" cx="19" cy="5" r="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" cx="5" cy="19" r="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.28s;" cx="19" cy="19" r="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.34s; stroke-dasharray: 6;" x1="9.5" y1="9.5" x2="7" y2="7"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.34s; stroke-dasharray: 6;" x1="14.5" y1="9.5" x2="17" y2="7"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.34s; stroke-dasharray: 6;" x1="9.5" y1="14.5" x2="7" y2="17"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.34s; stroke-dasharray: 6;" x1="14.5" y1="14.5" x2="17" y2="17"/>
+</svg>`,
+    "native": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="4" y="4" width="16" height="3" rx="0.5"/>
+<rect class="ic-a" style="animation-name: slideUp; animation-delay: 0.08s;" x="4" y="10" width="11" height="3" rx="0.5"/>
+<rect class="ic-a" style="animation-name: slideUp; animation-delay: 0.16s;" x="4" y="16" width="13" height="3" rx="0.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" cx="19" cy="11.5" r="1.2" fill="currentColor"/>
+</svg>`,
+    "dooh": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="4" y="5" width="16" height="9" rx="1"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.12s; stroke-dasharray: 14;" x1="12" y1="14" x2="12" y2="19"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 10;" x1="8" y1="19" x2="16" y2="19"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.24s; stroke-dasharray: 6;" x1="8" y1="9" x2="12" y2="9"/>
+</svg>`,
+    "ooh-static": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="4" width="18" height="11" rx="0.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 6;" x1="10" y1="15" x2="10" y2="20"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 6;" x1="14" y1="15" x2="14" y2="20"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 8;" x1="8" y1="20" x2="16" y2="20"/>
+</svg>`,
+    "affiliate": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: drawIn; stroke-dasharray: 30;" d="M14 6l-2 2a4 4 0 1 0 5.5 5.5l2-2a4 4 0 1 0-5.5-5.5z"/>
+<path class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 30;" d="M10 18l2-2a4 4 0 1 0-5.5-5.5l-2 2a4 4 0 1 0 5.5 5.5z"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.3s; stroke-dasharray: 8;" x1="10" y1="14" x2="14" y2="10"/>
+</svg>`,
+    "audio-streaming": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<line class="ic-a" style="animation-name: barRise; transform-origin: center;" x1="6" y1="10" x2="6" y2="14"/>
+<line class="ic-a" style="animation-name: barRise; animation-delay: 0.07s; transform-origin: center;" x1="10" y1="7" x2="10" y2="17"/>
+<line class="ic-a" style="animation-name: barRise; animation-delay: 0.14s; transform-origin: center;" x1="14" y1="9" x2="14" y2="15"/>
+<line class="ic-a" style="animation-name: barRise; animation-delay: 0.21s; transform-origin: center;" x1="18" y1="11" x2="18" y2="13"/>
+</svg>`,
+    "podcast": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="9" y="3" width="6" height="11" rx="3"/>
+<path class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 18;" d="M5 11a7 7 0 0 0 14 0"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 6;" x1="12" y1="18" x2="12" y2="21"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 4;" x1="9" y1="21" x2="15" y2="21"/>
+</svg>`,
+    "radio": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="9" width="18" height="11" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.1s; stroke-dasharray: 14;" x1="7" y1="9" x2="15" y2="4"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.2s;" cx="8" cy="15" r="2"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.25s; stroke-dasharray: 4;" x1="13" y1="14" x2="17" y2="14"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.28s; stroke-dasharray: 4;" x1="13" y1="17" x2="17" y2="17"/>
+</svg>`,
+    "email": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="5" width="18" height="14" rx="1.5"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 30;" points="3 7 12 13 21 7"/>
+</svg>`,
+    "messaging": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: pulseGrow;" d="M4 8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-7l-3 3v-3H7a3 3 0 0 1-3-3V8z"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 4;" x1="9" y1="11" x2="9.01" y2="11"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.2s; stroke-dasharray: 4;" x1="12" y1="11" x2="12.01" y2="11"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.25s; stroke-dasharray: 4;" x1="15" y1="11" x2="15.01" y2="11"/>
+</svg>`,
+    "direct-mail": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: slideUp;" d="M3 9l9-5 9 5v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9z"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 22;" points="3 9 12 14 21 9"/>
+</svg>`,
+    "in-game": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="7" width="18" height="11" rx="3"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 4;" x1="7" y1="12" x2="9" y2="12"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 4;" x1="8" y1="11" x2="8" y2="13"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" cx="15" cy="11" r="1" fill="currentColor"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.26s;" cx="17" cy="13" r="1" fill="currentColor"/>
+</svg>`,
+    "ar-vr": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: pulseGrow;" d="M3 10a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3h-3l-3 3-3-3H6a3 3 0 0 1-3-3v-3z"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" cx="9" cy="11.5" r="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.2s;" cx="15" cy="11.5" r="1.5"/>
+</svg>`,
+    "cinema": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="4" width="18" height="16" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.1s; stroke-dasharray: 4;" x1="3" y1="8" x2="21" y2="8"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.13s; stroke-dasharray: 4;" x1="3" y1="16" x2="21" y2="16"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.16s; stroke-dasharray: 4;" x1="7" y1="4" x2="7" y2="20"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.19s; stroke-dasharray: 4;" x1="17" y1="4" x2="17" y2="20"/>
+</svg>`,
+    "print": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path class="ic-a" style="animation-name: slideUp;" d="M5 4h10l4 4v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 10;" points="15 4 15 9 20 9"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.2s; stroke-dasharray: 6;" x1="8" y1="14" x2="16" y2="14"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.24s; stroke-dasharray: 6;" x1="8" y1="17" x2="14" y2="17"/>
+</svg>`,
+    "event": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="6" width="18" height="14" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.1s; stroke-dasharray: 4;" x1="8" y1="3" x2="8" y2="8"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.13s; stroke-dasharray: 4;" x1="16" y1="3" x2="16" y2="8"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 14;" x1="3" y1="11" x2="21" y2="11"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.24s;" cx="12" cy="15" r="1" fill="currentColor"/>
+</svg>`,
+    "fmt-standard-video": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="2"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.15s;" d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/>
+</svg>`,
+    "fmt-short-video": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="7" y="3" width="10" height="18" rx="2"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.15s;" d="M11 10v4l3-2-3-2z" fill="currentColor"/>
+</svg>`,
+    "fmt-bumper": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="4" y="7" width="16" height="10" rx="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" cx="12" cy="12" r="2.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 4;" x1="12" y1="11" x2="12" y2="13.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.25s; stroke-dasharray: 4;" x1="12" y1="12.5" x2="13.5" y2="12.5"/>
+</svg>`,
+    "fmt-shoppable-video": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="2"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.1s;" d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.2s;" cx="18" cy="18" r="3" fill="currentColor"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.28s; stroke-dasharray: 4;" x1="17" y1="18" x2="19" y2="18" stroke="#fff"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.28s; stroke-dasharray: 4;" x1="18" y1="17" x2="18" y2="19" stroke="#fff"/>
+</svg>`,
+    "fmt-static-display": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 8;" x1="7" y1="11" x2="13" y2="11"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 6;" x1="7" y1="14" x2="11" y2="14"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" x="15" y="10" width="3" height="4" rx="0.5"/>
+</svg>`,
+    "fmt-html5": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="1.5"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 10;" points="8 10 6 12 8 14"/>
+<polyline class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 10;" points="16 10 18 12 16 14"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 6;" x1="13" y1="9" x2="11" y2="15"/>
+</svg>`,
+    "fmt-responsive": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="12" height="9" rx="1"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.1s;" x="14" y="9" width="7" height="11" rx="1"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.2s; stroke-dasharray: 4;" x1="16" y1="18" x2="19" y2="18"/>
+</svg>`,
+    "fmt-rich-media": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="1.5"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.12s;" cx="12" cy="12" r="3"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.22s;" cx="12" cy="12" r="5" stroke-dasharray="1.5 2.5"/>
+</svg>`,
+    "fmt-carousel": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="7" y="6" width="10" height="12" rx="1.5"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.1s;" x="2" y="8" width="3" height="8" rx="0.8" opacity="0.6"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.18s;" x="19" y="8" width="3" height="8" rx="0.8" opacity="0.6"/>
+</svg>`,
+    "fmt-stories": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="6" y="3" width="12" height="18" rx="2"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.15s; stroke-dasharray: 4;" x1="9" y1="6" x2="11" y2="6"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.18s; stroke-dasharray: 4;" x1="13" y1="6" x2="15" y2="6"/>
+</svg>`,
+    "fmt-collection": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="4" width="18" height="9" rx="1.5"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.1s;" x="3" y="15" width="5" height="5" rx="0.8"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" x="9.5" y="15" width="5" height="5" rx="0.8"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.2s;" x="16" y="15" width="5" height="5" rx="0.8"/>
+</svg>`,
+    "fmt-playable": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="6" width="18" height="12" rx="2"/>
+<circle class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.15s;" cx="12" cy="12" r="3"/>
+<path class="ic-a" style="animation-name: slideUp; animation-delay: 0.22s;" d="M11 11l2 1-2 1v-2z" fill="currentColor"/>
+</svg>`,
+    "fmt-search-text": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="3" y="6" width="18" height="4" rx="1"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.1s; stroke-dasharray: 14;" x1="6" y1="14" x2="18" y2="14"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.16s; stroke-dasharray: 10;" x1="6" y1="17" x2="14" y2="17"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.22s; stroke-dasharray: 12;" x1="6" y1="20" x2="16" y2="20"/>
+</svg>`,
+    "fmt-product-feed": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: pulseGrow;" x="3" y="3" width="8" height="8" rx="0.8"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.08s;" x="13" y="3" width="8" height="8" rx="0.8"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.16s;" x="3" y="13" width="8" height="8" rx="0.8"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.24s;" x="13" y="13" width="8" height="8" rx="0.8"/>
+</svg>`,
+    "fmt-lead-form": `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<rect class="ic-a" style="animation-name: slideUp;" x="4" y="3" width="16" height="18" rx="1.5"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.1s; stroke-dasharray: 8;" x1="8" y1="8" x2="16" y2="8"/>
+<line class="ic-a" style="animation-name: drawIn; animation-delay: 0.14s; stroke-dasharray: 8;" x1="8" y1="12" x2="16" y2="12"/>
+<rect class="ic-a" style="animation-name: pulseGrow; animation-delay: 0.2s;" x="8" y="15" width="8" height="3" rx="0.5" fill="currentColor"/>
+</svg>`
+};
+
+const PLATFORM_ICON_MAP = {
+    "Google Ads (Search)": { icon: "search", cat: "search" },
+    "Bing Ads (Microsoft)": { icon: "search", cat: "search" },
+    "Apple Search Ads": { icon: "search", cat: "search" },
+    "Google Shopping": { icon: "shopping", cat: "search" },
+    "Amazon Ads": { icon: "marketplace", cat: "search" },
+    "Walmart Connect": { icon: "marketplace", cat: "search" },
+    "Instacart Ads": { icon: "grocery", cat: "search" },
+    "Google Performance Max": { icon: "discovery", cat: "search" },
+    "Google Demand Gen": { icon: "discovery", cat: "search" },
+    "Meta Ads (Facebook)": { icon: "social-feed", cat: "social" },
+    "Meta Ads (Instagram)": { icon: "photo-social", cat: "social" },
+    "Meta Advantage+": { icon: "social-feed", cat: "social" },
+    "WhatsApp Business Ads": { icon: "messaging", cat: "messaging" },
+    "TikTok Ads": { icon: "short-video", cat: "social" },
+    "LinkedIn Ads": { icon: "professional", cat: "social" },
+    "Snapchat Ads": { icon: "short-video", cat: "social" },
+    "Pinterest Ads": { icon: "photo-social", cat: "social" },
+    "X (Twitter) Ads": { icon: "microblog", cat: "social" },
+    "Reddit Ads": { icon: "community", cat: "social" },
+    "Quora Ads": { icon: "community", cat: "social" },
+    "Threads Ads": { icon: "microblog", cat: "social" },
+    "Bluesky Ads": { icon: "microblog", cat: "social" },
+    "Nextdoor Ads": { icon: "neighborhood", cat: "social" },
+    "YouTube Ads": { icon: "video-platform", cat: "video" },
+    "YouTube Shorts Ads": { icon: "short-vertical", cat: "video" },
+    "Connected TV (CTV)": { icon: "ctv", cat: "video" },
+    "OTT / Streaming": { icon: "streaming", cat: "video" },
+    "Hulu Ads": { icon: "streaming", cat: "video" },
+    "Netflix Ads": { icon: "streaming", cat: "video" },
+    "Disney+ Ads": { icon: "streaming", cat: "video" },
+    "Peacock Ads": { icon: "streaming", cat: "video" },
+    "Roku Ads": { icon: "ctv", cat: "video" },
+    "Amazon Fire TV Ads": { icon: "ctv", cat: "video" },
+    "Samsung TV Plus Ads": { icon: "ctv", cat: "video" },
+    "Online Video (OLV)": { icon: "video-platform", cat: "video" },
+    "Linear TV": { icon: "linear-tv", cat: "video" },
+    "Addressable TV": { icon: "linear-tv", cat: "video" },
+    "Programmatic Display": { icon: "programmatic", cat: "programmatic" },
+    "Google Display Network (GDN)": { icon: "programmatic", cat: "programmatic" },
+    "Native Advertising": { icon: "native", cat: "programmatic" },
+    "Taboola / Outbrain": { icon: "native", cat: "programmatic" },
+    "Programmatic Audio": { icon: "audio-streaming", cat: "audio" },
+    "DOOH (Digital Out-of-Home)": { icon: "dooh", cat: "programmatic" },
+    "Traditional OOH (Billboards)": { icon: "ooh-static", cat: "programmatic" },
+    "Retargeting / Remarketing": { icon: "programmatic", cat: "programmatic" },
+    "Dynamic Creative Optimization (DCO)": { icon: "programmatic", cat: "programmatic" },
+    "Contextual Targeting": { icon: "programmatic", cat: "programmatic" },
+    "Influencer Marketing": { icon: "affiliate", cat: "programmatic" },
+    "Micro-Influencer Campaigns": { icon: "affiliate", cat: "programmatic" },
+    "Sponsored Content / Advertorials": { icon: "affiliate", cat: "programmatic" },
+    "Podcast Advertising": { icon: "podcast", cat: "audio" },
+    "UGC (User-Generated Content)": { icon: "affiliate", cat: "programmatic" },
+    "Affiliate Marketing": { icon: "affiliate", cat: "programmatic" },
+    "Creator Partnerships": { icon: "affiliate", cat: "programmatic" },
+    "Branded Content / Entertainment": { icon: "affiliate", cat: "programmatic" },
+    "Spotify Ads": { icon: "audio-streaming", cat: "audio" },
+    "Pandora Ads": { icon: "audio-streaming", cat: "audio" },
+    "iHeart Radio Ads": { icon: "radio", cat: "audio" },
+    "SiriusXM / Stitcher Ads": { icon: "audio-streaming", cat: "audio" },
+    "Programmatic Audio (DAX)": { icon: "audio-streaming", cat: "audio" },
+    "Email Marketing": { icon: "email", cat: "messaging" },
+    "SMS / MMS Marketing": { icon: "messaging", cat: "messaging" },
+    "Push Notifications": { icon: "messaging", cat: "messaging" },
+    "In-App Advertising": { icon: "messaging", cat: "messaging" },
+    "Direct Mail (Programmatic)": { icon: "direct-mail", cat: "messaging" },
+    "Chatbot / Conversational Ads": { icon: "messaging", cat: "messaging" },
+    "AI-Powered Ad Optimization": { icon: "programmatic", cat: "programmatic" },
+    "In-Game Advertising": { icon: "in-game", cat: "emerging" },
+    "AR / VR Advertising": { icon: "ar-vr", cat: "emerging" },
+    "Digital Cinema Ads": { icon: "cinema", cat: "emerging" },
+    "Print (Magazine / Newspaper)": { icon: "print", cat: "emerging" },
+    "Radio (Terrestrial)": { icon: "radio", cat: "audio" },
+    "Event / Experiential Marketing": { icon: "event", cat: "emerging" },
+    "Sponsorships & Partnerships": { icon: "event", cat: "emerging" }
+};
+
+const FORMAT_ICON_MAP = {
+    "Video (15s / 30s / 60s)": { icon: "fmt-standard-video", cat: "video" },
+    "Short-Form Video (Reels / TikTok)": { icon: "fmt-short-video", cat: "video" },
+    "Long-Form Video (2min+)": { icon: "fmt-standard-video", cat: "video" },
+    "CTV / Pre-Roll / Mid-Roll": { icon: "fmt-standard-video", cat: "video" },
+    "Bumper Ads (6s)": { icon: "fmt-bumper", cat: "video" },
+    "Shoppable Video": { icon: "fmt-shoppable-video", cat: "video" },
+    "Livestream / Live Shopping": { icon: "fmt-shoppable-video", cat: "video" },
+    "Static Display / Banners": { icon: "fmt-static-display", cat: "search" },
+    "HTML5 / Animated Display": { icon: "fmt-html5", cat: "search" },
+    "Responsive Display Ads": { icon: "fmt-responsive", cat: "search" },
+    "High-Impact / Takeover Units": { icon: "fmt-rich-media", cat: "search" },
+    "Interactive / Rich Media": { icon: "fmt-rich-media", cat: "search" },
+    "Dynamic Creative (DCO)": { icon: "fmt-rich-media", cat: "search" },
+    "Carousel Ads": { icon: "fmt-carousel", cat: "social" },
+    "Stories / Full-Screen Vertical": { icon: "fmt-stories", cat: "social" },
+    "Native / In-Feed": { icon: "fmt-carousel", cat: "social" },
+    "Collection / Instant Experience": { icon: "fmt-collection", cat: "social" },
+    "Playable / Gamified Ads": { icon: "fmt-playable", cat: "social" },
+    "Poll / Interactive Ads": { icon: "fmt-playable", cat: "social" },
+    "UGC / Influencer Creative": { icon: "fmt-playable", cat: "social" },
+    "Search Text Ads": { icon: "fmt-search-text", cat: "audio" },
+    "Responsive Search Ads (RSA)": { icon: "fmt-search-text", cat: "audio" },
+    "Shopping / Product Ads": { icon: "fmt-product-feed", cat: "audio" },
+    "Dynamic Product Ads (DPA)": { icon: "fmt-product-feed", cat: "audio" },
+    "Lead Gen Forms": { icon: "fmt-lead-form", cat: "audio" },
+    "Catalog / Feed Ads": { icon: "fmt-product-feed", cat: "audio" },
+    "Audio Ads (Podcast / Spotify)": { icon: "fmt-standard-video", cat: "video" },
+    "Companion Display (with Audio)": { icon: "fmt-static-display", cat: "search" },
+    "AR / Lens / Filter Ads": { icon: "fmt-playable", cat: "social" },
+    "Connected TV (CTV) Cards": { icon: "fmt-standard-video", cat: "video" },
+    "Whitepapers / Gated Content": { icon: "fmt-lead-form", cat: "audio" },
+    "Infographic Ads": { icon: "fmt-static-display", cat: "search" }
+};
+
+const CHIP_ICON_CATEGORIES = ['search', 'social', 'video', 'programmatic', 'audio', 'messaging', 'emerging'];
+const ALWAYS_RECOMMENDED_CHANNELS = [
+    "Google Ads (Search)",
+    "Meta Ads (Facebook)",
+    "Meta Ads (Instagram)",
+    "YouTube Ads",
+    "Connected TV (CTV)",
+    "Programmatic Display"
+];
+
+function getChipIconEntry(containerId, map, chip) {
+    const val = chip.dataset.val;
+    const entry = map[val];
+    if (entry) return entry;
+    console.warn('[icon-map] No mapping for', val, 'in', containerId);
+    return { icon: 'programmatic', cat: 'emerging' };
+}
+
+function decorateChips(containerId, map) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.querySelectorAll('.chip').forEach(chip => {
+        const entry = getChipIconEntry(containerId, map, chip);
+        CHIP_ICON_CATEGORIES.forEach(cat => chip.classList.remove('cat-' + cat));
+        chip.classList.add('cat-' + entry.cat);
+        chip.dataset.icon = entry.icon;
+
+        let label = chip.querySelector('.chip-label');
+        if (!label) {
+            label = document.createElement('span');
+            label.className = 'chip-label';
+            label.textContent = chip.textContent.trim();
+            chip.textContent = '';
+        }
+
+        let iconWrap = chip.querySelector('.icon-wrap');
+        if (!iconWrap) {
+            iconWrap = document.createElement('span');
+            iconWrap.className = 'icon-wrap';
+        }
+        iconWrap.setAttribute('aria-hidden', 'true');
+        iconWrap.innerHTML = ICON_SVG[entry.icon] || ICON_SVG.programmatic;
+
+        let check = chip.querySelector('.tile-check');
+        if (!check) {
+            check = document.createElement('span');
+            check.className = 'tile-check';
+        }
+        check.setAttribute('aria-hidden', 'true');
+
+        chip.insertBefore(iconWrap, chip.firstChild);
+        if (!label.parentNode) chip.appendChild(label);
+        if (label.previousElementSibling !== iconWrap) chip.insertBefore(label, iconWrap.nextSibling);
+        if (!check.parentNode) chip.appendChild(check);
+        chip.appendChild(check);
+    });
+}
+
+function markRecommended() {
+    document.querySelectorAll('#platformChips .chip').forEach(chip => {
+        chip.classList.toggle('recommended', ALWAYS_RECOMMENDED_CHANNELS.includes(chip.dataset.val));
+    });
+}
+
+function replayChipIconAnimation(chip) {
+    const iconWrap = chip.querySelector('.icon-wrap');
+    if (!iconWrap) return;
+
+    iconWrap.classList.remove('is-animating');
+    iconWrap.querySelectorAll('.ic-a').forEach(piece => {
+        const animationName = piece.style.animationName;
+        if (!animationName) return;
+        piece.style.animationName = 'none';
+        void piece.offsetWidth;
+        piece.style.animationName = animationName;
+    });
+    void iconWrap.offsetWidth;
+    iconWrap.classList.add('is-animating');
+    iconWrap.addEventListener('animationend', () => iconWrap.classList.remove('is-animating'), { once: true });
+}
+
+
 function updateChipGroupCount(group) {
     if (!group) return;
     const count = group.querySelectorAll('.chip.selected').length;
@@ -5033,6 +5513,7 @@ function initChips() {
     document.querySelectorAll('.chip').forEach(chip => {
         chip.addEventListener('click', () => {
             chip.classList.toggle('selected');
+            if (chip.classList.contains('selected')) replayChipIconAnimation(chip);
             updateChipGroupCount(chip.closest('.chip-group'));
             if (chip.closest('#platformChips') && typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
         });
@@ -5192,7 +5673,7 @@ function initFormSteps() {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); decorateChips('platformChips', PLATFORM_ICON_MAP); decorateChips('creativeChips', FORMAT_ICON_MAP); markRecommended(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
