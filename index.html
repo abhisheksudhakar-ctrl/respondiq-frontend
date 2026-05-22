@@ -772,10 +772,11 @@
                 padding: 28px;
             }
         }
-        #userBadge { position: absolute; top: 16px; right: 20px; display: none; align-items: center; gap: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 13px; color: #0f172a; box-shadow: 0 2px 8px rgba(15,23,42,0.06); z-index: 100; }
+        #userBadge { display: none; align-items: center; gap: 10px; max-width: 320px; min-width: 0; background: rgba(255,255,255,.86); border: 1px solid var(--hair, #e2e8f0); border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 13px; color: var(--ink, #0f172a); box-shadow: var(--shadow-soft, 0 2px 8px rgba(15,23,42,0.06)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 3; }
         #userBadge.active { display: inline-flex; }
         #userBadge .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #0071e3, #ff6b35); color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        #userBadge .signout { background: none; border: none; color: #64748b; cursor: pointer; font-size: 12px; padding: 0 4px; }
+        #userBadgeName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #userBadge .signout { background: none; border: none; color: var(--ink-3, #64748b); cursor: pointer; font-size: 12px; padding: 0 4px; white-space: nowrap; }
         #userBadge .signout:hover { color: #b91c1c; }
         .brand-logo.brand-stack {
             display: inline-grid;
@@ -863,7 +864,7 @@
         .form-input, .form-select, .form-textarea {
             width: 100%; padding: 13px 16px; background: var(--surface-2);
             border: 1.5px solid var(--border); border-radius: 12px;
-            color: var(--text); font-size: 14.5px; font-family: inherit; transition: all 0.2s ease; outline: none;
+            color: var(--text); font-size: 14.5px; font-family: inherit; transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; outline: none;
         }
         .form-select {
             cursor: pointer; appearance: none;
@@ -968,10 +969,10 @@
             height: 8px;
             border-right: 1.5px solid currentColor;
             border-bottom: 1.5px solid currentColor;
-            transform: rotate(45deg) translateY(-2px);
-            transition: transform 0.2s ease;
+            transform: rotate(45deg);
+            transition: none;
         }
-        .chip-group[open] .chip-group-arrow { transform: rotate(225deg) translate(-1px, -1px); }
+        .chip-group[open] .chip-group-arrow { transform: rotate(45deg); }
         .chip-group-options {
             display: flex;
             flex-wrap: wrap;
@@ -1230,6 +1231,16 @@
             justify-content: space-between;
             gap: 20px;
             padding: 0 0 34px;
+        }
+
+        #formSection .form-top-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            min-width: 0;
+            flex: 1 1 auto;
+            flex-wrap: wrap;
         }
 
         #formSection .form-brand {
@@ -1537,7 +1548,7 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 1px 0 rgba(26,24,20,.02);
             font: 500 14.5px/1.35 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
             letter-spacing: -.005em;
-            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, transform .2s ease;
+            transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
         }
 
         #formSection .form-select {
@@ -1759,12 +1770,12 @@
             height: 8px;
             border-right: 1.5px solid currentColor;
             border-bottom: 1.5px solid currentColor;
-            transform: rotate(45deg) translateY(-2px);
-            transition: transform .2s ease;
+            transform: rotate(45deg);
+            transition: none;
         }
 
         #formSection .chip-group[open] .chip-group-arrow {
-            transform: rotate(225deg) translate(-1px, -1px);
+            transform: rotate(45deg);
         }
 
         #formSection .chip-group-options {
@@ -2965,6 +2976,16 @@
                 padding-bottom: 24px;
             }
 
+            #formSection .form-top-actions {
+                align-items: flex-start;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            #userBadge {
+                max-width: 100%;
+            }
+
             #formSection .form-header,
             #formSection .form-card,
             #formSection .fcard {
@@ -4056,12 +4077,6 @@
             </div>
         </div>
 
-        <div id="userBadge">
-            <span class="avatar" id="userAvatar">?</span>
-            <span id="userBadgeName"></span>
-            <button type="button" class="signout" onclick="signOut()">Sign out</button>
-        </div>
-
         <!-- ========== FORM ========== -->
         <div id="formSection">
             <div class="form-bg" aria-hidden="true">
@@ -4105,7 +4120,14 @@
             <span class="form-brand-by">by <img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></span>
                         </span>
                     </div>
-                    <span class="form-top-note"><span class="dot"></span> Strategic Media Planner</span>
+                    <div class="form-top-actions">
+                        <span class="form-top-note"><span class="dot"></span> Strategic Media Planner</span>
+                        <div id="userBadge">
+                            <span class="avatar" id="userAvatar">?</span>
+                            <span id="userBadgeName"></span>
+                            <button type="button" class="signout" onclick="signOut()">Sign out</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-progress" aria-label="Form progress">
@@ -4267,7 +4289,6 @@
                                 <div class="callout-pill">
                                     <span class="sparkle" aria-hidden="true">✦</span>
                                     <span>Pick channels for the plan, or let the strategist propose them.</span>
-                                    <button type="button" class="callout-pill-link" onclick="showAllChannels()">See the full list →</button>
                                 </div>
                                 <button type="button" class="btn-ai" id="aiRecommendBtn">
                                     <span class="sparkle" aria-hidden="true">✦</span>
