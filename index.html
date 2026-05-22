@@ -1683,12 +1683,14 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex: none;
             min-width: 0;
             color: var(--ink);
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: .12em;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .14em;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         #formSection .chip-group-title::before {
@@ -1696,8 +1698,14 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 4px rgba(46,152,102,.12);
+            background: var(--cat-color, var(--green));
+            box-shadow: 0 0 0 4px var(--cat-soft, rgba(46,152,102,.12));
+        }
+
+        #formSection .chip-group-rule {
+            flex: 1 1 auto;
+            height: .5px;
+            background: var(--hair);
         }
 
         #formSection .chip-group-meta {
@@ -1711,7 +1719,7 @@
         }
 
         #formSection .chip-group-count {
-            min-width: 24px;
+            min-width: 40px;
             padding: 3px 8px;
             border-radius: 999px;
             background: #fff;
@@ -1719,6 +1727,31 @@
             color: var(--ink-3);
             text-align: center;
             font-variant-numeric: tabular-nums;
+        }
+
+        #formSection .chip-group-clear {
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--ink-3);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.35;
+            text-decoration: underline;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease, color .2s ease;
+        }
+
+        #formSection .chip-group-clear.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #formSection .chip-group-clear:hover {
+            color: var(--ink);
         }
 
         #formSection .chip-group-arrow {
@@ -1777,14 +1810,13 @@
         }
 
         #formSection .fcard.channels .chip-group-title {
-            letter-spacing: .22em;
             color: var(--ink-3);
         }
 
         #formSection .fcard.channels .chip-group-title::before {
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 5px rgba(46,152,102,.12);
+            background: var(--cat-color, var(--green));
+            box-shadow: 0 0 0 5px var(--cat-soft, rgba(46,152,102,.12));
         }
 
         #formSection .fcard.channels .chip-group-options {
@@ -1804,20 +1836,16 @@
             min-width: 0;
             min-height: 64px;
             margin: 0;
-            padding: 14px 38px 14px 14px;
+            padding: 12px 36px 12px 12px;
             border-radius: 14px;
             border: .5px solid rgba(26,24,20,.14);
             background: #fff;
             color: var(--ink);
             box-shadow: none;
             text-align: left;
-            font-size: 12px;
-            font-weight: 500;
-            line-height: 1.25;
-            white-space: nowrap;
             cursor: pointer;
             user-select: none;
-            transition: border-color .25s, transform .2s, box-shadow .25s, background .25s;
+            transition: border-color .25s, transform .2s, box-shadow .25s, background .25s, opacity .25s;
         }
 
         #formSection #platformChips .chip:hover,
@@ -1866,9 +1894,14 @@
         #formSection #creativeChips .chip .chip-label {
             flex: 1 1 auto;
             min-width: 0;
+            color: var(--ink);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.3;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         #formSection #platformChips .chip .tile-check,
@@ -1913,6 +1946,52 @@
         #formSection .chip.cat-audio { --cat-color: var(--cat-audio); --cat-soft: var(--cat-audio-soft); }
         #formSection .chip.cat-messaging { --cat-color: var(--cat-messaging); --cat-soft: var(--cat-messaging-soft); }
         #formSection .chip.cat-emerging { --cat-color: var(--cat-emerging); --cat-soft: var(--cat-emerging-soft); }
+        #formSection .chip-group.cat-search { --cat-color: var(--cat-search); --cat-soft: var(--cat-search-soft); }
+        #formSection .chip-group.cat-social { --cat-color: var(--cat-social); --cat-soft: var(--cat-social-soft); }
+        #formSection .chip-group.cat-video { --cat-color: var(--cat-video); --cat-soft: var(--cat-video-soft); }
+        #formSection .chip-group.cat-programmatic { --cat-color: var(--cat-programmatic); --cat-soft: var(--cat-programmatic-soft); }
+        #formSection .chip-group.cat-audio { --cat-color: var(--cat-audio); --cat-soft: var(--cat-audio-soft); }
+        #formSection .chip-group.cat-messaging { --cat-color: var(--cat-messaging); --cat-soft: var(--cat-messaging-soft); }
+        #formSection .chip-group.cat-emerging { --cat-color: var(--cat-emerging); --cat-soft: var(--cat-emerging-soft); }
+
+        #formSection .chip.is-cap-blocked {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        #formSection .chip.is-cap-blocked:hover {
+            border-color: rgba(26,24,20,.14);
+            box-shadow: none;
+            transform: none;
+        }
+
+        #formSection .cap-message {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 10px 14px;
+            border: .5px solid rgba(255,107,53,.35);
+            border-radius: 8px;
+            background: rgba(255,107,53,.08);
+            color: #8B3A12;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        #formSection .cap-message strong {
+            font-weight: 500;
+        }
+
+        #formSection .cap-message.is-visible {
+            display: flex;
+            animation: capSlide .3s ease;
+        }
+
+        @keyframes capSlide {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         #formSection .ic-a {
             animation-duration: .7s;
@@ -2454,26 +2533,25 @@
         }
 
         #formSection .step-pane {
-            position: absolute;
-            inset: 0;
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 20px;
             opacity: 0;
-            transform: translateX(40px);
+            transform: translateY(8px);
             pointer-events: none;
-            transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1);
         }
 
         #formSection .step-pane.is-active {
             position: relative;
+            display: flex;
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
             pointer-events: auto;
+            animation: stepPaneFlowIn .18s ease-out both;
         }
 
         #formSection .step-pane.is-past {
-            transform: translateX(-40px);
+            transform: translateY(0);
         }
 
         #formSection .step-header {
@@ -2651,11 +2729,19 @@
             transform: translateY(0);
         }
 
+        #formSection .callout-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        #formSection .callout-pill,
         #formSection .channel-picker-callout {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 12px;
+            flex: 1 1 auto;
             padding: 10px 12px;
             border-radius: 8px;
             background: #F1F8F7;
@@ -2664,11 +2750,13 @@
             line-height: 1.35;
         }
 
+        #formSection .callout-pill .sparkle,
         #formSection .channel-picker-callout .sparkle {
             flex: none;
             font-size: 14px;
         }
 
+        #formSection .callout-pill-link,
         #formSection .channel-picker-link {
             margin-left: auto;
             padding: 0;
@@ -2682,6 +2770,63 @@
             line-height: 1.35;
             text-decoration: underline;
             white-space: nowrap;
+        }
+
+        #formSection .btn-ai {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 0 0 auto;
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--violet), var(--blue));
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: .02em;
+            line-height: 1.35;
+            white-space: nowrap;
+            transition: transform .2s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+        }
+
+        #formSection .btn-ai:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px -16px rgba(124,107,255,.6);
+        }
+
+        #formSection .btn-ai .sparkle {
+            display: inline-flex;
+            font-size: 13px;
+        }
+
+        #formSection .btn-ai.is-loading {
+            opacity: .85;
+            pointer-events: none;
+        }
+
+        #formSection .btn-ai.is-loading .sparkle {
+            animation: aiBtnSpin 1s linear infinite;
+        }
+
+        #formSection .btn-ai.is-done {
+            background: rgba(46,152,102,.12);
+            color: #085041;
+            box-shadow: none;
+        }
+
+        #formSection .btn-ai.is-done:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        @keyframes aiBtnSpin {
+            from { transform: rotate(0); }
+            to { transform: rotate(360deg); }
         }
 
         #formSection .step-detail-card details > summary {
@@ -2761,6 +2906,11 @@
             0% { transform: scale(.7) rotate(-20deg); opacity: .4; }
             40% { transform: scale(1.15) rotate(10deg); opacity: 1; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes stepPaneFlowIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes ctaGradientFlow {
@@ -2873,11 +3023,22 @@
                 text-align: left;
             }
 
+            #formSection .callout-row {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            #formSection .btn-ai {
+                width: 100%;
+            }
+
+            #formSection .callout-pill,
             #formSection .channel-picker-callout {
                 align-items: flex-start;
                 flex-wrap: wrap;
             }
 
+            #formSection .callout-pill-link,
             #formSection .channel-picker-link {
                 margin-left: 22px;
             }
@@ -4102,10 +4263,16 @@
                         </div>
                         <div class="form-group full-width">
                             <label class="form-label">Channels &amp; Platforms</label>
-                            <div class="channel-picker-callout">
-                                <span class="sparkle" aria-hidden="true">✦</span>
-                                <span>Sorted by fit for your goal and budget. Top six are highlighted.</span>
-                                <button type="button" class="channel-picker-link" onclick="showAllChannels()">See the full list →</button>
+                            <div class="callout-row">
+                                <div class="callout-pill">
+                                    <span class="sparkle" aria-hidden="true">✦</span>
+                                    <span>Pick channels for the plan, or let the strategist propose them.</span>
+                                    <button type="button" class="callout-pill-link" onclick="showAllChannels()">See the full list →</button>
+                                </div>
+                                <button type="button" class="btn-ai" id="aiRecommendBtn">
+                                    <span class="sparkle" aria-hidden="true">✦</span>
+                                    <span id="aiRecommendBtnText">Get AI recommendations</span>
+                                </button>
                             </div>
                             <div class="chip-container" id="platformChips">
                                 <div class="chip-category-label">Search & Shopping</div>
@@ -4191,6 +4358,10 @@
                                 <div class="chip" data-val="Event / Experiential Marketing">Event / Experiential</div>
                                 <div class="chip" data-val="Sponsorships & Partnerships">Sponsorships</div>
                             </div>
+                            <div class="cap-message" id="platformCapMessage">
+                                <span class="cap-icon" aria-hidden="true">⚑</span>
+                                <span><strong>Free plan: 6 channels max.</strong> Deselect one to add another. Upgrade to remove the cap.</span>
+                            </div>
                         </div>
                         <div class="form-group full-width">
                             <label class="form-label">Creative Formats</label>
@@ -4232,6 +4403,10 @@
                                 <div class="chip" data-val="Connected TV (CTV) Cards">CTV Overlay Cards</div>
                                 <div class="chip" data-val="Whitepapers / Gated Content">Whitepapers / Gated</div>
                                 <div class="chip" data-val="Infographic Ads">Infographic Ads</div>
+                            </div>
+                            <div class="cap-message" id="formatCapMessage">
+                                <span class="cap-icon" aria-hidden="true">⚑</span>
+                                <span><strong>Free plan: 6 formats max.</strong> Deselect one to add another. Upgrade to remove the cap.</span>
                             </div>
                         </div>
                     </div>
@@ -5373,15 +5548,133 @@ const FORMAT_ICON_MAP = {
     "Infographic Ads": { icon: "fmt-static-display", cat: "search" }
 };
 
+const CHIP_LABEL_OVERRIDE = {
+    "Google Ads (Search)": "Google Search",
+    "Bing Ads (Microsoft)": "Microsoft Ads",
+    "Apple Search Ads": "Apple Search",
+    "Google Shopping": "Google Shopping",
+    "Google Performance Max": "Performance Max",
+    "Google Demand Gen": "Demand Gen",
+    "Amazon Ads": "Amazon Ads",
+    "Walmart Connect": "Walmart Connect",
+    "Instacart Ads": "Instacart Ads",
+    "Meta Ads (Facebook)": "Meta (Facebook)",
+    "Meta Ads (Instagram)": "Meta (Instagram)",
+    "Meta Advantage+": "Meta Advantage+",
+    "WhatsApp Business Ads": "WhatsApp Business",
+    "TikTok Ads": "TikTok Ads",
+    "LinkedIn Ads": "LinkedIn Ads",
+    "Snapchat Ads": "Snapchat Ads",
+    "Pinterest Ads": "Pinterest Ads",
+    "X (Twitter) Ads": "X (Twitter) Ads",
+    "Reddit Ads": "Reddit Ads",
+    "Quora Ads": "Quora Ads",
+    "Threads Ads": "Threads Ads",
+    "Bluesky Ads": "Bluesky Ads",
+    "Nextdoor Ads": "Nextdoor Ads",
+    "YouTube Ads": "YouTube Ads",
+    "YouTube Shorts Ads": "YouTube Shorts",
+    "Connected TV (CTV)": "Connected TV",
+    "OTT / Streaming": "OTT / Streaming",
+    "Hulu Ads": "Hulu Ads",
+    "Netflix Ads": "Netflix Ads",
+    "Disney+ Ads": "Disney+ Ads",
+    "Peacock Ads": "Peacock Ads",
+    "Roku Ads": "Roku Ads",
+    "Amazon Fire TV Ads": "Fire TV Ads",
+    "Samsung TV Plus Ads": "Samsung TV+ Ads",
+    "Online Video (OLV)": "Online Video",
+    "Linear TV": "Linear TV",
+    "Addressable TV": "Addressable TV",
+    "Programmatic Display": "Programmatic",
+    "Google Display Network (GDN)": "Google Display",
+    "Native Advertising": "Native Ads",
+    "Taboola / Outbrain": "Taboola / Outbrain",
+    "Programmatic Audio": "Programmatic Audio",
+    "DOOH (Digital Out-of-Home)": "Digital OOH",
+    "Traditional OOH (Billboards)": "Traditional OOH",
+    "Retargeting / Remarketing": "Retargeting",
+    "Dynamic Creative Optimization (DCO)": "DCO",
+    "Contextual Targeting": "Contextual",
+    "Influencer Marketing": "Influencer",
+    "Micro-Influencer Campaigns": "Micro-Influencers",
+    "Sponsored Content / Advertorials": "Sponsored Content",
+    "Podcast Advertising": "Podcast Ads",
+    "UGC (User-Generated Content)": "UGC Campaigns",
+    "Affiliate Marketing": "Affiliate",
+    "Creator Partnerships": "Creator Partnerships",
+    "Branded Content / Entertainment": "Branded Content",
+    "Spotify Ads": "Spotify Ads",
+    "Pandora Ads": "Pandora Ads",
+    "iHeart Radio Ads": "iHeart Radio",
+    "SiriusXM / Stitcher Ads": "SiriusXM / Stitcher",
+    "Programmatic Audio (DAX)": "Programmatic Audio",
+    "Email Marketing": "Email Marketing",
+    "SMS / MMS Marketing": "SMS / MMS",
+    "Push Notifications": "Push Notifications",
+    "In-App Advertising": "In-App Ads",
+    "Direct Mail (Programmatic)": "Direct Mail",
+    "Chatbot / Conversational Ads": "Chatbot Ads",
+    "AI-Powered Ad Optimization": "AI Optimization",
+    "In-Game Advertising": "In-Game Ads",
+    "AR / VR Advertising": "AR / VR Ads",
+    "Digital Cinema Ads": "Cinema Ads",
+    "Print (Magazine / Newspaper)": "Print Media",
+    "Radio (Terrestrial)": "Radio (FM/AM)",
+    "Event / Experiential Marketing": "Event / Experiential",
+    "Sponsorships & Partnerships": "Sponsorships"
+};
+
+const FORMAT_LABEL_OVERRIDE = {
+    "Video (15s / 30s / 60s)": "Video (15-60s)",
+    "Short-Form Video (Reels / TikTok)": "Short-Form Video",
+    "Long-Form Video (2min+)": "Long-Form Video",
+    "CTV / Pre-Roll / Mid-Roll": "CTV Video",
+    "Bumper Ads (6s)": "Bumper Ads (6s)",
+    "Static Display / Banners": "Static Display",
+    "HTML5 / Animated Display": "HTML5 Animated",
+    "Responsive Display Ads": "Responsive Display",
+    "High-Impact / Takeover Units": "High-Impact Units",
+    "Interactive / Rich Media": "Rich Media",
+    "Dynamic Creative (DCO)": "Dynamic Creative",
+    "Stories / Full-Screen Vertical": "Stories / Vertical",
+    "Native / In-Feed": "Native / In-Feed",
+    "Collection / Instant Experience": "Collection",
+    "Playable / Gamified Ads": "Playable Ads",
+    "Responsive Search Ads (RSA)": "Responsive Search",
+    "Shopping / Product Ads": "Shopping Ads",
+    "Dynamic Product Ads (DPA)": "Dynamic Product Ads",
+    "Audio Ads (Podcast / Spotify)": "Audio Ads",
+    "Companion Display (with Audio)": "Companion Display",
+    "AR / Lens / Filter Ads": "AR / Lens",
+    "Connected TV (CTV) Cards": "CTV Cards",
+    "Whitepapers / Gated Content": "Whitepapers",
+    "Infographic Ads": "Infographic Ads"
+};
+
 const CHIP_ICON_CATEGORIES = ['search', 'social', 'video', 'programmatic', 'audio', 'messaging', 'emerging'];
-const ALWAYS_RECOMMENDED_CHANNELS = [
-    "Google Ads (Search)",
-    "Meta Ads (Facebook)",
-    "Meta Ads (Instagram)",
-    "YouTube Ads",
-    "Connected TV (CTV)",
-    "Programmatic Display"
-];
+const MAX_SELECTION = { platformChips: 6, creativeChips: 6 };
+const CHIP_CAP_MESSAGE_ID = { platformChips: 'platformCapMessage', creativeChips: 'formatCapMessage' };
+const GROUP_META = {
+    platformChips: {
+        'Search & Shopping': { slug: 'search-shopping', cat: 'search' },
+        'Social Media': { slug: 'social-media', cat: 'social' },
+        'Video & CTV': { slug: 'video-ctv', cat: 'video' },
+        'Programmatic & Display': { slug: 'programmatic-display', cat: 'programmatic' },
+        'Influencer & Content': { slug: 'influencer-content', cat: 'programmatic' },
+        'Audio & Streaming': { slug: 'audio-streaming', cat: 'audio' },
+        'Direct & CRM': { slug: 'direct-crm', cat: 'messaging' },
+        'Emerging & Other': { slug: 'emerging-other', cat: 'emerging' }
+    },
+    creativeChips: {
+        'Video': { slug: 'video', cat: 'video' },
+        'Display & Static': { slug: 'display-static', cat: 'search' },
+        'Social & Feed': { slug: 'social-feed', cat: 'social' },
+        'Search & Commerce': { slug: 'search-commerce', cat: 'audio' },
+        'Audio & Other': { slug: 'audio-other', cat: 'video' }
+    }
+};
+let isAiRecommendationLoading = false;
 
 function getChipIconEntry(containerId, map, chip) {
     const val = chip.dataset.val;
@@ -5389,6 +5682,12 @@ function getChipIconEntry(containerId, map, chip) {
     if (entry) return entry;
     console.warn('[icon-map] No mapping for', val, 'in', containerId);
     return { icon: 'programmatic', cat: 'emerging' };
+}
+
+function getChipDisplayLabel(containerId, chip, fallbackLabel) {
+    const val = chip.dataset.val;
+    const map = containerId === 'platformChips' ? CHIP_LABEL_OVERRIDE : FORMAT_LABEL_OVERRIDE;
+    return map[val] || fallbackLabel || val;
 }
 
 function decorateChips(containerId, map) {
@@ -5402,12 +5701,13 @@ function decorateChips(containerId, map) {
         chip.dataset.icon = entry.icon;
 
         let label = chip.querySelector('.chip-label');
+        const fallbackLabel = label ? label.textContent.trim() : chip.textContent.trim();
         if (!label) {
             label = document.createElement('span');
             label.className = 'chip-label';
-            label.textContent = chip.textContent.trim();
             chip.textContent = '';
         }
+        label.textContent = getChipDisplayLabel(containerId, chip, fallbackLabel);
 
         let iconWrap = chip.querySelector('.icon-wrap');
         if (!iconWrap) {
@@ -5433,9 +5733,7 @@ function decorateChips(containerId, map) {
 }
 
 function markRecommended() {
-    document.querySelectorAll('#platformChips .chip').forEach(chip => {
-        chip.classList.toggle('recommended', ALWAYS_RECOMMENDED_CHANNELS.includes(chip.dataset.val));
-    });
+    document.querySelectorAll('#platformChips .chip.recommended, #creativeChips .chip.recommended').forEach(chip => chip.classList.remove('recommended'));
 }
 
 function replayChipIconAnimation(chip) {
@@ -5459,8 +5757,81 @@ function replayChipIconAnimation(chip) {
 function updateChipGroupCount(group) {
     if (!group) return;
     const count = group.querySelectorAll('.chip.selected').length;
+    const total = group.querySelectorAll('.chip').length;
     const countEl = group.querySelector('.chip-group-count');
-    if (countEl) countEl.textContent = count ? count + ' selected' : '0';
+    const clearBtn = group.querySelector('.chip-group-clear');
+    if (countEl) countEl.textContent = count + ' / ' + total;
+    if (clearBtn) clearBtn.classList.toggle('is-visible', count > 0);
+}
+
+function slugifyChipCategory(label) {
+    return String(label || 'category')
+        .toLowerCase()
+        .replace(/&/g, ' ')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'category';
+}
+
+function getGroupMeta(containerId, label) {
+    return (GROUP_META[containerId] && GROUP_META[containerId][label]) || {
+        slug: slugifyChipCategory(label),
+        cat: 'emerging'
+    };
+}
+
+function getCappedChipContainer(chip) {
+    const container = chip.closest('#platformChips, #creativeChips');
+    return container || null;
+}
+
+function getSelectedCount(containerId) {
+    const container = document.getElementById(containerId);
+    return container ? container.querySelectorAll('.chip.selected').length : 0;
+}
+
+function updateCategoryUI(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('.chip-group').forEach(updateChipGroupCount);
+}
+
+function updateCapState(containerId) {
+    const container = document.getElementById(containerId);
+    const max = MAX_SELECTION[containerId];
+    if (!container || !max) return;
+    const atCap = getSelectedCount(containerId) >= max;
+    container.querySelectorAll('.chip').forEach(chip => {
+        chip.classList.toggle('is-cap-blocked', atCap && !chip.classList.contains('selected'));
+    });
+}
+
+function flashCapMessage(containerId) {
+    const msg = document.getElementById(CHIP_CAP_MESSAGE_ID[containerId]);
+    if (!msg) return;
+    msg.classList.remove('is-visible');
+    void msg.offsetWidth;
+    msg.classList.add('is-visible');
+    clearTimeout(msg.__timer);
+    msg.__timer = setTimeout(() => msg.classList.remove('is-visible'), 4000);
+}
+
+function syncChipContainerUi(containerId) {
+    updateCategoryUI(containerId);
+    updateCapState(containerId);
+    if (containerId === 'platformChips' && typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
+}
+
+function setChipSelected(chip, selected, animate = true) {
+    chip.classList.toggle('selected', selected);
+    chip.classList.remove('is-cap-blocked');
+    if (selected && animate) replayChipIconAnimation(chip);
+}
+
+function clearChipContainerSelections(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('.chip.selected').forEach(chip => setChipSelected(chip, false, false));
+    syncChipContainerUi(containerId);
 }
 
 function initChipAccordions() {
@@ -5473,11 +5844,14 @@ function initChipAccordions() {
 
         children.forEach(child => {
             if (child.classList && child.classList.contains('chip-category-label')) {
-                current = { label: child.textContent.trim(), chips: [] };
+                const label = child.textContent.trim();
+                const meta = getGroupMeta(containerId, label);
+                current = { label, slug: meta.slug, cat: meta.cat, chips: [] };
                 groups.push(current);
             } else if (child.classList && child.classList.contains('chip')) {
                 if (!current) {
-                    current = { label: 'Recommended', chips: [] };
+                    const meta = getGroupMeta(containerId, 'Recommended');
+                    current = { label: 'Recommended', slug: meta.slug, cat: meta.cat, chips: [] };
                     groups.push(current);
                 }
                 current.chips.push(child);
@@ -5490,16 +5864,50 @@ function initChipAccordions() {
 
         groups.forEach((group, index) => {
             const details = document.createElement('details');
-            details.className = 'chip-group';
+            details.className = 'chip-group cat-' + group.cat;
+            details.dataset.cat = group.slug;
             details.open = index === 0;
 
             const summary = document.createElement('summary');
-            summary.innerHTML = '<span class="chip-group-title">' + group.label + '</span>' +
-                '<span class="chip-group-meta"><span class="chip-group-count">0</span><span class="chip-group-arrow" aria-hidden="true"></span></span>';
+            const title = document.createElement('span');
+            title.className = 'chip-group-title';
+            title.textContent = group.label;
+
+            const rule = document.createElement('span');
+            rule.className = 'chip-group-rule';
+            rule.setAttribute('aria-hidden', 'true');
+
+            const meta = document.createElement('span');
+            meta.className = 'chip-group-meta';
+
+            const count = document.createElement('span');
+            count.className = 'chip-group-count';
+            count.textContent = '0 / ' + group.chips.length;
+
+            const clear = document.createElement('button');
+            clear.type = 'button';
+            clear.className = 'chip-group-clear';
+            clear.dataset.clear = group.slug;
+            clear.textContent = 'Clear';
+
+            const arrow = document.createElement('span');
+            arrow.className = 'chip-group-arrow';
+            arrow.setAttribute('aria-hidden', 'true');
+
+            meta.appendChild(count);
+            meta.appendChild(clear);
+            meta.appendChild(arrow);
+            summary.appendChild(title);
+            summary.appendChild(rule);
+            summary.appendChild(meta);
 
             const options = document.createElement('div');
             options.className = 'chip-group-options';
-            group.chips.forEach(chip => options.appendChild(chip));
+            options.dataset.cat = group.slug;
+            group.chips.forEach(chip => {
+                chip.dataset.cat = group.slug;
+                options.appendChild(chip);
+            });
 
             details.appendChild(summary);
             details.appendChild(options);
@@ -5509,18 +5917,144 @@ function initChipAccordions() {
     });
 }
 
+function initChipGroupControls() {
+    document.querySelectorAll('#platformChips .chip-group-clear, #creativeChips .chip-group-clear').forEach(btn => {
+        btn.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const group = btn.closest('.chip-group');
+            const container = btn.closest('#platformChips, #creativeChips');
+            if (!group || !container) return;
+
+            group.querySelectorAll('.chip.selected').forEach(chip => setChipSelected(chip, false, false));
+            syncChipContainerUi(container.id);
+        });
+    });
+}
+
+function toggleChip(chip) {
+    const container = getCappedChipContainer(chip);
+    if (!container) {
+        chip.classList.toggle('selected');
+        if (chip.classList.contains('selected')) replayChipIconAnimation(chip);
+        return;
+    }
+
+    const containerId = container.id;
+    const isSelected = chip.classList.contains('selected');
+    const max = MAX_SELECTION[containerId];
+
+    if (!isSelected && max && getSelectedCount(containerId) >= max) {
+        flashCapMessage(containerId);
+        return;
+    }
+
+    setChipSelected(chip, !isSelected, true);
+    updateChipGroupCount(chip.closest('.chip-group'));
+    syncChipContainerUi(containerId);
+}
+
 function initChips() {
     document.querySelectorAll('.chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-            chip.classList.toggle('selected');
-            if (chip.classList.contains('selected')) replayChipIconAnimation(chip);
-            updateChipGroupCount(chip.closest('.chip-group'));
-            if (chip.closest('#platformChips') && typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
-        });
+        chip.addEventListener('click', () => toggleChip(chip));
     });
 }
 function getSelectedChips(containerId) {
     return Array.from(document.querySelectorAll(`#${containerId} .chip.selected`)).map(c => c.dataset.val);
+}
+
+function getStep1RecommendationData() {
+    return {
+        brandName: document.getElementById('brandName')?.value.trim() || '',
+        website: document.getElementById('website')?.value.trim() || '',
+        industry: document.getElementById('industry')?.value || '',
+        companySize: document.getElementById('companySize')?.value || '',
+        competitors: document.getElementById('competitors')?.value.trim() || '',
+        campaignName: document.getElementById('campaignName')?.value.trim() || '',
+        campaignDuration: document.getElementById('campaignDuration')?.value || '',
+        budget: document.getElementById('budget')?.value || '',
+        goal: document.getElementById('goal')?.value || '',
+        kpi: document.getElementById('kpi')?.value || ''
+    };
+}
+
+function setAiRecommendButtonState(state) {
+    const btn = document.getElementById('aiRecommendBtn');
+    const text = document.getElementById('aiRecommendBtnText');
+    if (!btn || !text) return;
+
+    btn.classList.toggle('is-loading', state === 'loading');
+    btn.classList.toggle('is-done', state === 'done');
+
+    if (state === 'loading') text.textContent = 'Working the brief...';
+    else if (state === 'done') text.textContent = '✓ Recommendations applied';
+    else if (state === 'error') text.textContent = 'Try again';
+    else text.textContent = 'Get AI recommendations';
+}
+
+function findPlatformChipByValue(value) {
+    return Array.from(document.querySelectorAll('#platformChips .chip')).find(chip => chip.dataset.val === value) || null;
+}
+
+function applyRecommendedChannels(channels) {
+    const validChannels = Array.from(new Set(Array.isArray(channels) ? channels : []))
+        .map(findPlatformChipByValue)
+        .filter(Boolean)
+        .slice(0, MAX_SELECTION.platformChips);
+
+    clearChipContainerSelections('platformChips');
+
+    validChannels.forEach((chip, index) => {
+        setTimeout(() => {
+            setChipSelected(chip, true, true);
+            updateChipGroupCount(chip.closest('.chip-group'));
+            syncChipContainerUi('platformChips');
+        }, index * 120);
+    });
+
+    return new Promise(resolve => {
+        setTimeout(resolve, validChannels.length * 120 + 200);
+    });
+}
+
+function initAIRecommendations() {
+    const btn = document.getElementById('aiRecommendBtn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        if (isAiRecommendationLoading) return;
+
+        if (btn.classList.contains('is-done')) {
+            setAiRecommendButtonState('default');
+            return;
+        }
+
+        isAiRecommendationLoading = true;
+        setAiRecommendButtonState('loading');
+
+        try {
+            const res = await fetch(BACKEND_BASE + '/api/recommend-channels', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(getStep1RecommendationData())
+            });
+
+            if (!res.ok) throw new Error('Recommendation request failed');
+            const data = await res.json();
+            await applyRecommendedChannels(data.channels || []);
+            isAiRecommendationLoading = false;
+            setAiRecommendButtonState('done');
+        } catch (err) {
+            console.error('[ai-recommend]', err);
+            isAiRecommendationLoading = false;
+            setAiRecommendButtonState('error');
+            setTimeout(() => {
+                if (!btn.classList.contains('is-done')) setAiRecommendButtonState('default');
+            }, 3000);
+        }
+    });
 }
 
 // ======================== FORM STEP FLOW ========================
@@ -5673,7 +6207,7 @@ function initFormSteps() {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); decorateChips('platformChips', PLATFORM_ICON_MAP); decorateChips('creativeChips', FORMAT_ICON_MAP); markRecommended(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); decorateChips('platformChips', PLATFORM_ICON_MAP); decorateChips('creativeChips', FORMAT_ICON_MAP); markRecommended(); initChipGroupControls(); initChips(); initAIRecommendations(); syncChipContainerUi('platformChips'); syncChipContainerUi('creativeChips'); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
