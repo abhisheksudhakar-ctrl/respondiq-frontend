@@ -2369,6 +2369,389 @@
             animation: none;
         }
 
+        #formSection .form-progress {
+            margin: 0 0 24px;
+            padding-top: 2px;
+        }
+
+        #formSection .form-progress-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        #formSection .form-progress-eyebrow {
+            color: var(--ink-3);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        #formSection .form-progress-counter {
+            color: var(--ink-3);
+            font-size: 11px;
+            letter-spacing: .04em;
+        }
+
+        #formSection .form-progress-bars {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #formSection .form-progress-bar {
+            flex: 1;
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(26,24,20,.12);
+            transition: background .4s;
+        }
+
+        #formSection .form-progress-bar.is-filled {
+            background: var(--orange);
+        }
+
+        #formSection .form-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+
+        #formSection .form-progress-label {
+            color: var(--ink-4);
+            font-weight: 400;
+            transition: color .3s ease, font-weight .3s ease;
+        }
+
+        #formSection .form-progress-label.is-current {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        #formSection .form-progress-label.is-past {
+            color: var(--ink-2);
+            font-weight: 400;
+        }
+
+        #formSection .step-viewport {
+            position: relative;
+            min-height: 500px;
+        }
+
+        #formSection .step-pane {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0;
+            transform: translateX(40px);
+            pointer-events: none;
+            transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1);
+        }
+
+        #formSection .step-pane.is-active {
+            position: relative;
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        #formSection .step-pane.is-past {
+            transform: translateX(-40px);
+        }
+
+        #formSection .step-header {
+            margin: 0 0 -2px;
+        }
+
+        #formSection .step-header h1 {
+            margin: 0 0 6px;
+            color: var(--ink);
+            font-size: clamp(24px, 3vw, 28px);
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 1.15;
+        }
+
+        #formSection .step-header p {
+            margin: 0;
+            color: var(--ink-3);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #formSection .step-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 2px;
+        }
+
+        #formSection .step-nav-three .step-gate-message {
+            flex: 1;
+            text-align: center;
+        }
+
+        #formSection .step-gate-message {
+            flex: 1;
+            color: var(--ink-4);
+            font-size: 12px;
+            line-height: 1.4;
+            transition: color .3s ease;
+        }
+
+        #formSection .step-gate-message.is-ready {
+            color: #085041;
+        }
+
+        #formSection .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 18px;
+            border: .5px solid rgba(26,24,20,.14);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--ink-3);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            transition: background .2s ease, color .2s ease;
+        }
+
+        #formSection .btn-back:hover {
+            background: rgba(26,24,20,.04);
+            color: var(--ink);
+        }
+
+        #formSection .btn-forward {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(26,24,20,.15);
+            color: #fff;
+            cursor: not-allowed;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: .04em;
+            transition: background .3s ease, transform .2s ease, box-shadow .25s ease, opacity .25s ease;
+        }
+
+        #formSection .btn-forward .arrow,
+        #formSection .btn-forward .arrow-left {
+            display: inline-flex;
+            align-items: center;
+            transition: transform .3s ease;
+        }
+
+        #formSection .btn-forward.is-enabled {
+            cursor: pointer;
+            background: linear-gradient(135deg, #FF6B35, #FF8A5C 58%, #0071E3);
+            animation: forwardLift .5s cubic-bezier(.2,.7,.2,1) 1;
+        }
+
+        #formSection .btn-forward.is-enabled .arrow {
+            animation: forwardNudge 1.4s cubic-bezier(.4,0,.2,1) 1;
+        }
+
+        #formSection .btn-forward.is-enabled:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px -16px rgba(255,107,53,.7);
+        }
+
+        #formSection .btn-forward.is-enabled:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        #formSection .btn-forward.is-enabled:active {
+            transform: translateY(0);
+        }
+
+        #formSection .btn-build {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border: 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #FF6B35, #FF8A5C 58%, #0071E3);
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            transition: transform .2s ease, box-shadow .25s ease;
+        }
+
+        #formSection .btn-build .arrow {
+            display: inline-flex;
+            align-items: center;
+            transition: transform .3s ease;
+        }
+
+        #formSection .btn-build .sparkle {
+            display: inline-flex;
+            font-size: 14px;
+        }
+
+        #formSection .btn-build-hint {
+            opacity: .7;
+            font-size: 10px;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        #formSection .btn-build.is-active {
+            animation: buildLift .55s cubic-bezier(.2,.7,.2,1) 1;
+        }
+
+        #formSection .btn-build.is-active .arrow {
+            animation: buildNudge 1.6s cubic-bezier(.4,0,.2,1) 1;
+        }
+
+        #formSection .btn-build.is-active .sparkle {
+            animation: buildSparkle 1.8s cubic-bezier(.4,0,.2,1) 1;
+        }
+
+        #formSection .btn-build:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 32px -16px rgba(255,107,53,.85);
+        }
+
+        #formSection .btn-build:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        #formSection .btn-build:active {
+            transform: translateY(0);
+        }
+
+        #formSection .channel-picker-callout {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #F1F8F7;
+            color: #085041;
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        #formSection .channel-picker-callout .sparkle {
+            flex: none;
+            font-size: 14px;
+        }
+
+        #formSection .channel-picker-link {
+            margin-left: auto;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: #085041;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.35;
+            text-decoration: underline;
+            white-space: nowrap;
+        }
+
+        #formSection .step-detail-card details > summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        #formSection .step-detail-card details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        #formSection .step-detail-card details[open] > summary {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--hair);
+        }
+
+        #formSection .summary-body {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        #formSection .summary-body span:last-child {
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        #formSection .step-detail-content {
+            display: grid;
+            gap: 18px;
+        }
+
+        #formSection .consent-label strong {
+            color: var(--ink);
+            font-weight: 500;
+        }
+
+        #formSection .consent-label a {
+            color: var(--blue);
+            text-decoration: underline;
+        }
+
+        @keyframes forwardLift {
+            0% { transform: translateY(2px); opacity: .85; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes forwardNudge {
+            0%, 100% { transform: translateX(0); }
+            30% { transform: translateX(5px); }
+            60% { transform: translateX(-1px); }
+        }
+
+        @keyframes buildLift {
+            0% { transform: translateY(4px); opacity: .7; }
+            60% { transform: translateY(-1px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes buildNudge {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(7px); }
+            55% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        @keyframes buildSparkle {
+            0% { transform: scale(.7) rotate(-20deg); opacity: .4; }
+            40% { transform: scale(1.15) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
         @keyframes ctaGradientFlow {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -2453,6 +2836,45 @@
 
             #formSection .chip-group-meta {
                 margin-top: 2px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #formSection .step-nav,
+            #formSection .step-nav-three {
+                flex-direction: column-reverse;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            #formSection .step-nav .btn-forward,
+            #formSection .step-nav-three .btn-forward,
+            #formSection .step-nav .btn-build {
+                width: 100%;
+                justify-content: center;
+            }
+
+            #formSection .step-nav-three .btn-back {
+                align-self: flex-start;
+            }
+
+            #formSection .step-nav-three .step-gate-message {
+                text-align: left;
+            }
+
+            #formSection .channel-picker-callout {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            #formSection .channel-picker-link {
+                margin-left: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #formSection .form-progress-label:not(.is-current) {
+                display: none;
             }
         }
 
@@ -3505,20 +3927,35 @@
                     <span class="form-top-note"><span class="dot"></span> Strategic Media Planner</span>
                 </div>
 
-                <div class="form-header">
-                    <div>
-                        <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-by">by</span><span class="brand-mts brand-mts-logo"><img class="responsive-mts-logo" src="https://responsivemts.com/wp-content/uploads/2025/06/ResponsiveMTS-LOGO_2018_Final-06-1024x298.png" alt="Responsive MTS"></span></div>
-                        <h1>Tell us about your plan.</h1>
+                <div class="form-progress" aria-label="Form progress">
+                    <div class="form-progress-head">
+                        <div class="form-progress-eyebrow">The brief</div>
+                        <div class="form-progress-counter" id="stepCounter">Step 1 of 3</div>
                     </div>
-                    <p>Intelligent media strategy generation powered by <span class="engine-mark">AI Engine</span></p>
+                    <div class="form-progress-bars" aria-hidden="true">
+                        <div class="form-progress-bar is-filled" data-bar="1"></div>
+                        <div class="form-progress-bar" data-bar="2"></div>
+                        <div class="form-progress-bar" data-bar="3"></div>
+                    </div>
+                    <div class="form-progress-labels">
+                        <div class="form-progress-label is-current" data-label="1">Brand &amp; Campaign</div>
+                        <div class="form-progress-label" data-label="2">Audience &amp; Channels</div>
+                        <div class="form-progress-label" data-label="3">Context</div>
+                    </div>
                 </div>
 
                 <form id="mediaForm" onsubmit="return false;">
+                    <div class="step-viewport">
+                        <div class="step-pane is-active" data-step="1">
+                            <div class="step-header">
+                                <h1>Start with the brand and the brief.</h1>
+                                <p>Five required fields. Everything else is upside.</p>
+                            </div>
 
                     <div class="form-card fcard client">
                         <div class="fcard-head">
                             <div class="fcard-title"><span class="marker"></span><span class="fcard-num">01</span><span>Client Information</span></div>
-                            <div class="fcard-meta">Brand, website, category, competitors</div>
+                            <div class="fcard-meta">The brand's position in its market</div>
                         </div>
                         <div class="form-grid">
                             <div class="form-group brand-search-group">
@@ -3532,7 +3969,8 @@
                         <div class="form-grid">
                             <div class="form-group"><label class="form-label">Industry *</label>
                                 <select id="industry" class="form-select">
-                                    <option value="__auto__" selected>✦ Auto-detect from URL (recommended)</option>
+                                    <option value="" selected>Select or auto-detect...</option>
+                                    <option value="__auto__">✦ Auto-detect from URL (recommended)</option>
                                     <option>E-commerce (DTC)</option><option>B2B SaaS</option><option>Local Services</option><option>Healthcare</option><option>Financial Services</option><option>Education</option><option>Real Estate</option><option>Technology</option><option>Manufacturing</option><option>Professional Services</option><option>Retail</option><option>Hospitality & Travel</option><option>Automotive</option><option>FMCG / CPG</option><option>Media & Entertainment</option><option>Non-Profit</option><option>B2B Marketing & Ad Operations Outsourcing</option><option>Adtech / Martech</option><option>Programmatic Advertising</option><option>Performance Marketing Agency</option><option>Creative Production</option><option>SaaS</option><option>Marketplace</option><option>DTC E-commerce</option><option>Subscription Services</option><option>Logistics & Supply Chain</option><option>Legal Services</option><option>Insurance</option><option>Fitness & Wellness</option><option>Beauty & Personal Care</option><option>Food & Beverage</option><option>Gaming</option><option>Cryptocurrency / Web3</option><option>Telecommunications</option><option>Energy & Utilities</option><option>Construction</option><option>Other</option>
                                 </select>
                             </div>
@@ -3548,7 +3986,7 @@
                     <div class="form-card fcard campaign">
                         <div class="fcard-head">
                             <div class="fcard-title"><span class="marker"></span><span class="fcard-num">02</span><span>Campaign Details</span></div>
-                            <div class="fcard-meta">Timing, spend, goal, KPI</div>
+                            <div class="fcard-meta">What success looks like and what it costs</div>
                         </div>
                         <div class="form-grid">
                             <div class="form-group"><label class="form-label">Campaign Name</label><input type="text" id="campaignName" class="form-input" placeholder="e.g., Summer 2026 Launch"></div>
@@ -3558,21 +3996,41 @@
                         </div>
                         <div class="form-grid-3">
                             <div class="form-group"><label class="form-label">Monthly Budget *</label>
-                                <select id="budget" class="form-select"><option>$1,000 - $5,000</option><option>$5,000 - $10,000</option><option>$10,000 - $25,000</option><option>$25,000 - $50,000</option><option>$50,000 - $100,000</option><option>$100,000 - $250,000</option><option>$250,000 - $500,000</option><option>$500,000 - $1,000,000</option><option>$1,000,000+</option></select>
+                                <select id="budget" class="form-select"><option value="" selected>Select...</option><option>$1,000 - $5,000</option><option>$5,000 - $10,000</option><option>$10,000 - $25,000</option><option>$25,000 - $50,000</option><option>$50,000 - $100,000</option><option>$100,000 - $250,000</option><option>$250,000 - $500,000</option><option>$500,000 - $1,000,000</option><option>$1,000,000+</option></select>
                             </div>
                             <div class="form-group"><label class="form-label">Campaign Goal *</label>
-                                <select id="goal" class="form-select"><option>Sales & Conversions</option><option>Leads & Signups</option><option>Brand Awareness</option><option>Website Traffic</option><option>App Installs</option><option>Store Visits / Foot Traffic</option><option>Product Launch</option><option>Market Expansion</option><option>Customer Retention</option><option>Event Promotion</option></select>
+                                <select id="goal" class="form-select"><option value="" selected>Select...</option><option>Sales & Conversions</option><option>Leads & Signups</option><option>Brand Awareness</option><option>Website Traffic</option><option>App Installs</option><option>Store Visits / Foot Traffic</option><option>Product Launch</option><option>Market Expansion</option><option>Customer Retention</option><option>Event Promotion</option></select>
                             </div>
                             <div class="form-group"><label class="form-label">Primary KPI *</label>
-                                <select id="kpi" class="form-select"><option>ROAS (Return on Ad Spend)</option><option>CPA (Cost Per Acquisition)</option><option>CPC (Cost Per Click)</option><option>CPM (Cost Per Thousand)</option><option>CTR (Click-Through Rate)</option><option>Conversion Rate</option><option>Brand Lift</option><option>Share of Voice</option><option>Customer Lifetime Value</option><option>Engagement Rate</option></select>
+                                <select id="kpi" class="form-select"><option value="" selected>Select...</option><option>ROAS (Return on Ad Spend)</option><option>CPA (Cost Per Acquisition)</option><option>CPC (Cost Per Click)</option><option>CPM (Cost Per Thousand)</option><option>CTR (Click-Through Rate)</option><option>Conversion Rate</option><option>Brand Lift</option><option>Share of Voice</option><option>Customer Lifetime Value</option><option>Engagement Rate</option></select>
                             </div>
                         </div>
                     </div>
 
+                            <div class="step-nav">
+                                <div class="step-gate-message" id="step1Gate">Brand, industry, budget, goal, and KPI. Then we plan.</div>
+                                <button type="button" class="btn-forward" id="btnNext1" disabled>
+                                    Continue to strategy
+                                    <span class="arrow" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="step-pane" data-step="2">
+                            <div class="step-header">
+                                <h1>The plan needs an audience and a media mix.</h1>
+                                <p>Pick the people. Pick where to reach them. The allocation math comes next.</p>
+                            </div>
+
                     <div class="form-card fcard audience">
                         <div class="fcard-head">
                             <div class="fcard-title"><span class="marker"></span><span class="fcard-num">03</span><span>Audience Targeting</span></div>
-                            <div class="fcard-meta">Location, age, gender, income</div>
+                            <div class="fcard-meta">The people the plan is built to reach</div>
                         </div>
                         <div class="form-grid">
                             <div class="form-group">
@@ -3620,10 +4078,15 @@
                     <div class="form-card fcard channels">
                         <div class="fcard-head">
                             <div class="fcard-title"><span class="marker"></span><span class="fcard-num">04</span><span>Channels &amp; Platforms</span></div>
-                            <div class="fcard-meta">Select all that apply</div>
+                            <div class="fcard-meta">Where the budget will work hardest</div>
                         </div>
                         <div class="form-group full-width">
                             <label class="form-label">Channels &amp; Platforms</label>
+                            <div class="channel-picker-callout">
+                                <span class="sparkle" aria-hidden="true">✦</span>
+                                <span>Sorted by fit for your goal and budget. Top six are highlighted.</span>
+                                <button type="button" class="channel-picker-link" onclick="showAllChannels()">See the full list →</button>
+                            </div>
                             <div class="chip-container" id="platformChips">
                                 <div class="chip-category-label">Search & Shopping</div>
                                 <div class="chip" data-val="Google Ads (Search)">Google Ads (Search)</div>
@@ -3753,19 +4216,60 @@
                         </div>
                     </div>
 
-                    <div class="form-card fcard creative">
-                        <div class="fcard-head">
-                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">05</span><span>Creative &amp; Notes</span></div>
-                            <div class="fcard-meta">Optional context for the strategy</div>
+                            <div class="step-nav step-nav-three">
+                                <button type="button" class="btn-back" id="btnBack2">
+                                    <span class="arrow-left" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                                            <polyline points="12 19 5 12 12 5"></polyline>
+                                        </svg>
+                                    </span>
+                                    Back to the brief
+                                </button>
+                                <div class="step-gate-message" id="step2Gate">One location and one channel, minimum.</div>
+                                <button type="button" class="btn-forward" id="btnNext2" disabled>
+                                    Continue to context
+                                    <span class="arrow" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group full-width"><label class="form-label">Notes &amp; Requirements</label><textarea id="notes" class="form-textarea" placeholder="Past campaign learnings, competitive context, seasonal factors, specific creative requirements, budget constraints..."></textarea></div>
+
+                        <div class="step-pane" data-step="3">
+                            <div class="step-header">
+                                <h1>Last call: anything the strategist should know?</h1>
+                                <p>Optional inputs only. Skip and we build with what we have.</p>
+                            </div>
+
+                    <div class="form-card fcard creative step-detail-card">
+                        <details>
+                            <summary>
+                                <div class="summary-body">
+                                    <span class="fcard-num">05</span>
+                                    <span>Notes for the strategist</span>
+                                </div>
+                                <span class="fcard-meta">Click to add context</span>
+                            </summary>
+                            <div class="step-detail-content">
+                                <div class="form-group full-width"><label class="form-label">Notes &amp; Requirements</label><textarea id="notes" class="form-textarea" placeholder="Past campaign learnings, competitive context, seasonal factors, specific creative requirements, budget constraints..."></textarea></div>
+                            </div>
+                        </details>
                     </div>
 
-                    <div class="form-card fcard optional">
-                        <div class="fcard-head">
-                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">06</span><span>Optional Context</span></div>
-                            <div class="fcard-meta">Improves plan accuracy</div>
-                        </div>
+                    <div class="form-card fcard optional step-detail-card">
+                        <details>
+                            <summary>
+                                <div class="summary-body">
+                                    <span class="fcard-num">06</span>
+                                    <span>Sharpen the math</span>
+                                </div>
+                                <span class="fcard-meta">Past performance, sales cycle, traffic, CRM</span>
+                            </summary>
+                            <div class="step-detail-content">
                         <div class="form-grid">
                             <div class="form-group"><label class="form-label">Past Campaign Performance</label>
                                 <select id="pastPerformance" class="form-select"><option value="">Not sure / First campaign</option><option value="CPA under $20">Avg CPA under $20</option><option value="CPA $20-$50">Avg CPA $20-$50</option><option value="CPA $50-$100">Avg CPA $50-$100</option><option value="CPA over $100">Avg CPA over $100</option><option value="ROAS 2:1-4:1">ROAS 2:1 – 4:1</option><option value="ROAS 4:1-8:1">ROAS 4:1 – 8:1</option><option value="ROAS 8:1+">ROAS 8:1+</option></select>
@@ -3795,33 +4299,56 @@
                                 <div class="chip" data-val="No assets — need everything">No assets yet</div>
                             </div>
                         </div>
+                            </div>
+                        </details>
                     </div>
 
                     <div class="form-card fcard generate">
                         <div class="fcard-head">
-                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">07</span><span>Consent, Generate</span></div>
-                            <div class="fcard-meta">Required before generation</div>
+                            <div class="fcard-title"><span class="marker"></span><span class="fcard-num">07</span><span>Consent</span></div>
+                            <div class="fcard-meta">The last check before the plan runs</div>
                         </div>
                         <div class="consent-block">
                             <div class="consent-row">
                                 <input type="checkbox" id="consentRequired" class="consent-checkbox">
                                 <label for="consentRequired" class="consent-label">
-                                    <strong style="color:#0f172a;">I agree to the Terms of Use and Privacy Policy *</strong><br>
-                                    I confirm that the information I've provided is accurate and I consent to Responsive Media Tech Services storing and processing my data to generate and deliver this media plan. I understand my data is handled in accordance with the <a href="https://responsivemts.com/privacy-policy" target="_blank">Privacy Policy</a>.
+                                    <strong>I agree to the Terms of Use and Privacy Policy *</strong><br>
+                                    The data you've entered is processed by Responsive MTS to build your plan. Full details in the <a href="https://responsivemts.com/privacy-policy" target="_blank">Privacy Policy</a>.
                                 </label>
                             </div>
                             <div class="consent-row">
                                 <input type="checkbox" id="consentMarketing" class="consent-checkbox">
                                 <label for="consentMarketing" class="consent-label">
-                                    I agree to receive marketing communications from Responsive Media Tech Services, including newsletters, product updates, industry insights, and promotional offers. You can unsubscribe at any time.
+                                    Send me product updates and industry insights from Responsive MTS. Unsubscribe anytime.
                                 </label>
                             </div>
                             <div id="consentError" class="consent-required-note">Please accept the Terms of Use and Privacy Policy to continue.</div>
                         </div>
                     </div>
 
-                    <div class="generate-action">
-                        <button type="button" onclick="generateReport()" id="btnSubmit" class="btn-generate">✦ Generate Media Plan With RespondIQ</button>
+                            <div class="step-nav">
+                                <button type="button" class="btn-back" id="btnBack3">
+                                    <span class="arrow-left" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                                            <polyline points="12 19 5 12 12 5"></polyline>
+                                        </svg>
+                                    </span>
+                                    Back to strategy
+                                </button>
+                                <button type="button" onclick="generateReport()" id="btnBuild" class="btn-build">
+                                    <span class="sparkle" aria-hidden="true">✦</span>
+                                    <span>Build the plan</span>
+                                    <span class="arrow" aria-hidden="true">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </span>
+                                    <span class="btn-build-hint">~90s</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -4205,7 +4732,7 @@ function initLocationDropdown() {
     const chipsWrap = document.getElementById('locChipsWrap');
     const counter = document.getElementById('locCounter');
     const MAX_LOCATIONS = 3;
-    let selectedLocations = [];
+    let selectedLocations = ['United States'];
 
     function updateCounter() {
         counter.textContent = '(' + selectedLocations.length + '/' + MAX_LOCATIONS + ' selected)';
@@ -4232,7 +4759,13 @@ function initLocationDropdown() {
             chipsWrap.appendChild(chip);
         });
         chipsWrap.querySelectorAll('.loc-chip-remove').forEach(btn => {
-            btn.onclick = (e) => { e.stopPropagation(); selectedLocations.splice(parseInt(btn.dataset.idx), 1); renderChips(); updateCounter(); };
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                selectedLocations.splice(parseInt(btn.dataset.idx), 1);
+                renderChips();
+                updateCounter();
+                if (typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
+            };
         });
         updateCounter();
     }
@@ -4254,6 +4787,7 @@ function initLocationDropdown() {
                     input.value = '';
                     renderChips();
                     render('');
+                    if (typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
                     if (selectedLocations.length >= MAX_LOCATIONS) dd.classList.remove('open');
                 };
                 dd.appendChild(opt);
@@ -4271,14 +4805,15 @@ function initLocationDropdown() {
             input.value = '';
             renderChips();
             render('');
+            if (typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
         }
     });
     document.addEventListener('click', (e) => { if (!e.target.closest('.loc-search-wrap') && !e.target.closest('.loc-chips-wrap')) dd.classList.remove('open'); });
+    renderChips();
     render('');
-    updateCounter();
 
     // Expose getter for form data
-    window.getSelectedLocations = () => selectedLocations.length ? selectedLocations : ['United States'];
+    window.getSelectedLocations = () => selectedLocations.slice();
 }
 
 // ======================== AGE RANGE SLIDER ========================
@@ -4418,16 +4953,22 @@ function initGoalKpiFilter() {
 
     function updateKpis() {
         const goal = goalSelect.value;
-        const kpis = GOAL_KPI_MAP[goal] || GOAL_KPI_MAP['Sales & Conversions'];
         const prevVal = kpiSelect.value;
-        kpiSelect.innerHTML = '';
+        kpiSelect.innerHTML = '<option value="">Select...</option>';
+        if (!goal) {
+            kpiSelect.value = '';
+            if (typeof evaluateStep1Gate === 'function') evaluateStep1Gate();
+            return;
+        }
+        const kpis = GOAL_KPI_MAP[goal] || GOAL_KPI_MAP['Sales & Conversions'];
         kpis.forEach(k => {
             const opt = document.createElement('option');
             opt.value = k; opt.textContent = k;
             kpiSelect.appendChild(opt);
         });
         // Try to preserve previous selection if still relevant
-        if (kpis.includes(prevVal)) kpiSelect.value = prevVal;
+        kpiSelect.value = kpis.includes(prevVal) ? prevVal : '';
+        if (typeof evaluateStep1Gate === 'function') evaluateStep1Gate();
     }
 
     goalSelect.addEventListener('change', updateKpis);
@@ -4493,6 +5034,7 @@ function initChips() {
         chip.addEventListener('click', () => {
             chip.classList.toggle('selected');
             updateChipGroupCount(chip.closest('.chip-group'));
+            if (chip.closest('#platformChips') && typeof evaluateStep2Gate === 'function') evaluateStep2Gate();
         });
     });
 }
@@ -4500,8 +5042,157 @@ function getSelectedChips(containerId) {
     return Array.from(document.querySelectorAll(`#${containerId} .chip.selected`)).map(c => c.dataset.val);
 }
 
+// ======================== FORM STEP FLOW ========================
+let STEP = 1;
+let stage1Ready = false;
+let step1Touched = false;
+
+function showAllChannels() {
+    // No-op for Phase 1. Full sort logic ships in a later pass.
+}
+
+function replayAnim(el, className) {
+    if (!el) return;
+    el.classList.remove(className);
+    void el.offsetWidth;
+    el.classList.add(className);
+}
+
+function evaluateStep1Gate() {
+    const btn = document.getElementById('btnNext1');
+    const gate = document.getElementById('step1Gate');
+    const fields = [
+        { id: 'brandName', label: 'brand', value: () => document.getElementById('brandName')?.value.trim() },
+        { id: 'industry', label: 'industry', value: () => document.getElementById('industry')?.value },
+        { id: 'budget', label: 'budget', value: () => document.getElementById('budget')?.value },
+        { id: 'goal', label: 'goal', value: () => document.getElementById('goal')?.value },
+        { id: 'kpi', label: 'KPI', value: () => document.getElementById('kpi')?.value }
+    ];
+    const missing = fields.filter(field => !field.value()).map(field => field.label);
+    const ready = missing.length === 0;
+
+    if (btn) {
+        btn.disabled = !ready;
+        if (ready) {
+            if (!stage1Ready) replayAnim(btn, 'is-enabled');
+            else btn.classList.add('is-enabled');
+        } else {
+            btn.classList.remove('is-enabled');
+        }
+    }
+
+    if (gate) {
+        if (!step1Touched && !ready) {
+            gate.textContent = 'Brand, industry, budget, goal, and KPI. Then we plan.';
+        } else {
+            gate.textContent = ready ? 'Ready when you are.' : 'Missing: ' + missing.join(', ') + '.';
+        }
+        gate.classList.toggle('is-ready', ready);
+    }
+
+    stage1Ready = ready;
+    return ready;
+}
+
+function evaluateStep2Gate() {
+    const btn = document.getElementById('btnNext2');
+    const gate = document.getElementById('step2Gate');
+    const locations = window.getSelectedLocations ? window.getSelectedLocations().filter(Boolean).length : 0;
+    const platforms = document.querySelectorAll('#platformChips .chip.selected').length;
+    const ready = locations >= 1 && platforms >= 1;
+
+    if (btn) {
+        btn.disabled = !ready;
+        btn.classList.toggle('is-enabled', ready);
+    }
+    if (gate) {
+        gate.textContent = 'One location and one channel, minimum.';
+    }
+    return ready;
+}
+
+function evaluateStep3Gate() {
+    const consent = document.getElementById('consentRequired');
+    const btn = document.getElementById('btnBuild');
+    const error = document.getElementById('consentError');
+    const ready = Boolean(consent && consent.checked);
+    if (btn) btn.removeAttribute('aria-disabled');
+    if (ready && error) error.style.display = 'none';
+    return ready;
+}
+
+function showStep(n, options = {}) {
+    const next = Math.max(1, Math.min(3, Number(n) || 1));
+    STEP = next;
+
+    document.querySelectorAll('#formSection .step-pane').forEach(pane => {
+        const paneStep = Number(pane.dataset.step);
+        pane.classList.toggle('is-active', paneStep === STEP);
+        pane.classList.toggle('is-past', paneStep < STEP);
+    });
+
+    document.querySelectorAll('#formSection .form-progress-bar').forEach(bar => {
+        bar.classList.toggle('is-filled', Number(bar.dataset.bar) <= STEP);
+    });
+
+    document.querySelectorAll('#formSection .form-progress-label').forEach(label => {
+        const labelStep = Number(label.dataset.label);
+        label.classList.toggle('is-current', labelStep === STEP);
+        label.classList.toggle('is-past', labelStep < STEP);
+    });
+
+    const counter = document.getElementById('stepCounter');
+    if (counter) counter.textContent = 'Step ' + STEP + ' of 3';
+
+    evaluateStep1Gate();
+    evaluateStep2Gate();
+    evaluateStep3Gate();
+
+    const btnNext2 = document.getElementById('btnNext2');
+    const btnBuild = document.getElementById('btnBuild');
+    if (STEP === 2 && btnNext2 && !btnNext2.disabled) replayAnim(btnNext2, 'is-enabled');
+    if (STEP === 3 && btnBuild) replayAnim(btnBuild, 'is-active');
+
+    if (!options.skipScroll) {
+        const form = document.getElementById('formSection');
+        if (form) {
+            const formTop = form.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: Math.max(0, formTop), behavior: 'smooth' });
+        }
+    }
+}
+
+function initFormSteps() {
+    ['brandName', 'industry', 'budget', 'goal', 'kpi'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        ['input', 'change'].forEach(eventName => {
+            el.addEventListener(eventName, () => {
+                step1Touched = true;
+                evaluateStep1Gate();
+            });
+        });
+    });
+
+    const btnNext1 = document.getElementById('btnNext1');
+    const btnNext2 = document.getElementById('btnNext2');
+    const btnBack2 = document.getElementById('btnBack2');
+    const btnBack3 = document.getElementById('btnBack3');
+    const consent = document.getElementById('consentRequired');
+    const btnBuild = document.getElementById('btnBuild');
+
+    if (btnNext1) btnNext1.addEventListener('click', () => { if (evaluateStep1Gate()) showStep(2); });
+    if (btnNext2) btnNext2.addEventListener('click', () => { if (evaluateStep2Gate()) showStep(3); });
+    if (btnBack2) btnBack2.addEventListener('click', () => showStep(1));
+    if (btnBack3) btnBack3.addEventListener('click', () => showStep(2));
+    if (consent) consent.addEventListener('change', evaluateStep3Gate);
+    if (btnBuild) btnBuild.addEventListener('click', evaluateStep3Gate);
+
+    showStep(1, { skipScroll: true });
+}
+
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); });
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); initChips(); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
@@ -4584,6 +5275,10 @@ function selectBrandSuggestion(brand) {
     if (websiteInput) websiteInput.value = normalizeWebsiteForBrand(brand.domain);
     hideBrandSuggestions();
     renderSelectedBrandPreview(brand);
+    if (typeof evaluateStep1Gate === 'function') {
+        step1Touched = true;
+        evaluateStep1Gate();
+    }
 }
 
 function renderBrandSuggestions(results, message) {
