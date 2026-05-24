@@ -792,22 +792,23 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             margin-top: 6px;
             color: var(--navy);
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 700;
             letter-spacing: 0.02em;
             text-transform: none;
             white-space: nowrap;
-            line-height: 1;
+            line-height: 1.2;
         }
         .brand-logo.brand-stack .brand-attribution-logo {
-            display: inline-block;
-            height: 19px;
-            max-width: 160px;
-            vertical-align: middle;
+            display: block;
+            height: 18px;
+            max-width: 156px;
+            align-self: center;
             object-fit: contain;
+            transform: translateY(-1px);
         }
         .brand-logo.brand-stack .brand-mts-logo {
             display: inline-flex;
@@ -1303,23 +1304,25 @@
         #formSection .form-brand-by {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin-top: 4px;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--ink-2);
             letter-spacing: .02em;
             text-transform: none;
             white-space: nowrap;
+            line-height: 1.2;
         }
 
         #formSection .form-brand-by .responsive-mts-logo {
-            display: inline-block;
-            height: 19px;
-            max-width: 160px;
+            display: block;
+            height: 18px;
+            max-width: 156px;
             filter: saturate(.88) contrast(1.02);
             opacity: .96;
-            vertical-align: middle;
+            align-self: center;
+            transform: translateY(-1px);
         }
 
         #formSection .form-top-note {
@@ -4753,7 +4756,7 @@
                         <div class="pt-rule"></div>
                         <div class="pt-eyebrow">Media Plan</div>
                         <div class="pt-title" id="printCampaign">Campaign</div>
-                        <div class="pt-client" id="printClient">Prepared for —</div>
+                        <div class="pt-client" id="printClient">Prepared for -</div>
                         <div class="pt-prepared" id="printPreparedDate"></div>
                     </div>
                     <div class="pt-bottom">
@@ -4806,7 +4809,7 @@
                     <div class="pt-body">
                         <div class="pt-rule"></div>
                         <div class="pt-title">Thank You</div>
-                        <div class="pt-campaign" id="printClient2">Prepared for —</div>
+                        <div class="pt-campaign" id="printClient2">Prepared for -</div>
                         <div class="pt-cta-box">
                             <div class="pt-cta-title">Need deeper strategy or full-service execution?</div>
                             <div class="pt-cta-email"><a href="mailto:info@responsivemts.com" style="color:inherit;text-decoration:none;">info@responsivemts.com</a></div>
@@ -6039,7 +6042,7 @@ function getSelectedChips(containerId) {
 
 function getStep1RecommendationData() {
     return {
-        brandName: document.getElementById('brandName')?.value.trim() || '',
+        brandName: smartBrandDisplayName(document.getElementById('brandName')?.value.trim() || ''),
         website: document.getElementById('website')?.value.trim() || '',
         industry: document.getElementById('industry')?.value || '',
         companySize: document.getElementById('companySize')?.value || '',
@@ -6506,7 +6509,7 @@ function getFormData() {
     return {
         // Identity is pulled from the session on the backend; no client fields needed.
         // Client info
-        brandName: document.getElementById('brandName').value.trim() || 'Brand',
+        brandName: smartBrandDisplayName(document.getElementById('brandName').value.trim()) || 'Brand',
         website: document.getElementById('website').value.trim() || 'N/A',
         brandDomain: window.SELECTED_BRAND?.domain || '',
         brandSource: window.SELECTED_BRAND?.source || '',
@@ -7491,34 +7494,7 @@ function sanitizeJSONControlChars(text) {
 //    Runs recursively so it catches nested objects and arrays.
 function cleanPlanText(obj) {
     if (typeof obj === 'string') {
-        return obj
-            // Em dash (—) and en dash (–) → plain hyphen-space
-            .replace(/\u2014/g, ' - ')   // em dash
-            .replace(/\u2013/g, ' - ')   // en dash
-            // Approximate / tilde symbols
-            .replace(/\u2248/g, '')      // ≈  almost equal to
-            .replace(/\u007E/g, '')      // ~  tilde (standalone)
-            .replace(/~(\d)/g, '$1')     // ~2.4M → 2.4M  (tilde before number)
-            // Smart / curly quotes → straight quotes
-            .replace(/[\u2018\u2019]/g, "'")  // ' '
-            .replace(/[\u201C\u201D]/g, '"')  // " "
-            // Ellipsis character → three dots
-            .replace(/\u2026/g, '...')
-            // Bullet / middle dot
-            .replace(/\u2022/g, '-')
-            .replace(/\u00B7/g, '-')
-            // Normalize common HTML entities before the render sanitizer escapes output
-            .replace(/&amp;/g, '&')
-            .replace(/&quot;/g, '"')
-            .replace(/&#39;/g, "'")
-            // Remove any remaining non-ASCII control characters
-            .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
-            // Fix occasional model spacing collapses in executive-summary copy
-            .replace(/(\$[\d,]+(?:\.\d+)?)(?=(?![KMB]\b)[A-Za-z])/gi, '$1 ')
-            .replace(/(\$[\d,]+(?:\.\d+)?)\s*totalinvestment/gi, '$1 total investment')
-            .replace(/(\$[\d,]+(?:\.\d+)?)\s*total\s+investment/gi, '$1 total investment')
-            .replace(/\btotalinvestment\b/gi, 'total investment')
-            .trim();
+        return normalizeReportTextString(obj);
     }
     if (Array.isArray(obj)) {
         return obj.map(cleanPlanText);
@@ -7603,7 +7579,7 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
 
         // Skip contingency/testing lines
         if (bb.item.toLowerCase().includes('contingency') || bb.item.toLowerCase().includes('testing') || pct === 0) {
-            return { ...bb, impressions: '—', cpm: '—' };
+            return { ...bb, impressions: '-', cpm: '-' };
         }
 
         // Calculate reach deterministically
@@ -7681,7 +7657,7 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
         // Build a map of actual rates from the budget breakdown (keyed by channel fragments)
         const channelRateMap = [];
         plan.budget_breakdown.forEach(bb => {
-            if (!bb.cpm || bb.cpm === '—') return;
+            if (!bb.cpm || bb.cpm === '-' || bb.cpm === '—') return;
             const m = String(bb.cpm).match(/\$?([\d.]+)\s*(CPC|CPM|CPA)/i);
             if (m) {
                 channelRateMap.push({
@@ -8283,6 +8259,55 @@ async function generateMockPlan(data) {
     };
 }
 
+function normalizeReportTextString(value) {
+    return String(value == null ? '' : value)
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/[\u2013\u2014]/g, ' - ')
+        .replace(/\u2026/g, '...')
+        .replace(/\u2248/g, '')
+        .replace(/~(?=\d)/g, '')
+        .replace(/\u007E/g, '')
+        .replace(/[\u2022\u00B7]/g, '-')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/(\$[\d,]+(?:\.\d+)?)(?=(?![KMB]\b)[A-Za-z])/gi, '$1 ')
+        .replace(/(\d+(?:\.\d+)?%)(?=[A-Za-z])/g, '$1 ')
+        .replace(/(\d+(?:\.\d+)?[KMB])(?=[A-Za-z])/gi, '$1 ')
+        .replace(/(\d+(?:\.\d+)?:\d+(?:\.\d+)?)(?=[A-Za-z])/g, '$1 ')
+        .replace(/(\$[\d,]+(?:\.\d+)?)\s*totalinvestment/gi, '$1 total investment')
+        .replace(/(\$[\d,]+(?:\.\d+)?)\s*total\s+investment/gi, '$1 total investment')
+        .replace(/\btotalinvestment\b/gi, 'total investment')
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+        .replace(/\s+-\s+/g, ' - ')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim();
+}
+
+function smartBrandDisplayName(value) {
+    const text = normalizeReportTextString(value);
+    if (!text || text !== text.toLowerCase() || !/[a-z]/.test(text)) return text;
+    return text.replace(/(^|[\s([{'"-])([a-z])/g, (_, prefix, letter) => prefix + letter.toUpperCase());
+}
+
+function normalizeBrandCasingInReport(value, sourceBrand, displayBrand) {
+    const source = normalizeReportTextString(sourceBrand);
+    const display = normalizeReportTextString(displayBrand);
+    if (!source || !display || source === display || source !== source.toLowerCase()) return value;
+    const escapedSource = source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const brandRegex = new RegExp('(^|[^A-Za-z0-9])(' + escapedSource + ')(?=$|[^A-Za-z0-9])', 'g');
+    const normalizeString = text => normalizeReportTextString(text).replace(brandRegex, (_, prefix) => prefix + display);
+    if (typeof value === 'string') return normalizeString(value);
+    if (Array.isArray(value)) return value.map(item => normalizeBrandCasingInReport(item, source, display));
+    if (value && typeof value === 'object') {
+        const out = {};
+        for (const key of Object.keys(value)) out[key] = normalizeBrandCasingInReport(value[key], source, display);
+        return out;
+    }
+    return value;
+}
+
 function escapeHtml(value) {
     return String(value == null ? '' : value)
         .replace(/&/g, '&amp;')
@@ -8301,7 +8326,7 @@ function escapeCssContent(value) {
 }
 
 function sanitizeForRender(value) {
-    if (typeof value === 'string') return escapeHtml(value);
+    if (typeof value === 'string') return escapeHtml(normalizeReportTextString(value));
     if (Array.isArray(value)) return value.map(sanitizeForRender);
     if (value && typeof value === 'object') {
         const out = {};
@@ -8327,7 +8352,7 @@ function decodeHtmlForMatch(value) {
 }
 
 function normalizeText(value, fallback) {
-    const text = String(value == null ? '' : value).trim();
+    const text = normalizeReportTextString(value);
     return text || fallback;
 }
 
@@ -8622,7 +8647,8 @@ function normalizePlanForRender(plan, data) {
 
 // ======================== RENDER HTML TEMPLATE ========================
 function renderTemplate(data, plan) {
-    const rawData = data || {};
+    const rawData = { ...(data || {}), brandName: smartBrandDisplayName(data && data.brandName) || 'Brand' };
+    plan = normalizeBrandCasingInReport(plan, data && data.brandName, rawData.brandName);
     plan = normalizePlanForRender(constrainPlanToUserSelections(plan, rawData), rawData);
     plan = constrainPlanToUserSelections(plan, rawData);
     const rawPlan = plan;
@@ -8643,7 +8669,7 @@ function renderTemplate(data, plan) {
     const planningSignals = sanitizeForRender(rawPlanningSignals || {});
     const sourceTag = plan._source === 'ai'
         ? '<span style="display:inline-block;background:rgba(52,199,89,0.1);color:#1f9d4d;border:1px solid rgba(52,199,89,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">✦ STRATEGY INTELLIGENCE</span>'
-        : '<span style="display:inline-block;background:rgba(255,107,53,0.1);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">⚠ SAMPLE DATA — Backend not connected</span>';
+        : '<span style="display:inline-block;background:rgba(255,107,53,0.1);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:0.5px;margin-left:auto;">⚠ SAMPLE DATA - Backend not connected</span>';
 
     // Build social media presence bar (detected from website scrape)
     let techStackHtml = '';
@@ -8986,7 +9012,7 @@ function renderTemplate(data, plan) {
         // don't accidentally match 'at' and turn a red flag green.
         if (s.includes('✅') || /\b(below|at|good|beat|beating)\b/i.test(s)) return `<span class="bench-pill bench-pill-good">${stripped || 'At/Below'}</span>`;
         if (s.includes('⚠')  || /\b(above|over|worse|exceed|exceeds)\b/i.test(s)) return `<span class="bench-pill bench-pill-over">${stripped || 'Above avg'}</span>`;
-        return `<span class="bench-pill bench-pill-neutral">${s || '—'}</span>`;
+        return `<span class="bench-pill bench-pill-neutral">${s || '-'}</span>`;
     }
 
     const el = document.getElementById('mediaplan-content');
@@ -9022,7 +9048,7 @@ function renderTemplate(data, plan) {
     </div>
     <div class="section" data-group="strategy"><div class="section-number">Section 05</div><div class="section-title">${M.strategy}Media Strategy</div><p class="content-text">${plan.media_strategy}</p></div>
     <div class="section channel-mix-section" data-group="tactics"><div class="section-number">Section 06</div><div class="section-title">${M.tactics}Media Channel Mix & Tactics</div>
-        ${plan.channels.map(ch=>`<div class="subsection"><div class="subsection-title">${ch.name} — ${ch.budget_pct} of Budget</div><p class="content-text" style="margin-bottom:12px;"><em>${ch.rationale}</em></p><ul class="strategy-list">${ch.tactics.map(t=>`<li>${t}</li>`).join('')}</ul></div>`).join('')}
+        ${plan.channels.map(ch=>`<div class="subsection"><div class="subsection-title">${ch.name} - ${ch.budget_pct} of Budget</div><p class="content-text" style="margin-bottom:12px;"><em>${ch.rationale}</em></p><ul class="strategy-list">${ch.tactics.map(t=>`<li>${t}</li>`).join('')}</ul></div>`).join('')}
     </div>
     <div class="section flight-plan-section" data-group="tactics"><div class="section-number">Section 07</div><div class="section-title">${M.tactics}Flight Plan & Calendar</div>
         ${(function() {
@@ -9054,7 +9080,7 @@ function renderTemplate(data, plan) {
 
             // Helper: wrap cell text in phase pills (Upgrade 3)
             function wrapPhase(cell) {
-                if (!cell || cell === '—') return '—';
+                if (!cell || cell === '—' || cell === '-') return '-';
                 const lower = cell.toLowerCase();
                 if (lower.includes('launch')) return '<div class="phase-launch">' + cell + '</div>';
                 if (lower.includes('optimiz')) return '<div class="phase-optimize">' + cell + '</div>';
@@ -9068,7 +9094,7 @@ function renderTemplate(data, plan) {
                 headers.map(h => '<th>' + h + '</th>').join('') +
                 '</tr></thead><tbody>' +
                 plan.flight_plan.map(fp => '<tr><td>' + fp.channel + '</td>' +
-                    keys.map(k => '<td>' + wrapPhase(fp[k] || '—') + '</td>').join('') +
+                    keys.map(k => '<td>' + wrapPhase(fp[k] || '-') + '</td>').join('') +
                 '</tr>').join('') +
                 '</tbody></table>';
         })()}
@@ -9083,7 +9109,7 @@ function renderTemplate(data, plan) {
             const budgetMapForDollar = {'$1,000 - $5,000':3000,'$5,000 - $10,000':7500,'$10,000 - $25,000':17500,'$25,000 - $50,000':37500,'$50,000 - $100,000':75000,'$100,000 - $250,000':175000,'$250,000 - $500,000':375000,'$500,000 - $1,000,000':750000,'$1,000,000+':1500000};
             const durationMo = {'4 Weeks':1,'8 Weeks':2,'12 Weeks (Quarter)':3,'6 Months':6,'12 Months (Annual)':12};
             const totalB = (budgetMapForDollar[data.budget]||17500) * (durationMo[data.campaignDuration]||3);
-            const dollarAmt = pctNum > 0 ? '$' + Math.round(totalB * pctNum / 100).toLocaleString() : '—';
+            const dollarAmt = pctNum > 0 ? '$' + Math.round(totalB * pctNum / 100).toLocaleString() : '-';
             return `<tr><td>${bb.item}</td><td>${bb.pct}</td><td>${dollarAmt}</td><td>${bb.impressions}</td><td>${cpmVal}</td></tr>`;
         }).join('')}</tbody></table>
     </div>
@@ -9222,7 +9248,8 @@ function renderBudgetChart(plan) {
 // a second Chart.js instance for the snapshotBudgetChart canvas.
 function renderSnapshotPage(plan, data) {
     if (!plan || !data) return;
-    const rawData = data || {};
+    const rawData = { ...(data || {}), brandName: smartBrandDisplayName(data && data.brandName) || 'Brand' };
+    plan = normalizeBrandCasingInReport(plan, data && data.brandName, rawData.brandName);
     plan = normalizePlanForRender(plan, rawData);
     const rawPlan = plan;
     data = sanitizeForRender(rawData);
@@ -9230,20 +9257,20 @@ function renderSnapshotPage(plan, data) {
 
     const psTitle = document.getElementById('psTitle');
     const psSubtitle = document.getElementById('psSubtitle');
-    if (psTitle) psTitle.textContent = (rawData.campaignName || 'Media Plan') + ' — At a Glance';
+    if (psTitle) psTitle.textContent = (rawData.campaignName || 'Media Plan') + ' - At a Glance';
     if (psSubtitle) psSubtitle.textContent = (rawData.brandName || '') + ' · ' + (rawData.campaignDuration || '') + ' · ' + (rawData.budget || '');
 
     // Hero cards (same 4 numerals as Section 1 hero row)
     const heroRow = document.getElementById('psHeroRow');
     if (heroRow) {
         const isSales = ['Sales & Conversions','Customer Retention'].includes(rawData.goal);
-        const thirdVal = isSales ? (plan.target_roas || '—') : ((data.kpi || '').split('(')[0].trim() || '—');
+        const thirdVal = isSales ? (plan.target_roas || '-') : ((data.kpi || '').split('(')[0].trim() || '-');
         const thirdLbl = isSales ? 'Target ROAS' : 'Primary KPI';
         heroRow.innerHTML = ''
-            + '<div class="ps-hero-card h1"><div class="ps-num">' + (plan.total_investment || '—') + '</div><div class="ps-lbl">Total Investment</div></div>'
-            + '<div class="ps-hero-card h2"><div class="ps-num">' + (plan.projected_impressions || '—') + '</div><div class="ps-lbl">Projected Impressions</div></div>'
+            + '<div class="ps-hero-card h1"><div class="ps-num">' + (plan.total_investment || '-') + '</div><div class="ps-lbl">Total Investment</div></div>'
+            + '<div class="ps-hero-card h2"><div class="ps-num">' + (plan.projected_impressions || '-') + '</div><div class="ps-lbl">Projected Impressions</div></div>'
             + '<div class="ps-hero-card h3"><div class="ps-num">' + thirdVal + '</div><div class="ps-lbl">' + thirdLbl + '</div></div>'
-            + '<div class="ps-hero-card h4"><div class="ps-num">' + (plan.target_reach_pct || '—') + '</div><div class="ps-lbl">Target Reach</div></div>';
+            + '<div class="ps-hero-card h4"><div class="ps-num">' + (plan.target_reach_pct || '-') + '</div><div class="ps-lbl">Target Reach</div></div>';
     }
 
     // Audience summary
@@ -9251,9 +9278,9 @@ function renderSnapshotPage(plan, data) {
     if (psAud && plan.target_audience) {
         const ta = plan.target_audience;
         psAud.innerHTML = ''
-            + '<div class="ps-audience-row"><strong>Demographics</strong> · ' + (ta.demographics || '—') + '</div>'
-            + '<div class="ps-audience-row"><strong>Geographic</strong> · ' + (ta.geographic || '—') + '</div>'
-            + '<div class="ps-audience-row"><strong>Behavioral</strong> · ' + (ta.behavioral || '—') + '</div>';
+            + '<div class="ps-audience-row"><strong>Demographics</strong> · ' + (ta.demographics || '-') + '</div>'
+            + '<div class="ps-audience-row"><strong>Geographic</strong> · ' + (ta.geographic || '-') + '</div>'
+            + '<div class="ps-audience-row"><strong>Behavioral</strong> · ' + (ta.behavioral || '-') + '</div>';
     }
 
     // Second donut instance on the snapshot canvas
