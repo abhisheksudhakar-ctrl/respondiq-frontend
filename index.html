@@ -800,15 +800,14 @@
             letter-spacing: 0.02em;
             text-transform: none;
             white-space: nowrap;
-            line-height: 1.2;
+            line-height: 1;
         }
         .brand-logo.brand-stack .brand-attribution-logo {
             display: block;
-            height: 18px;
-            max-width: 156px;
+            height: 1.4em;
+            max-width: 160px;
             align-self: center;
             object-fit: contain;
-            transform: translateY(-1px);
         }
         .brand-logo.brand-stack .brand-mts-logo {
             display: inline-flex;
@@ -882,6 +881,9 @@
         .form-group.full-width { grid-column: 1 / -1; }
         .form-label { font-size: 11.5px; font-weight: 600; color: var(--text-2); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
         .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+        .char-counter { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; display: block; }
+        .char-counter.near-limit { color: #c97a13; }
+        .char-counter.at-limit { color: #c0392b; font-weight: 600; }
 
         .form-input, .form-select, .form-textarea {
             width: 100%; padding: 13px 16px; background: var(--surface-2);
@@ -1312,17 +1314,16 @@
             letter-spacing: .02em;
             text-transform: none;
             white-space: nowrap;
-            line-height: 1.2;
+            line-height: 1;
         }
 
         #formSection .form-brand-by .responsive-mts-logo {
             display: block;
-            height: 18px;
-            max-width: 156px;
+            height: 1.4em;
+            max-width: 160px;
             filter: saturate(.88) contrast(1.02);
             opacity: .96;
             align-self: center;
-            transform: translateY(-1px);
         }
 
         #formSection .form-top-note {
@@ -1553,12 +1554,21 @@
         }
 
         #formSection .form-hint,
+        #formSection .char-counter,
         #formSection .age-slider-hint,
         #formSection .loc-counter {
             color: var(--ink-4);
             font-size: 11.5px;
             line-height: 1.45;
         }
+
+        #formSection .char-counter {
+            margin-top: 6px;
+            align-self: flex-end;
+        }
+
+        #formSection .char-counter.near-limit { color: #c97a13; }
+        #formSection .char-counter.at-limit { color: #c0392b; font-weight: 700; }
 
         #formSection .form-input,
         #formSection .form-select,
@@ -4249,7 +4259,7 @@
                             <div class="fcard-meta">What success looks like and what it costs</div>
                         </div>
                         <div class="form-grid">
-                            <div class="form-group"><label class="form-label">Campaign Name</label><input type="text" id="campaignName" class="form-input" placeholder="e.g., Summer 2026 Launch"></div>
+                            <div class="form-group"><label class="form-label">Campaign Name</label><input type="text" id="campaignName" class="form-input" placeholder="e.g., Summer 2026 Launch" maxlength="60"><span class="char-counter" id="campaignNameCounter">0 / 60</span></div>
                             <div class="form-group"><label class="form-label">Campaign Duration</label>
                                 <select id="campaignDuration" class="form-select"><option>4 Weeks</option><option>8 Weeks</option><option>12 Weeks (Quarter)</option><option>6 Months</option><option>12 Months (Annual)</option></select>
                             </div>
@@ -6283,7 +6293,21 @@ function initFormSteps() {
 }
 
 // ======================== INIT ========================
-document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); decorateChips('platformChips', PLATFORM_ICON_MAP); decorateChips('creativeChips', FORMAT_ICON_MAP); markRecommended(); initChipGroupControls(); initChips(); initAIRecommendations(); syncChipContainerUi('platformChips'); syncChipContainerUi('creativeChips'); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); });
+function initCampaignNameCounter() {
+    const campaignInput = document.getElementById('campaignName');
+    const campaignCounter = document.getElementById('campaignNameCounter');
+    if (!campaignInput || !campaignCounter) return;
+    const updateCounter = () => {
+        const len = campaignInput.value.length;
+        campaignCounter.textContent = `${len} / 60`;
+        campaignCounter.classList.toggle('near-limit', len >= 55);
+        campaignCounter.classList.toggle('at-limit', len >= 60);
+    };
+    campaignInput.addEventListener('input', updateCounter);
+    updateCounter();
+}
+
+document.addEventListener('DOMContentLoaded', () => { initLocationDropdown(); initChipAccordions(); decorateChips('platformChips', PLATFORM_ICON_MAP); decorateChips('creativeChips', FORMAT_ICON_MAP); markRecommended(); initChipGroupControls(); initChips(); initAIRecommendations(); syncChipContainerUi('platformChips'); syncChipContainerUi('creativeChips'); initAgeSlider(); initIncomeChips(); initGoalKpiFilter(); initBrandAutocomplete(); initFormSteps(); initCampaignNameCounter(); });
 
 // ======================== GLOBAL STATE ========================
 let PLAN_DATA = null;
@@ -6524,7 +6548,7 @@ function getFormData() {
         companySize: document.getElementById('companySize').value,
         competitors: document.getElementById('competitors').value.trim() || '',
         // Campaign
-        campaignName: document.getElementById('campaignName').value.trim() || 'Strategic Media Campaign 2026',
+        campaignName: document.getElementById('campaignName').value.trim().slice(0, 60) || 'Strategic Media Campaign 2026',
         campaignDuration: document.getElementById('campaignDuration').value,
         budget: document.getElementById('budget').value,
         goal: document.getElementById('goal').value,
