@@ -300,18 +300,23 @@
             animation: rot 8s linear infinite;
         }
 
-        #signInSection .brand .sso-brand-logo {
-            height: 18px;
-            width: auto;
-            display: block;
+        #signInSection .brand .name {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            color: var(--ink);
+            line-height: 1;
         }
 
-        #signInSection .brand .sso-platform-lockup {
-            height: 10px;
-            width: auto;
+        #signInSection .brand .by {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--ink-4);
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            margin-top: 4px;
             display: block;
-            margin-top: 7px;
-            opacity: .82;
         }
 
         #signInSection #viewSSO {
@@ -781,12 +786,6 @@
             letter-spacing: 0.12em;
         }
         .brand-logo.brand-stack .brand-main { color: var(--orange); font-weight: 800; }
-        .respondiq-logo { width: auto; display: block; object-fit: contain; }
-        .respondiq-logo.form-brand-name-logo { height: 26px; }
-        .respondiq-logo.brand-main-logo { height: 30px; margin: 0 auto; }
-        .responsive-mts-platform-lockup { width: auto; display: block; object-fit: contain; }
-        .responsive-mts-platform-lockup.form-brand-logo { height: 14px; margin-top: 2px; }
-        .brand-logo.brand-stack .brand-attribution .responsive-mts-platform-lockup { height: 18px; }
         .brand-logo.brand-stack .brand-by { color: var(--text-3); font-size: 10px; font-weight: 500; letter-spacing: 0.22em; }
         .brand-logo.brand-stack .brand-mts { color: var(--navy); font-size: 14px; font-weight: 800; letter-spacing: 0.1em; }
         .brand-logo.brand-stack .brand-attribution {
@@ -1305,25 +1304,35 @@
             min-width: 0;
         }
 
-        #formSection .form-brand-name-logo {
-            height: 26px;
-            width: auto;
+        #formSection .form-brand-name {
             display: block;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            line-height: 1;
+            color: var(--ink);
         }
 
         #formSection .form-brand-by {
             display: inline-flex;
             align-items: center;
+            gap: 9px;
             margin-top: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink-2);
+            letter-spacing: .02em;
+            text-transform: none;
             white-space: nowrap;
             line-height: 1;
         }
 
-        #formSection .form-brand-by .responsive-mts-platform-lockup {
+        #formSection .form-brand-by .responsive-mts-logo {
             display: block;
-            height: 14px;
-            width: auto;
-            max-width: clamp(150px, 16vw, 215px);
+            width: clamp(150px, 12vw, 190px);
+            height: auto;
+            max-width: none;
+            max-height: 31px;
             filter: saturate(.88) contrast(1.02);
             opacity: .96;
             object-fit: contain;
@@ -3026,13 +3035,13 @@
                 width: 100%;
             }
 
-            #formSection .form-brand-name-logo {
-                height: 23px;
+            #formSection .form-brand-by {
+                gap: 7px;
+                font-size: 14px;
             }
 
-            #formSection .form-brand-by .responsive-mts-platform-lockup {
-                height: 12px;
-                max-width: clamp(150px, 58vw, 215px);
+            #formSection .form-brand-by .responsive-mts-logo {
+                width: clamp(132px, 45vw, 176px);
             }
 
             #userBadge {
@@ -3428,7 +3437,7 @@
 
         .template-footer { background: var(--surface-2); color: var(--text-3); padding: 30px; text-align: center; font-size: 13px; border-top: 1px solid var(--border); }
         .template-footer .footer-attribution { display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; vertical-align: middle; white-space: nowrap; }
-        .template-footer .footer-attribution-logo { display: inline-block; height: 11px; max-width: 180px; vertical-align: middle; object-fit: contain; }
+        .template-footer .footer-attribution-logo { display: inline-block; height: 13px; max-width: 110px; vertical-align: middle; object-fit: contain; }
 
         /* ── UPGRADE 3: Visual Flight Plan (Kanban Cards) ── */
         .phase-launch { display: block; background: rgba(0,113,227,0.08); border: 1px solid rgba(0,113,227,0.3); color: #0071e3; padding: 8px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 600; line-height: 1.5; margin-bottom: 6px; }
@@ -3577,11 +3586,6 @@
         .riq-footer-brand {
             font-weight: 600;
             color: var(--text);
-        }
-        .riq-footer-brand-logo {
-            height: 12px;
-            width: auto;
-            display: block;
         }
         .riq-footer-sep {
             color: var(--border-strong);
@@ -3812,7 +3816,6 @@
             .pt-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
             .pt-mark { display: flex; flex-direction: column; }
             .pt-mark .pt-brand { font-size: 16px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
-            .pt-mark .pt-brand-logo { height: 20px; width: auto; display: block; margin-bottom: 4px; }
             .pt-mark .pt-by { font-size: 9px; color: rgba(255,255,255,0.58); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2px; }
             .pt-mark .pt-sub { font-size: 13px; color: #ffffff; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
             .pt-mark .pt-attribution {
@@ -3831,10 +3834,14 @@
             }
             .pt-mark .pt-attribution-logo {
                 display: inline-block;
-                height: 13px;
-                max-width: 220px;
+                height: 19px;
+                max-width: 160px;
                 vertical-align: middle;
                 object-fit: contain;
+                background: #fff;
+                border-radius: 999px;
+                padding: 5px 10px;
+                box-sizing: content-box;
             }
             .pt-corner-mark { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
             .pt-corner-mark span { display: block; height: 2px; background: var(--orange); border-radius: 2px; }
@@ -3853,7 +3860,7 @@
             .pt-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
             .pt-bottom-left .pt-copy { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 0.05em; }
             .pt-bottom-left .pt-copy-sub { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.78); margin-top: 4px; line-height: 1; text-transform: none; letter-spacing: 0.02em; font-weight: 600; white-space: nowrap; }
-            .pt-bottom-left .pt-copy-sub .pt-copy-sub-logo { display: inline-block; height: 11px; max-width: 190px; vertical-align: middle; object-fit: contain; }
+            .pt-bottom-left .pt-copy-sub .pt-copy-sub-logo { display: inline-block; height: 12px; max-width: 110px; vertical-align: middle; object-fit: contain; background: #fff; border-radius: 999px; padding: 3px 6px; box-sizing: content-box; }
             .pt-bottom-left .pt-copy-sub strong { color: #fff; font-size: 12px; }
             .pt-ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,107,53,0.7); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(255,107,53,0.08); }
             .pt-ai-badge .pt-spark { color: var(--orange); font-size: 12px; }
@@ -3874,7 +3881,7 @@
             .print-cta-page .pt-mark .pt-by { font-size: 9px; color: #64748b; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 2px; }
             .print-cta-page .pt-mark .pt-sub { font-size: 13px; color: var(--navy); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
             .print-cta-page .pt-mark .pt-attribution { color: var(--navy); }
-            .print-cta-page .pt-mark .pt-attribution-logo { background: transparent; padding: 0; height: 13px; max-width: 220px; }
+            .print-cta-page .pt-mark .pt-attribution-logo { background: transparent; padding: 0; }
             .print-cta-page .pt-body { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
             .print-cta-page .pt-rule { width: 50px; height: 2px; background: var(--orange); margin-bottom: 22px; border-radius: 2px; }
             .print-cta-page .pt-title { font-size: 52px; font-weight: 800; color: var(--ink); letter-spacing: -0.035em; margin-bottom: 12px; line-height: 1.05; }
@@ -3895,7 +3902,7 @@
             .print-cta-page .pt-bottom { display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; color: #94a3b8; letter-spacing: 0.05em; }
             .print-cta-page .pt-bottom .pt-brand-mini { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: var(--navy); letter-spacing: 0.02em; text-transform: none; line-height: 1; font-size: 12px; white-space: nowrap; }
             .print-cta-page .pt-bottom .pt-brand-mini .mini-attribution { display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: 11px; font-weight: 500; }
-            .print-cta-page .pt-bottom .pt-brand-mini .mini-attribution-logo { display: inline-block; height: 11px; max-width: 180px; vertical-align: middle; object-fit: contain; }
+            .print-cta-page .pt-bottom .pt-brand-mini .mini-attribution-logo { display: inline-block; height: 12px; max-width: 110px; vertical-align: middle; object-fit: contain; }
             .print-cta-page .pt-bottom .pt-brand-mini strong { color: var(--navy); font-size: 12px; font-weight: 700; }
         }
 
@@ -4100,8 +4107,8 @@
                     <div class="brand">
                         <span class="sparkle"></span>
                         <div>
-                            <img class="respondiq-logo sso-brand-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async">
-                            <img class="responsive-mts-platform-lockup sso-platform-lockup" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async">
+                            <span class="name">RespondIQ</span>
+                            <span class="by">A Responsive MTS Platform</span>
                         </div>
                     </div>
                 </div>
@@ -4202,9 +4209,11 @@
                     <div class="form-brand">
                         <span class="sparkle"></span>
                         <span class="form-brand-copy">
-                            <img class="respondiq-logo form-brand-name-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async">
+                            <span class="form-brand-name">RespondIQ</span>
                             <span class="form-brand-by" aria-label="A Responsive MTS Platform">
-                                <img class="responsive-mts-platform-lockup form-brand-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async">
+                                <span>A</span>
+                                <img class="responsive-mts-logo form-brand-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async">
+                                <span>Platform</span>
                             </span>
                         </span>
                     </div>
@@ -4761,7 +4770,7 @@
         <!-- ========== RESULTS ========== -->
         <div id="resultSection">
             <div class="form-header">
-                <div class="brand-logo brand-stack"><img class="respondiq-logo brand-main-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async"><span class="brand-attribution" aria-label="A Responsive MTS Platform"><img class="responsive-mts-platform-lockup brand-attribution-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></span></div>
+                <div class="brand-logo brand-stack"><span class="brand-main">RespondIQ</span><span class="brand-attribution">A <img class="responsive-mts-logo brand-attribution-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</span></div>
                 <h1>Here's Your Media Strategy.</h1>
                 <p>Built in minutes. Ready to share with your client.</p>
             </div>
@@ -4778,8 +4787,8 @@
                 <div class="print-title-page" id="printTitlePage">
                     <div class="pt-top">
                         <div class="pt-mark">
-                            <img class="respondiq-logo pt-brand-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async">
-                            <div class="pt-attribution"><img class="responsive-mts-platform-lockup pt-attribution-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></div>
+                            <div class="pt-brand">RESPONDIQ</div>
+                            <div class="pt-attribution">A <img class="responsive-mts-logo pt-attribution-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -4793,7 +4802,7 @@
                     <div class="pt-bottom">
                         <div class="pt-bottom-left">
                             <div class="pt-copy">© 2026 RespondIQ</div>
-                            <div class="pt-copy-sub"><img class="responsive-mts-platform-lockup pt-copy-sub-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></div>
+                            <div class="pt-copy-sub">A <img class="responsive-mts-logo pt-copy-sub-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</div>
                         </div>
                         <div class="pt-ai-badge"><span class="pt-spark">✦</span><span>Strategy Intelligence</span></div>
                     </div>
@@ -4832,8 +4841,8 @@
                 <div class="print-cta-page" id="printCtaPage">
                     <div class="pt-top">
                         <div class="pt-mark">
-                            <img class="respondiq-logo pt-brand-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async">
-                            <div class="pt-attribution"><img class="responsive-mts-platform-lockup pt-attribution-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></div>
+                            <div class="pt-brand">RESPONDIQ</div>
+                            <div class="pt-attribution">A <img class="responsive-mts-logo pt-attribution-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</div>
                         </div>
                         <div class="pt-corner-mark" aria-hidden="true"><span></span><span></span><span></span></div>
                     </div>
@@ -4849,11 +4858,11 @@
                         </div>
                     </div>
                     <div class="pt-bottom">
-                        <div class="pt-brand-mini"><strong>RespondIQ</strong> <span class="mini-attribution" aria-label="A Responsive MTS Platform"><img class="responsive-mts-platform-lockup mini-attribution-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></span></div>
+                        <div class="pt-brand-mini"><strong>RespondIQ</strong> <span class="mini-attribution">A <img class="responsive-mts-logo mini-attribution-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</span></div>
                         <div>© 2026</div>
                     </div>
                 </div>
-                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong> | <span class="footer-attribution" aria-label="A Responsive MTS Platform"><img class="responsive-mts-platform-lockup footer-attribution-logo" src="responsive-mts-logo.png" alt="A Responsive MTS Platform" decoding="async"></span></p></div>
+                <div class="template-footer"><p>© 2026 Media Plan | Powered by <strong style="color:#ff6b35;">RespondIQ</strong> | <span class="footer-attribution">A <img class="responsive-mts-logo footer-attribution-logo" src="responsive-mts-logo.png" alt="Responsive MTS" width="1378" height="220" decoding="async"> Platform</span></p></div>
             </div>
 
             <!-- ========== LEAD GEN CTA ========== -->
@@ -7419,7 +7428,6 @@ async function generateMediaPlan(data) {
             window._planningSignals = result._planning_signals || buildFrontendPlanningSignals(data, window._competitiveIntel, window._metaAdsIntel, plan);
             plan = applyPlanningSignalCalibration(plan, data, window._planningSignals);
             plan = constrainPlanToUserSelections(plan, data);
-            plan.projected_impressions = formatNumber(parseLoaderPlanNumber(plan.projected_impressions) || parseLoaderPlanNumber((plan.budget_breakdown || []).map(bb => bb.impressions).join(' ')) || 0);
             updateRespondIqLoaderFromPlan(plan);
             setRespondIqLoaderStage(4);
             return plan;
@@ -9530,7 +9538,7 @@ function startOver() {
 <footer class="riq-footer">
     <div class="riq-footer-inner">
         <div class="riq-footer-left">
-            <img class="respondiq-logo riq-footer-brand-logo" src="respondiq-logo.png" alt="RespondIQ" decoding="async">
+            <span class="riq-footer-brand">RespondIQ</span>
             <span class="riq-footer-sep">·</span>
             <span class="riq-footer-tagline">AI-powered cross-channel media planning</span>
         </div>
