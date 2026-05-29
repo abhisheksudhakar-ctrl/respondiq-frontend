@@ -785,8 +785,8 @@
         .respondiq-logo.form-brand-name-logo { height: 26px; }
         .respondiq-logo.brand-main-logo { height: 30px; margin: 0 auto; }
         .responsive-mts-platform-lockup { width: auto; display: block; object-fit: contain; }
-        .responsive-mts-platform-lockup.form-brand-logo { height: 14px; margin-top: 2px; }
-        .brand-logo.brand-stack .brand-attribution .responsive-mts-platform-lockup { height: 18px; }
+        .responsive-mts-platform-lockup.form-brand-logo { height: 16px; margin-top: 3px; }
+        .brand-logo.brand-stack .brand-attribution .responsive-mts-platform-lockup { height: 20px; }
         .brand-logo.brand-stack .brand-by { color: var(--text-3); font-size: 10px; font-weight: 500; letter-spacing: 0.22em; }
         .brand-logo.brand-stack .brand-mts { color: var(--navy); font-size: 14px; font-weight: 800; letter-spacing: 0.1em; }
         .brand-logo.brand-stack .brand-attribution {
@@ -1321,9 +1321,9 @@
 
         #formSection .form-brand-by .responsive-mts-platform-lockup {
             display: block;
-            height: 14px;
+            height: 16px;
             width: auto;
-            max-width: clamp(150px, 16vw, 215px);
+            max-width: clamp(170px, 18vw, 240px);
             filter: saturate(.88) contrast(1.02);
             opacity: .96;
             object-fit: contain;
@@ -3031,8 +3031,8 @@
             }
 
             #formSection .form-brand-by .responsive-mts-platform-lockup {
-                height: 12px;
-                max-width: clamp(150px, 58vw, 215px);
+                height: 14px;
+                max-width: clamp(160px, 62vw, 230px);
             }
 
             #userBadge {
@@ -3693,8 +3693,7 @@
             /* Hide everything except the template */
             body { background: #ffffff !important; margin: 0; padding: 0; color: #0f172a !important; }
             .noise, #formSection, #loaderSection, .form-header, .result-actions,
-            .cta-section, .new-plan-link, .new-plan-link-wrap, .btn-download,
-            #refineSection, .refine-section { display: none !important; }
+            .cta-section, .new-plan-link, .new-plan-link-wrap, .btn-download { display: none !important; }
 
             /* Show only the media plan content */
             .container { max-width: 100% !important; padding: 0 !important; }
@@ -7224,8 +7223,6 @@ async function generateReport() {
         document.getElementById('loaderSection').style.display = 'none';
     }
     document.getElementById('resultSection').style.display = 'block';
-    // UPGRADE 4: Show refine UI after plan generates
-    document.getElementById('refineSection').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -7655,38 +7652,22 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
     // Override top-level projected impressions
     plan.projected_impressions = formatNumber(totalImpressions);
 
-    // ── Sync executive summary text with recalculated figures ──
-    // Gemini's narrative often embeds impression/investment numbers that differ
-    // from the Math Firewall's deterministic calculations. Replace them so the
-    // paragraph and the metric cards show the same values.
-    if (plan.executive_summary && typeof plan.executive_summary === 'string') {
-        const correctedImpressions = plan.projected_impressions; // e.g. "355.3K" or "23.5M"
-        const correctedInvestment = plan.total_investment;       // e.g. "$6,000"
-
-        // Replace impression figures: matches patterns like "24.6M", "366.7K", "24.6 million",
-        // "366,700", "23.9M" when followed by words like "impressions", "total impressions",
-        // "local impressions", "geo-targeted impressions", etc.
-        plan.executive_summary = plan.executive_summary.replace(
-            /[\d,.]+\s*[KMBkmb]?(?:\s+(?:total|local|geo-targeted|high-quality|targeted|qualified|projected))?\s*(?:total\s+)?impressions/gi,
-            correctedImpressions + ' impressions'
+    // ── Sync all visible narrative text with recalculated figures ──
+    // Gemini's narrative can embed delivery numbers that differ from the Math
+    // Firewall's deterministic calculations. Replace those references anywhere
+    // they may appear in the exported outline, not only the executive summary.
+    const correctedImpressions = plan.projected_impressions;
+    const investmentNum = totalBudget.toLocaleString();
+    function syncCalculatedText(value) {
+        if (typeof value !== 'string') return value;
+        let text = value;
+        text = text.replace(
+            /[\d,.]+\s*(?:[KMBkmb]|million|thousand|billion)?(?=(?:\s+(?:total|local|geo-targeted|high-quality|highly targeted|targeted|qualified|projected|ad))*\s+impressions)/gi,
+            correctedImpressions
         );
-        // Catch word-form numbers: "1.49 million impressions", "366 thousand impressions"
-        plan.executive_summary = plan.executive_summary.replace(
-            /[\d,.]+\s+(?:million|thousand|billion)\s+(?:total\s+|local\s+|geo-targeted\s+|high-quality\s+|targeted\s+|ad\s+)?impressions/gi,
-            correctedImpressions + ' impressions'
-        );
-        // Also catch "approximately X impressions" or "generate X impressions" (abbreviated + word form)
-        plan.executive_summary = plan.executive_summary.replace(
-            /approximately\s+[\d,.]+\s*(?:[KMBkmb]|million|thousand|billion)?\s*(?:total\s+)?impressions/gi,
-            'approximately ' + correctedImpressions + ' impressions'
-        );
-
-        // Replace investment figures: matches "$210,000" or "$6,000" near "investment" or "budget"
-        const investmentNum = totalBudget.toLocaleString();
-        plan.executive_summary = plan.executive_summary.replace(
+        text = text.replace(
             /\$[\d,]+(?:\.\d{2})?\s*(?=(?:,?\s*(?:the|across|over|total|media|in|\.)))/gi,
             (match) => {
-                // Only replace if it looks like the total budget (not a CPC or small figure)
                 const val = parseFloat(match.replace(/[$,]/g, ''));
                 if (val >= totalBudget * 0.5 && val <= totalBudget * 2) {
                     return '$' + investmentNum;
@@ -7694,7 +7675,14 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
                 return match;
             }
         );
+        return text;
     }
+
+    plan.executive_summary = syncCalculatedText(plan.executive_summary);
+    plan.media_strategy = syncCalculatedText(plan.media_strategy);
+    ['marketing_objectives', 'media_objectives', 'reporting_plan', 'recommendations'].forEach(key => {
+        if (Array.isArray(plan[key])) plan[key] = plan[key].map(syncCalculatedText);
+    });
 
     // ── Sync actual rates from budget breakdown into benchmarks (Section 16) ──
     // This ensures the "Plan Target" column matches Section 08 exactly.
@@ -7820,24 +7808,15 @@ function recalculatePlanMath(plan, budgetMidpointMonthly, months) {
             const higherIsBetter = /ctr|cvr|conversion|roas|click.?through|fill.?rate|brand.?lift|share of voice|sov|engagement|lifetime value|clv|ltv/.test(metricLower);
 
             let status;
-            if (ratio >= 0.85 && ratio <= 1.15) {
+            if (Math.abs(ratio - 1) <= 0.02) {
                 status = 'At benchmark';
-            } else if (ratio > 0.75 && ratio < 0.85 || ratio > 1.15 && ratio < 1.25) {
-                // Close to benchmark
-                if (lowerIsBetter) {
-                    status = planVal < indVal ? 'Below avg \u2705' : 'Above avg \u26a0\ufe0f';
-                } else if (higherIsBetter) {
-                    status = planVal > indVal ? 'Above avg \u2705' : 'Below avg \u26a0\ufe0f';
-                } else {
-                    status = 'Roughly at benchmark';
-                }
             } else {
                 if (lowerIsBetter) {
-                    status = planVal < indVal ? 'Below avg \u2705' : 'Above avg \u26a0\ufe0f';
+                    status = planVal < indVal ? 'Below avg' : 'Above avg';
                 } else if (higherIsBetter) {
-                    status = planVal > indVal ? 'Above avg \u2705' : 'Below avg \u26a0\ufe0f';
+                    status = planVal > indVal ? 'Above avg' : 'Below avg';
                 } else {
-                    status = planVal <= indVal ? 'Below avg \u2705' : 'Above avg \u26a0\ufe0f';
+                    status = planVal <= indVal ? 'Below avg' : 'Above avg';
                 }
             }
 
@@ -8106,7 +8085,7 @@ function applyPlanningSignalCalibration(plan, data, signals) {
             metric: 'Blended CPA',
             plan_target: calibration.modeled_target,
             industry_avg: industryAvg,
-            vs_benchmark: parseMoneyValue(calibration.modeled_target) <= parseMoneyValue(industryAvg) ? 'Below avg ✅' : 'Above avg ⚠️'
+            vs_benchmark: parseMoneyValue(calibration.modeled_target) <= parseMoneyValue(industryAvg) ? 'Below avg' : 'Above avg'
         };
         if (idx >= 0) plan.benchmarks[idx] = { ...plan.benchmarks[idx], ...row };
         else plan.benchmarks.unshift(row);
@@ -9036,22 +9015,22 @@ function renderTemplate(data, plan) {
     // ── Section 16 pill renderer (replaces ⚠/✅ glyphs) ──
     function benchPill(vs, row) {
         const s = String(vs || '');
-        const stripped = s.replace(/[✅⚠️]/g, '').trim();
+        const stripped = s.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F]/gu, '').trim();
         const planVal = parseNum(row && row.plan_target);
         const avgVal = parseNum(row && row.industry_avg);
         const direction = benchmarkMetricDirection(row && row.metric);
-        if (!s.includes('✅') && !s.includes('⚠') && planVal !== null && avgVal !== null && avgVal !== 0) {
+        if (planVal !== null && avgVal !== null && avgVal !== 0) {
             const ratio = planVal / avgVal;
-            if (ratio >= 0.85 && ratio <= 1.15) {
+            if (Math.abs(ratio - 1) <= 0.02) {
                 return `<span class="bench-pill bench-pill-good">${stripped || 'At benchmark'}</span>`;
             }
             if (direction === 'lower') {
                 const klass = planVal <= avgVal ? 'bench-pill-good' : 'bench-pill-over';
-                return `<span class="bench-pill ${klass}">${stripped || (planVal <= avgVal ? 'Below avg' : 'Above avg')}</span>`;
+                return `<span class="bench-pill ${klass}">${planVal <= avgVal ? 'Below avg' : 'Above avg'}</span>`;
             }
             if (direction === 'higher') {
                 const klass = planVal >= avgVal ? 'bench-pill-good' : 'bench-pill-over';
-                return `<span class="bench-pill ${klass}">${stripped || (planVal >= avgVal ? 'Above avg' : 'Below avg')}</span>`;
+                return `<span class="bench-pill ${klass}">${planVal >= avgVal ? 'Above avg' : 'Below avg'}</span>`;
             }
         }
         // Word boundaries on the regex so words like 'category' or 'beating'
